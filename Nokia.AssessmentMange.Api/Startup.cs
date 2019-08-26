@@ -29,7 +29,7 @@ namespace Nokia.AssessmentMange.Api
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddSingleton<IRepository, Repository>();
+           
             services.AddSingleton<IExcelExporter, ExcelExporter>();
             //注册配置类
             services.Configure<DbConnectionOption>(Configuration.GetSection("ConnectionStrings"));

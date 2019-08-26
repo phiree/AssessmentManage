@@ -12,7 +12,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Service
     public class AssessmentServiceTests
     {
         [Fact]
-        public void CalculateGradesTest()
+        public void 计算类型科目的成绩计算Test()
         {
             
             var subjectHeight = new Subject("身高", SubjectType.Intelligent, SexLimitation.BothAndSameConversion, false, "CM");

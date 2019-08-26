@@ -7,7 +7,7 @@ namespace Nokia.AssessmentManage.Domain.Infrastructure.Tests
     public class CodeRunnerTest
     {
         [Fact]
-        public void RunCode()
+        public void 运行时执行代码()
         {
             CodeRunner runner=new CodeRunner();
             var result=  runner.RunCode("return 1+1;");

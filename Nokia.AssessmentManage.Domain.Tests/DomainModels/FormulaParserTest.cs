@@ -9,7 +9,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels
    public class FormulaParserTest
     {
         [Fact]
-        public void ParseTest()
+        public void 公式解析Test()
         {
             var parser=new FormulaParser();
            string code= parser.Parse("$1/$2",new Dictionary<int,double?>{ {1,13 },{ 2,14} });

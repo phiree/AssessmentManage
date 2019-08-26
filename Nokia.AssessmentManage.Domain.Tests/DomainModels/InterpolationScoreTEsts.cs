@@ -10,7 +10,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels
     public class InterpolationScoreTEsts
     {
         [Fact]
-        public void GetValueTest()
+        public void 插值算法Test()
         {
 
             var value=new InterpolationScore(85,80,22,24,23).GetValue();

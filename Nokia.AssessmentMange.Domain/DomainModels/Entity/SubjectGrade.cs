@@ -8,8 +8,14 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class SubjectGrade
     {
+        public SubjectGrade(Subject subject,double? grade)
+        { 
+            this.Subject=subject;
+            this.Grade=grade;
+            }
+        
         public Subject Subject { get;protected set;}
-        public double? Grade { get; protected set; }
+        public double? Grade { get;   set; }
 
         
     }

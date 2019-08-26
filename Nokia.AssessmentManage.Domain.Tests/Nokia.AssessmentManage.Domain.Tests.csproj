@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Nokia.AssessmentMange.Domain\Nokia.AssessmentMange.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DomainModels\Service\" />
-  </ItemGroup>
-
 </Project>

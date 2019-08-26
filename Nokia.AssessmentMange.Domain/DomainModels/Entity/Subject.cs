@@ -44,17 +44,18 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     public class ComputedSubject : Subject
     {
         public ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
-                   bool isQualifiedConversion, string unit, IList<Subject> paramSubjects,string formula)
+                   bool isQualifiedConversion, string unit, IDictionary<int, Subject> paramSubjects,string formula)
             :base(name,subjectType,sexLimitation,isQualifiedConversion,unit)
         {
             this.ParamSubjects = paramSubjects;
-            this.Unit = unit;
+       
+            this.Formula=formula;
             
         }
         /// <summary>
         /// 参与计算的科目
         /// </summary>
-        public IList<Subject> ParamSubjects { get; protected set; }
+        public IDictionary<int,Subject> ParamSubjects { get; protected set; }
         /// <summary>
         /// 计算公式
         /// </summary>

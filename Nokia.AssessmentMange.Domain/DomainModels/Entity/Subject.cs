@@ -32,6 +32,8 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// </summary>
         public bool IsQualifiedConversion { get;protected set;}
         public string Unit { get; protected set; }
+
+        
     }
   
     

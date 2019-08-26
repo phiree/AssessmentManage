@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
 {
@@ -21,14 +19,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// </summary>
         public bool IsMakeup { get; protected set; }
         public IList<SubjectGrade> Grades { get; protected set; }
-    }
-    /// <summary>
-    /// 科目成绩
-    /// </summary>
-    public class SubjectGrade
-    {
-        public string SubjectId { get;protected set;}
-        public double? Grade { get; protected set; }
     }
 
 

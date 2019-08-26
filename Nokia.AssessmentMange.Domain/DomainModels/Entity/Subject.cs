@@ -9,6 +9,15 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class Subject : Entity.EntityBase
     {
+        public Subject(string name  ,SubjectType subjectType, SexLimitation sexLimitation,
+            bool isQualifiedConversion,string unit)
+        { 
+            this.Name=name;
+            this.SubjectType=subjectType;
+            this.SexLimitation=sexLimitation;
+            this.IsQualifiedConversion=isQualifiedConversion;
+            this.Unit=unit;
+            }
         /// <summary>
         /// 名称
         /// </summary>
@@ -17,7 +26,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// 分类
         /// </summary>
         public SubjectType SubjectType { get; protected set; }
-        public SubjectSexLimitation SubjectSexLimitation { get; protected set; }
+        public  SexLimitation SexLimitation { get; protected set; }
         /// <summary>
         /// 得分换算表是否使用 合格/不合格  
         /// </summary>
@@ -32,6 +41,14 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class ComputedSubject : Subject
     {
+        public ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
+                   bool isQualifiedConversion, string unit, IList<Subject> paramSubjects,string formula)
+            :base(name,subjectType,sexLimitation,isQualifiedConversion,unit)
+        {
+            this.ParamSubjects = paramSubjects;
+            this.Unit = unit;
+            
+        }
         /// <summary>
         /// 参与计算的科目
         /// </summary>
@@ -58,7 +75,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// </summary>
         Skill = 3
     }
-    public enum SubjectSexLimitation
+    public enum  SexLimitation
     {
         MaleOnly = 1,
         FemaleOnly = 2,

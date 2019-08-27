@@ -13,7 +13,8 @@ using Microsoft.Extensions.Options;
 using Nokia.AssessmentMange.Domain;
 using Nokia.AssessmentMange.Domain.DomainModels;
 using Nokia.AssessmentMange.Domain.Infrastructure;
-
+using Nokia.AssessmentMange.Domain.Infrastructure.EFC;
+using Microsoft.EntityFrameworkCore;
 namespace Nokia.AssessmentMange.Api
 {
     public class Startup
@@ -28,8 +29,13 @@ namespace Nokia.AssessmentMange.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-           
+          
+           services.AddDbContext<AssessmentDbContext>(
+               options=> options.UseSqlServer(
+                   Configuration["conn"],
+                     b=>b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
+               );
+            //--------------
             services.AddSingleton<IExcelExporter, ExcelExporter>();
             //注册配置类
             services.Configure<DbConnectionOption>(Configuration.GetSection("ConnectionStrings"));

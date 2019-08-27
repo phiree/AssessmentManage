@@ -13,9 +13,11 @@ using Dapper.Contrib;
 using Nokia.AssessmentMange.Domain.DomainModels.IInfrastructure;
 using Dapper.Contrib.Extensions;
 using Nokia.AssessmentMange.Domain.DomainModels.Repository;
+using Nokia.AssessmentMange.Domain.DomainModels.Exceptions;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.Repository.Dapper
 {
+
 
     public class BaseRepository<T> : IRepository<T> where T : class
     {
@@ -45,12 +47,12 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.Repository.Dapper
             }
             return Conn;
         }
-        public T Get(object id)
+        public T Get(string id)
         {
             return Conn.Get<T>(id);
             throw new NotImplementedException();
         }
-        public IEnumerable<T> GetList(IEnumerable<object> idList)
+        public IEnumerable<T> GetList(IEnumerable<string> idList)
         {
             return idList.Select(x => Get(x)).ToList();
         }
@@ -96,7 +98,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.Repository.Dapper
         public bool Update(T obj)
         {
             return conn.Update(obj);
-            throw new NotImplementedException();
+
         }
 
         public bool Update(IEnumerable<T> list)
@@ -117,6 +119,25 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.Repository.Dapper
 
             return Conn.Query<T>(sql, dp);
         }
+        public T FindOne(IDictionary<string, object> param)
+        {
+            DynamicParameters dp = new DynamicParameters(param);
+            string sql = new SqlBuilderForGeneric<T>().BuildQuery(dp);
+            var result = Conn.Query<T>(sql, dp);
+            if (result.Count() == 1)
+            {
+                return result.First();
+            }
+            else if (result.Count() == 0)
+            {
+                throw new NotFoundInRepository(param, typeof(T));
+            }
+            else
+            {
+                throw new MultiFoundInRepository(param, typeof(T));
+            }
+
+        }
         public IEnumerable<T> Search(string sql, dynamic param, int page, int itemsPerPage)
         {
             DynamicParameters dp = new DynamicParameters(param);
@@ -126,6 +147,16 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.Repository.Dapper
         public IDbTransaction BeginTransaction()
         {
             return GetOpenedConn().BeginTransaction();
+        }
+
+        public IEnumerable<T> SearchWithPage(IDictionary<string, object> param, int pageIndex, int pageSize)
+        {
+            return Search(param).Skip(pageIndex * pageSize).Take(pageSize);
+        }
+
+        public IEnumerable<T> SearchWithPage(string sql, dynamic param, int pageIndex, int pageSize)
+        {
+            return Search(sql, param).Skip(pageIndex * pageSize).Take(pageSize);
         }
     }
 

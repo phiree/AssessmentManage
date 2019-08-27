@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
 {
-    public interface IRepository<T>
+    public interface IRepository<T> : IRepository<T, string> { }
+    public interface IRepository<T, Key>
     {
-        IEnumerable<T> GetList(IEnumerable<object> idList);
-        T Get(object id);
+        IEnumerable<T> GetList(IEnumerable<Key> idList);
+        T Get(Key id);
+        T FindOne(IDictionary<string, object> param);
         /// <summary>
         /// 针对于该类型的简单查询
         /// </summary>
         /// <param name="param">查询条件,key值必须等于列名</param>
         /// <returns></returns>
+        IEnumerable<T> SearchWithPage(IDictionary<string, object> param, int pageIndex, int pageSize);
         IEnumerable<T> Search(IDictionary<string, object> param);
         /// <summary>
         /// 涉及到其他类型,或者复杂的查询
@@ -22,6 +26,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         /// <param name="param"></param>
         /// <returns></returns>
         IEnumerable<T> Search(string sql, dynamic param);
+        IEnumerable<T> SearchWithPage(string sql, dynamic param, int pageIndex, int pageSize);
         IEnumerable<T> GetAll();
         long Insert(T obj, IDbTransaction transaction = null);
         long Insert(IEnumerable<T> list);
@@ -32,5 +37,12 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         bool DeleteAll();
 
         IDbTransaction BeginTransaction();
+    }
+
+
+    public interface IRepositoryEFC<T>:IRepository<T>
+    {
+          T FindOne(Expression<Func<T, bool>> where);
+        IEnumerable< T> Find(Expression<Func<T, bool>> where);
     }
 }

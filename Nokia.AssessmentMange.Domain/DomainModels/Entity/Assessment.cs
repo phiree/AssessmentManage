@@ -7,10 +7,11 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 {
     public class Assessment : Entity.EntityBase
     {
-        public Assessment(string departmentId, string name, IList<Subject> subjects, bool annual)
+        protected Assessment() { }
+        public Assessment(string departmentId, string name,   bool annual)
         {
             this.DepartmentId = departmentId;
-            this.Subjects = subjects;
+           // this.Subjects = subjects;
             this.Annual = annual;
             this.CreatedTime = DateTime.Now;
 
@@ -26,9 +27,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// <summary>
         /// 包含的科目
         /// </summary>
-        public IList<Subject> Subjects { get; protected set; }
-
-
+       
 
         /// <summary>
         /// 是否是年度考核
@@ -36,9 +35,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public bool Annual { get; protected set; }
         public DateTime CreatedTime { get; protected set; }
 
-        public bool Contains(string subjectId)
-        {
-            return Subjects.Select(x => x.Id).Contains<string>(subjectId);
-        }
+        
     }
 }

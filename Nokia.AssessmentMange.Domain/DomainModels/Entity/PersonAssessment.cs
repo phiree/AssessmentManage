@@ -3,18 +3,19 @@
 namespace Nokia.AssessmentMange.Domain.DomainModels
 {
     /// <summary>
-    /// 人员考核成绩概况
+    /// 人员考核成绩
     /// </summary>
     public class PersonGrade : Entity.EntityBase
     {
-        public PersonGrade(string assessmentId,string personId,bool isAbsent,bool isMakeup, IList<SubjectGrade> grades)
-        { 
-            this.AssessmentId=assessmentId;
-            this.PersonId=personId;
-            this.IsAbsent=isAbsent;
-            this.IsMakeup=isMakeup;
-           this.Grades=grades;
-            }
+        protected PersonGrade() { }
+        public PersonGrade(string assessmentId, string personId, bool isAbsent, bool isMakeup, IEnumerable<SubjectGrade> grades)
+        {
+            this.AssessmentId = assessmentId;
+            this.PersonId = personId;
+            this.IsAbsent = isAbsent;
+            this.IsMakeup = isMakeup;
+            this.Grades = grades;
+        }
         public string AssessmentId { get; protected set; }
         public string PersonId { get; protected set; }
 
@@ -26,9 +27,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// 是否补考
         /// </summary>
         public bool IsMakeup { get; protected set; }
-        public IList<SubjectGrade> Grades { get; protected set; }
+        public IEnumerable<SubjectGrade> Grades { get; protected set; }
 
-        
+
     }
 
 

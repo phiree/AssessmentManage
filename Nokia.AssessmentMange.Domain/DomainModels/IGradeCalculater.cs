@@ -5,6 +5,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 {
     public interface IGradeCalculater
     {
-        void CalculateGrade(SubjectGrade subjectGrade, IList<SubjectGrade> subjectGrades);
+        void CalculateGrade(SubjectGrade subjectGrade, IEnumerable<SubjectGrade> subjectGrades);
     }
 }

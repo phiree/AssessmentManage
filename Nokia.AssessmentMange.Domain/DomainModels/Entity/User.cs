@@ -9,12 +9,15 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
    public  class User:Entity.EntityBase
     {
+        protected User() { }
         public string LoginName { get;protected set;}
         public string Password { get;protected set;}
         /// <summary>
         /// 关联的人员
         /// </summary>
+        
         public Person Person { get;protected set;}
+        public string PersonId { get;protected set;}
         /// <summary>
         /// 是否管理员
         /// </summary>

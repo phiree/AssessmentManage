@@ -9,6 +9,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class Subject : Entity.EntityBase
     {
+        protected Subject() { }
         public Subject(string name  ,SubjectType subjectType, SexLimitation sexLimitation,
             bool isQualifiedConversion,string unit)
         { 

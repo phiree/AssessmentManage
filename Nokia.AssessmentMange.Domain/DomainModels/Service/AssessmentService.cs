@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels.Service
 {
-    public class AssessmentService
+    public class AssessmentService : IAssessmentService
     {
 
        
@@ -15,25 +15,26 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Service
             this.gradeCalculater = gradeCalculater;
         }
         /// <summary>
-        /// 保存人员成绩
+        /// 保存用户得分.
         /// </summary>
         /// <param name="assessment"></param>
         /// <param name="person"></param>
-        /// <param name="subjectGrades"></param>
-        public void SavePersonGrade(Assessment assessment, Person person, bool isAbsent, bool isMakeup, IList<SubjectGrade> subjectGrades)
+        /// <param name="grades"></param>
+        public void SavePersonGrade(Assessment assessment, Person person, bool isAbsent, bool isMakeup, IEnumerable<SubjectGrade> grades)
         {
-            foreach (var subjectGrade in subjectGrades)
+            foreach (var subjectGrade in grades)
             {
                 var subject = subjectGrade.Subject;
-                if (!assessment.Contains(subject.Id))
-                {
-                    throw new Exceptions.AssessmentNotContainSubject(assessment.Name, subject.Name);
-                }
-                gradeCalculater.CalculateGrade(subjectGrade, subjectGrades);
+                //if (!assessment.Contains(subject.Id))
+                //{
+                //    throw new Exceptions.AssessmentNotContainSubject(assessment.Name, subject.Name);
+                //}
+                gradeCalculater.CalculateGrade(subjectGrade, grades);
             }
 
-            PersonGrade personGrade = new PersonGrade(assessment.Id, person.Id, isAbsent, isMakeup, subjectGrades);
 
+            PersonGrade personGrade = new PersonGrade(assessment.Id, person.Id, isAbsent, isMakeup, grades);
+            
         }
        
     }

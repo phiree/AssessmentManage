@@ -14,7 +14,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         { 
             this.codeRunner=codeRunner;
             }
-        public void CalculateGrade(SubjectGrade subjectGrade, IList<SubjectGrade> subjectGrades)
+        public void CalculateGrade(SubjectGrade subjectGrade, IEnumerable<SubjectGrade> subjectGrades)
         {
             var subject = subjectGrade.Subject;
 

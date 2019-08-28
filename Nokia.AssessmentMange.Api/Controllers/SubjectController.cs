@@ -18,10 +18,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
             this.subjectApplication = subjectApplication;
         }
         [HttpPost("create")]
-        public ActionResult<string> Create( Subject subject)
+        public ActionResult<Subject> Create(string name, SubjectType subjectType, SexLimitation sexLimitation, bool isQualifiedConversion, string unit)
         {
-            subjectApplication.Create(subject);
-            return "OK";
+           return subjectApplication.Create(name, subjectType, sexLimitation, isQualifiedConversion, unit);
+            
             }
         [HttpGet]
         public ActionResult<string> Get(string id)

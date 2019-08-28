@@ -15,7 +15,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         public AssessmentController(IAssessmentApplication assessmentApplication)
         {
             this.assessmentApplication=assessmentApplication;
-            }
+        }
         
     }
 }

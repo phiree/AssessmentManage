@@ -61,7 +61,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         {
             Conn.Add(obj);
            
-            
+            Conn.SaveChanges();
            
         }
 

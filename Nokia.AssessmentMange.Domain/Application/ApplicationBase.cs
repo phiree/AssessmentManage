@@ -13,15 +13,11 @@ namespace Nokia.AssessmentMange.Domain.Application
             this.baseRepository = baseRepository;
 
         }
-        public void Create(T newT)
-        {
-            baseRepository.Insert(newT);
-
-        }
-        public void Update(T newT)
-        {
-            baseRepository.Update(newT);
-        }
+        public T Get(string id)
+        { 
+            return baseRepository.Get(id);
+            }
+        
 
     }
 }

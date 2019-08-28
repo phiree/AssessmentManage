@@ -27,7 +27,7 @@ namespace Nokia.AssessmentMange.Api
              //})
              .ConfigureServices(services => services.AddAutofac())
 
-                .UseStartup<Startup>()
+            .UseStartup<Startup>()
             .UseNLog()
             ;
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+                                                                        using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
@@ -31,6 +32,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// <summary>
         /// 得分换算表是否使用 合格/不合格  
         /// </summary>
+        [Column("IsQualifiedConversion",TypeName="bit")]
         public bool IsQualifiedConversion { get;protected set;}
         public string Unit { get; protected set; }
 

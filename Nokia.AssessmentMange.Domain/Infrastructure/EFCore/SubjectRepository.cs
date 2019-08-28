@@ -7,7 +7,7 @@ using Nokia.AssessmentMange.Domain.DomainModels.Repository;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
-    public class SubjectRepository:BaseRepository<Subject>,ISubjectRepository
+    public class SubjectRepository:EFCRepository<Subject>,ISubjectRepository
     {
         public SubjectRepository(AssessmentDbContext dbContext):base(dbContext)
         { }

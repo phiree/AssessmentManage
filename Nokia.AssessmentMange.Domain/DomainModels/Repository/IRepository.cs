@@ -40,7 +40,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
     }
 
 
-    public interface IRepositoryEFC<T>:IRepository<T>
+    public interface IEFCRepository<T>:IRepository<T>
     {
           T FindOne(Expression<Func<T, bool>> where);
         IEnumerable< T> Find(Expression<Func<T, bool>> where);

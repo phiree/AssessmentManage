@@ -18,16 +18,33 @@ namespace Nokia.AssessmentMange.Api.Controllers
             this.subjectApplication = subjectApplication;
         }
         [HttpPost("create")]
-        public ActionResult<Subject> Create(string name, SubjectType subjectType, SexLimitation sexLimitation, bool isQualifiedConversion, string unit)
+        public Subject Create(string name, SubjectType subjectType, SexLimitation sexLimitation, bool isQualifiedConversion, string unit)
         {
-           return subjectApplication.Create(name, subjectType, sexLimitation, isQualifiedConversion, unit);
-            
-            }
-        [HttpGet]
-        public ActionResult<string> Get(string id)
+            return subjectApplication.Create(name, subjectType, sexLimitation, isQualifiedConversion, unit);
+
+        }
+        [HttpGet("Get")]
+        public Subject Get(string subjectId)
         {
-            
-            return "OK2";
+
+            return subjectApplication.Get(subjectId);
+        }
+        [HttpGet("getall")]
+        public IEnumerable<Subject> GetAll()
+        {
+            return subjectApplication.GetAll();
+        }
+        [HttpPost("udpate")]
+        public Subject Update(string subjectId, string name, SubjectType subjectType,
+            SexLimitation sexLimitation, bool isQualifiedConversion, string unit)
+        {
+            var old = subjectApplication.Get(subjectId);
+            old.Update(name, subjectType,
+              sexLimitation, isQualifiedConversion, unit);
+
+
+            subjectApplication.Update(old);
+            return old;
         }
 
 

@@ -17,7 +17,14 @@ namespace Nokia.AssessmentMange.Domain.Application
         { 
             return baseRepository.Get(id);
             }
-        
+        public IEnumerable<T> GetAll()
+        { 
+            return baseRepository.GetAll();
+            }
+        public void Update(T t)
+        {
+          baseRepository.Update(t);
+        }
 
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
 {
-    public interface IPersonGradeRepository:IRepositoryEFC<PersonGrade>
+    public interface IPersonGradeRepository:IEFCRepository<PersonGrade>
     {
         /// <summary>
         /// 人员的考核成绩

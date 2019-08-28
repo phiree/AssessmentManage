@@ -3,7 +3,7 @@ using Nokia.AssessmentMange.Domain.DomainModels;
 
 namespace Nokia.AssessmentMange.Domain.Application
 {
-    public interface IAssessmentApplication
+    public interface IAssessmentApplication:IApplicationBase<Assessment>
     {
         Assessment CreateAssessment(Assessment assessment);
         IEnumerable<Assessment> GetAllAssessment();

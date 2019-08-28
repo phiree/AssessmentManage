@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
-    public class PersonGradeRepository:BaseRepository<PersonGrade>,IPersonGradeRepository
+    public class PersonGradeRepository:EFCRepository<PersonGrade>,IPersonGradeRepository
     {
         public PersonGradeRepository(AssessmentDbContext conn) : base(conn) { }
 

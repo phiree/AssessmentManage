@@ -36,6 +36,14 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public bool IsQualifiedConversion { get;protected set;}
         public string Unit { get; protected set; }
 
+        public void Update(string name,SubjectType subjectType,SexLimitation sexLimitation,bool isQualifiedConversion,string unit)
+        {
+            this.Name = name;
+            this.SubjectType = subjectType;
+            this.SexLimitation = sexLimitation;
+            this.IsQualifiedConversion = isQualifiedConversion;
+            this.Unit = unit;
+        }
         
     }
   

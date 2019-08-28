@@ -12,5 +12,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Entity
         public EntityBase() {this.Id=Guid.NewGuid().ToString();  }
       
         public string Id { get;set;}
+
+        
     }
 }

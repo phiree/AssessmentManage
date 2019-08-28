@@ -8,11 +8,11 @@ using System.Data;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
-    public class BaseRepository<T> : IRepositoryEFC<T> where T :DomainModels.Entity.EntityBase 
+    public class EFCRepository<T> : IEFCRepository<T> where T :DomainModels.Entity.EntityBase 
     {
         
         AssessmentDbContext Conn;
-        public BaseRepository(AssessmentDbContext conn)
+        public EFCRepository(AssessmentDbContext conn)
         {
             this.Conn = conn;
 
@@ -30,6 +30,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public bool Delete(T obj)
         {
             try{ Conn.Remove(obj);
+                Conn.SaveChanges();
                 return true;
                 }
             catch { 
@@ -68,6 +69,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public void Insert(IEnumerable<T> list)
         {
             Conn.AddRange(list);
+            Conn.SaveChanges();
            // return Conn.Insert<IEnumerable<T>>(list);
             
         }
@@ -75,6 +77,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public bool Update(T obj)
         {
             try{ Conn.Update(obj);
+                Conn.SaveChanges();
                 
                 return true;}
             catch { 

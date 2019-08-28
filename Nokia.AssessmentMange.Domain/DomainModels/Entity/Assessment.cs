@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
 {
@@ -27,11 +28,12 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// <summary>
         /// 包含的科目
         /// </summary>
-       
+
 
         /// <summary>
         /// 是否是年度考核
         /// </summary>
+        [Column("Annual", TypeName = "bit")]
         public bool Annual { get; protected set; }
         public DateTime CreatedTime { get; protected set; }
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nokia.AssessmentMange.Domain.Application;
+using Nokia.AssessmentMange.Domain.DomainModels;
 namespace Nokia.AssessmentMange.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -16,6 +17,13 @@ namespace Nokia.AssessmentMange.Api.Controllers
         {
             this.assessmentApplication=assessmentApplication;
         }
+        
+        [HttpPost("create")]
+        public Assessment Create(Assessment assessment)
+        { 
+            assessmentApplication.CreateAssessment(assessment);
+            return assessment;
+            }
         
     }
 }

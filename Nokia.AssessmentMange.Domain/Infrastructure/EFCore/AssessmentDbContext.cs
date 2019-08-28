@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nokia.AssessmentMange.Domain.Infrastructure.EFC
+namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
    public  class AssessmentDbContext:DbContext
     {
+        
         public AssessmentDbContext( DbContextOptions<AssessmentDbContext> options)
             :base(options) { }
         public DbSet<Assessment> Assessments { get;set;}

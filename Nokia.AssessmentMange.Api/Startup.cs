@@ -13,8 +13,11 @@ using Microsoft.Extensions.Options;
 using Nokia.AssessmentMange.Domain;
 using Nokia.AssessmentMange.Domain.DomainModels;
 using Nokia.AssessmentMange.Domain.Infrastructure;
-using Nokia.AssessmentMange.Domain.Infrastructure.EFC;
+using Nokia.AssessmentMange.Domain.Infrastructure.EFCore;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.EntityFrameworkCore.Extensions;
+using Autofac;
+
 namespace Nokia.AssessmentMange.Api
 {
     public class Startup
@@ -31,14 +34,16 @@ namespace Nokia.AssessmentMange.Api
         {
           
            services.AddDbContext<AssessmentDbContext>(
-               options=> options.UseSqlServer(
-                   Configuration["conn"],
+               options=> options.UseMySQL(
+                   Configuration.GetConnectionString("Conn"),
                      b=>b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
-               );
+               )
+                ;
+          
             //--------------
             services.AddSingleton<IExcelExporter, ExcelExporter>();
             //注册配置类
-            services.Configure<DbConnectionOption>(Configuration.GetSection("ConnectionStrings"));
+            
             services.Configure<SampleOption>(Configuration);
             services.Configure<SampleOption2>(Configuration);
             //Add swaggergen 
@@ -51,11 +56,14 @@ namespace Nokia.AssessmentMange.Api
             });
             //nswag
             services.AddOpenApiDocument();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
         }
-
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new AutofacModule());
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -69,7 +77,7 @@ namespace Nokia.AssessmentMange.Api
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
             // enable middleware to server generated swagger as a json endpoint
-            app.UseSwagger(config => config.PostProcess = (document, request) =>
+            app.UseOpenApi(config => config.PostProcess = (document, request) =>
             {
                 if (request.Headers.ContainsKey("X-External-Host"))
                 {

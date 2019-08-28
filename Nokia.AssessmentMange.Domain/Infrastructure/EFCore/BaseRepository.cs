@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Data;
 
-namespace Nokia.AssessmentMange.Domain.Infrastructure.EFC
+namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
     public class BaseRepository<T> : IRepositoryEFC<T> where T :DomainModels.Entity.EntityBase 
     {
@@ -57,17 +57,19 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFC
             
         }
 
-        public long Insert(T obj, IDbTransaction transaction = null)
+        public void Insert(T obj, IDbTransaction transaction = null)
         {
-            throw new NotImplementedException();
+            Conn.Add(obj);
+           
             
            
         }
 
-        public long Insert(IEnumerable<T> list)
+        public void Insert(IEnumerable<T> list)
         {
+            Conn.AddRange(list);
            // return Conn.Insert<IEnumerable<T>>(list);
-            throw new NotImplementedException();
+            
         }
 
         public bool Update(T obj)

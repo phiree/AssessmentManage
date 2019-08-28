@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nokia.AssessmentMange.Domain.Infrastructure.EFC
+namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
     public class AssessmentRepository
     {

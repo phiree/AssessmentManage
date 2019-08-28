@@ -1,11 +1,11 @@
 ﻿using Nokia.AssessmentMange.Domain.DomainModels;
 using Nokia.AssessmentMange.Domain.DomainModels.Repository;
-using Nokia.AssessmentMange.Domain.Infrastructure.EFC;
+using Nokia.AssessmentMange.Domain.Infrastructure.EFCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nokia.AssessmentMange.Domain.Infrastructure.Repository.EFC
+namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
     public class PersonGradeRepository:BaseRepository<PersonGrade>,IPersonGradeRepository
     {

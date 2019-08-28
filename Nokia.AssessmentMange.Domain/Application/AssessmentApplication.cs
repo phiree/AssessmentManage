@@ -11,18 +11,19 @@ namespace Nokia.AssessmentMange.Domain.Application
     /// <summary>
     /// 考核管理
     /// </summary>
-    public class AssessmentApplication : IAssessmentApplication
+    public class AssessmentApplication : ApplicationBase<Assessment>, IAssessmentApplication
     {
         IAssessmentService assessmentService;
         IRepository<Assessment> assessmentRepository;
         ISubjectRepository subjectRepository;
         IRepository<Person> personSubject;
         IPersonGradeRepository personGradeRepository;
+        
         public AssessmentApplication(IAssessmentService assessmentService,
             IRepository<Assessment> assessmentRepository,
             IRepository<Person> personSubject,
         ISubjectRepository subjectRepository,
-        IPersonGradeRepository personGradeRepository)
+        IPersonGradeRepository personGradeRepository):base(assessmentRepository)
         {
             this.assessmentRepository = assessmentRepository;
             this.assessmentService = assessmentService;

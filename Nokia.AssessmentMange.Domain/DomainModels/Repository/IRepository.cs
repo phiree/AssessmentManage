@@ -28,8 +28,8 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         IEnumerable<T> Search(string sql, dynamic param);
         IEnumerable<T> SearchWithPage(string sql, dynamic param, int pageIndex, int pageSize);
         IEnumerable<T> GetAll();
-        long Insert(T obj, IDbTransaction transaction = null);
-        long Insert(IEnumerable<T> list);
+        void Insert(T obj, IDbTransaction transaction = null);
+        void Insert(IEnumerable<T> list);
         bool Update(T obj);
         bool Update(IEnumerable<T> list);
         bool Delete(T obj);

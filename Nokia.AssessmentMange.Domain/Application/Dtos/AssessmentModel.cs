@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nokia.AssessmentMange.Api.Models
+namespace Nokia.AssessmentMange.Domain.Application.Dtos
 {
     public class AssessmentModel
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nokia.AssessmentMange.Api.Models.DtoMapper
+namespace Nokia.AssessmentMange.Domain.Application.Dtos.DtoMapper
 {
     /// <summary>
     /// assessment model 和 实体转换. 量少, 暂时没必要使用automapper

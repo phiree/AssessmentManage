@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Nokia.AssessmentMange.Domain.DomainModels.Repository;
 using System.Linq;
+using Nokia.AssessmentMange.Domain.Application.Dtos;
 
 namespace Nokia.AssessmentMange.Domain.Application
 {
@@ -18,24 +19,27 @@ namespace Nokia.AssessmentMange.Domain.Application
         ISubjectRepository subjectRepository;
         IRepository<Person> personSubject;
         IPersonGradeRepository personGradeRepository;
+       Dtos.DtoMapper.IAssessmentMapper assemblyMapper;
         
         public AssessmentApplication(IAssessmentService assessmentService,
             IRepository<Assessment> assessmentRepository,
             IRepository<Person> personSubject,
         ISubjectRepository subjectRepository,
-        IPersonGradeRepository personGradeRepository):base(assessmentRepository)
+        IPersonGradeRepository personGradeRepository
+            ,Dtos.DtoMapper.IAssessmentMapper assemblyMapper ):base(assessmentRepository)
         {
             this.assessmentRepository = assessmentRepository;
             this.assessmentService = assessmentService;
             this.subjectRepository = subjectRepository;  
             this.personSubject=personSubject;
             this.personGradeRepository=personGradeRepository;
+            this.assemblyMapper=assemblyMapper;
         }
-        public Assessment CreateAssessment(Assessment assessment)
+        public Assessment CreateAssessment(AssessmentCreateModel assessment)
         { 
-            var ass=new Assessment(assessment.DepartmentId,assessment.Name, assessment.Annual);
-            assessmentRepository.Insert(assessment);
-            return assessment;
+            var ass= assemblyMapper.ToEntity(assessment);// new Assessment(assessment.DepartmentId,assessment.Name, assessment.Annual);
+            assessmentRepository.Insert(ass);
+            return ass;
 
             }
         public IEnumerable<Assessment> GetAllAssessment()

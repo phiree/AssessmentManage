@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nokia.AssessmentMange.Api.Models
+namespace Nokia.AssessmentMange.Domain.Application.Dtos
 {
     /// <summary>
     /// 人员考核成绩输入

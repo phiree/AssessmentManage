@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Nokia.AssessmentMange.Api.Models;
+using Nokia.AssessmentMange.Domain.Application.Dtos;
 using Nokia.AssessmentMange.Domain.Application;
+using Nokia.AssessmentMange.Domain.Application.Dtos;
 using Nokia.AssessmentMange.Domain.DomainModels;
 namespace Nokia.AssessmentMange.Api.Controllers
 {
@@ -15,11 +16,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
     public class AssessmentController : ControllerBase
     {
         IAssessmentApplication assessmentApplication;
-        Models.DtoMapper.IAssessmentMapper assessmentMapper;
-        public AssessmentController(IAssessmentApplication assessmentApplication, Models.DtoMapper.IAssessmentMapper assessmentMapper)
+        
+        public AssessmentController(IAssessmentApplication assessmentApplication  )
         {
             this.assessmentApplication=assessmentApplication;
-            this.assessmentMapper=assessmentMapper;
+         
         }
         /// <summary>
         /// 创建一个考核
@@ -27,10 +28,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="assessmentModel">考核模型,id为空</param>
         /// <returns></returns>
         [HttpPost("create")]
-        public Assessment Create(AssessmentModel assessmentModel)
+        public Assessment Create(AssessmentCreateModel createModel)
         { 
-            var assessment=assessmentMapper.ToEntity(assessmentModel);
-            assessmentApplication.CreateAssessment(assessment);
+            
+           var assessment= assessmentApplication.CreateAssessment(createModel);
             return assessment;
         }
         /// <summary>

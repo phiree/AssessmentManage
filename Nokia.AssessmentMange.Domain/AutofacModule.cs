@@ -22,7 +22,7 @@ namespace Nokia.AssessmentMange.Domain
 
             builder.RegisterAssemblyTypes(this.ThisAssembly)
 
-                .Where(t => new List<string> { "Application", "Service", "Repository" }
+                .Where(t => new List<string> { "Application", "Service", "Repository","Mapper" }
                                 .Where(x => t.Name.EndsWith(x)).Count() > 0)
 
                 .AsImplementedInterfaces()

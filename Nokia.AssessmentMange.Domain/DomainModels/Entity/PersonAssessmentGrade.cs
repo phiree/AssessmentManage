@@ -8,11 +8,11 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     public class PersonAssessmentGrade : Entity.EntityBase
     {
         protected PersonAssessmentGrade() { }
-        public PersonAssessmentGrade(string assessmentId, string personId, bool isAbsent, 
+        public PersonAssessmentGrade(Assessment assessment, Person person, bool isAbsent, 
             bool isMakeup, IEnumerable<SubjectGrade> grades)
         {
-            this.AssessmentId = assessmentId;
-            this.PersonId = personId;
+            this.Assessment  = assessment ;
+            this.Person  = person ;
             this.IsAbsent = isAbsent;
             this.IsMakeup = isMakeup;
             this.Grades = grades;
@@ -32,7 +32,17 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public bool IsMakeup { get; protected set; }
         public IEnumerable<SubjectGrade> Grades { get; protected set; }
 
-
+        public void Update(Assessment assessment, Person person, bool isAbsent,
+            bool isMakeup, IEnumerable<SubjectGrade> grades)
+        {
+            this.Assessment = assessment;
+            this.Person = person;
+            this.IsAbsent = isAbsent;
+            this.IsMakeup = isMakeup;
+            this.Grades = grades;
+        }
+        
+                  
     }
 
 

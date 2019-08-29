@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nokia.AssessmentMange.Domain.DomainModels;
-using Nokia.AssessmentMange.Api.Models;
-using Nokia.AssessmentMange.Api.Models.DtoMapper;
+using Nokia.AssessmentMange.Domain.Application.Dtos;
+
+using Nokia.AssessmentMange.Domain.Application;
+
 namespace Nokia.AssessmentMange.Api.Controllers
 {
 
@@ -14,26 +16,24 @@ namespace Nokia.AssessmentMange.Api.Controllers
     [ApiController]
     public class PersonAssessmentGradeController : ControllerBase
     {
-        IPersonAssessementGradeMapper personAssessementGradeMapper;
-        public PersonAssessmentGradeController(IPersonAssessementGradeMapper personAssessementGradeMapper)
+       PersonAssessmentGradeApplication personAssessmentGradeApplication;
+        public PersonAssessmentGradeController(PersonAssessmentGradeApplication personAssessmentGradeApplication)
         {
-            this.personAssessementGradeMapper = personAssessementGradeMapper;
+            this.personAssessmentGradeApplication= personAssessmentGradeApplication;
 
         }
         [HttpPost("create")]
         public PersonAssessmentGrade Create(PersonAssessementGradeCreateModel createModel)
         {
-            var personAssessmentGrade=personAssessementGradeMapper.ToEntity(createModel);
-
-            throw new NotImplementedException();
+          return  personAssessmentGradeApplication.Create(createModel);
 
         }
         [HttpPost("update")]
         public PersonAssessmentGrade Update(PersonAssessementGradeUpdateModel updateModel)
         {
-            var personAssessmentGrade = personAssessementGradeMapper.ToEntity(updateModel);
+            return personAssessmentGradeApplication.Create(updateModel);
 
-            throw new NotImplementedException();
+           
 
         }
     }

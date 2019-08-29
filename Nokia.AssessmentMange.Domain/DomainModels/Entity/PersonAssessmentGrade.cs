@@ -5,10 +5,11 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 人员考核成绩
     /// </summary>
-    public class PersonGrade : Entity.EntityBase
+    public class PersonAssessmentGrade : Entity.EntityBase
     {
-        protected PersonGrade() { }
-        public PersonGrade(string assessmentId, string personId, bool isAbsent, bool isMakeup, IEnumerable<SubjectGrade> grades)
+        protected PersonAssessmentGrade() { }
+        public PersonAssessmentGrade(string assessmentId, string personId, bool isAbsent, 
+            bool isMakeup, IEnumerable<SubjectGrade> grades)
         {
             this.AssessmentId = assessmentId;
             this.PersonId = personId;
@@ -17,7 +18,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.Grades = grades;
         }
         public string AssessmentId { get; protected set; }
+        public Assessment Assessment { get;protected set;}
         public string PersonId { get; protected set; }
+        public Person Person { get; protected set; }
 
         /// <summary>
         /// 是否缺考

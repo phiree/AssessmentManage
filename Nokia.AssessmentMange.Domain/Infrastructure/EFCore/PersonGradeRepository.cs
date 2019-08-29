@@ -7,16 +7,16 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
-    public class PersonGradeRepository:EFCRepository<PersonGrade>,IPersonGradeRepository
+    public class PersonGradeRepository:EFCRepository<PersonAssessmentGrade>,IPersonGradeRepository
     {
         public PersonGradeRepository(AssessmentDbContext conn) : base(conn) { }
 
-        public IEnumerable<PersonGrade> FindByAssessmentAndPerson(string assessmentId, string personId)
+        public IEnumerable<PersonAssessmentGrade> FindByAssessmentAndPerson(string assessmentId, string personId)
         {
            throw new NotImplementedException();
         }
 
-        public void SavePersonGrades(PersonGrade personGrade)
+        public void SavePersonGrades(PersonAssessmentGrade personGrade)
         { 
              
          }

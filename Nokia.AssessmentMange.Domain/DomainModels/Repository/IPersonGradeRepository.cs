@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
 {
-    public interface IPersonGradeRepository:IEFCRepository<PersonGrade>
+    public interface IPersonGradeRepository:IEFCRepository<PersonAssessmentGrade>
     {
         /// <summary>
         /// 人员的考核成绩
@@ -12,6 +12,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         /// <param name="assessmentId"></param>
         /// <param name="personId"></param>
         /// <returns></returns>
-        IEnumerable<PersonGrade> FindByAssessmentAndPerson(string assessmentId,string personId);
+        IEnumerable<PersonAssessmentGrade> FindByAssessmentAndPerson(string assessmentId,string personId);
     }
 }

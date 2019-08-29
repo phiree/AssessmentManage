@@ -14,7 +14,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.Subject=subject;
             this.Grade=grade;
             }
-        
+        public string SubjectId { get;protected set;}
         public Subject Subject { get;protected set;}
         public double? Grade { get;   set; }
 

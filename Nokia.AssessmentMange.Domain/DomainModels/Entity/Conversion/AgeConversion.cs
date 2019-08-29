@@ -5,7 +5,7 @@ using System.Text;
 namespace Nokia.AssessmentMange.Domain.DomainModels
 {
     /// <summary>
-    /// 得分换算
+    /// 得分换算--年龄段的值.
     /// </summary>
     public class AgeConversion : Entity.EntityBase
     {

@@ -17,7 +17,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public DbSet<AssessmentSubject> AssessmentSubjects { get; set; }
         public DbSet<Department> Departments { get; set; }
 
-        public DbSet<PersonGrade>  PersonGrades{ get; set; }
+        public DbSet<PersonAssessmentGrade>  PersonGrades{ get; set; }
         public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

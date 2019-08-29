@@ -7,7 +7,7 @@ namespace Nokia.AssessmentMange.Domain.Application
     {
         Assessment CreateAssessment(Assessment assessment);
         IEnumerable<Assessment> GetAllAssessment();
-        PersonGrade GetPersonGrade(string assessmentId, string personId);
-        PersonGrade SavePersonGrade(string assessmentId, string personId, bool isMakeup, IDictionary<string, double> grades);
+        PersonAssessmentGrade GetPersonGrade(string assessmentId, string personId);
+        PersonAssessmentGrade SavePersonGrade(string assessmentId, string personId, bool isMakeup, IDictionary<string, double> grades);
     }
 }

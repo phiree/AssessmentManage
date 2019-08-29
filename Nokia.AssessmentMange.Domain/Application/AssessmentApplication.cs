@@ -43,7 +43,7 @@ namespace Nokia.AssessmentMange.Domain.Application
             var list=assessmentRepository.GetAll();
             return list;                                                                                    
             }
-        public PersonGrade SavePersonGrade(string assessmentId,string personId,
+        public PersonAssessmentGrade SavePersonGrade(string assessmentId,string personId,
             bool isMakeup, IDictionary<string, double> grades)
         {
            var assessment= assessmentRepository.Get(assessmentId);
@@ -54,7 +54,7 @@ namespace Nokia.AssessmentMange.Domain.Application
             assessmentService.SavePersonGrade(assessment,person,false,isMakeup, realSubjectGrades);
             throw new NotImplementedException();
         }
-        public PersonGrade GetPersonGrade(string assessmentId,string personId)
+        public PersonAssessmentGrade GetPersonGrade(string assessmentId,string personId)
         { 
            throw new NotImplementedException();
             }

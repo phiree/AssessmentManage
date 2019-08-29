@@ -33,7 +33,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Service
             }
 
 
-            PersonGrade personGrade = new PersonGrade(assessment.Id, person.Id, isAbsent, isMakeup, grades);
+            PersonAssessmentGrade personGrade = new PersonAssessmentGrade(assessment.Id, person.Id, isAbsent, isMakeup, grades);
             
         }
        

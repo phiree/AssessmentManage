@@ -23,7 +23,7 @@ using Nokia.AssessmentMange.Api.Models;
 using System.Text;
 using Nokia.AssessmentMange.Api.Controllers.Authentication;
 using Nokia.AssessmentMange.Api.Controllers.UserManage;
-
+using Nokia.AssessmentMange.Api.Models.DtoMapper;
 namespace Nokia.AssessmentMange.Api
 {
     public class Startup
@@ -71,7 +71,8 @@ namespace Nokia.AssessmentMange.Api
             //});
             services.AddScoped<IAuthenticateService, TokenAuthenticationService>();
             services.AddScoped<IUserManagementService, UserManagementService>();
-
+            services.AddScoped< IAssessmentMapper, AssessmentMapper>();
+            services.AddScoped< IPersonAssessementGradeMapper, PersonAssessementGradeMapper>();
             services.AddDbContext<AssessmentDbContext>(
                options=> options.UseMySQL(
                    Configuration.GetConnectionString("Conn"),

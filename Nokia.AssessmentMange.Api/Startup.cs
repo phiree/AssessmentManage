@@ -95,7 +95,8 @@ namespace Nokia.AssessmentMange.Api
             });
             //nswag
             services.AddOpenApiDocument();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddWebApiConventions();
 
 
         }
@@ -145,6 +146,7 @@ namespace Nokia.AssessmentMange.Api
             });
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
+            
             app.UseMvc(routes =>
             {
                 routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");

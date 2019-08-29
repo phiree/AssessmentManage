@@ -17,6 +17,12 @@ using Nokia.AssessmentMange.Domain.Infrastructure.EFCore;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.EntityFrameworkCore.Extensions;
 using Autofac;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Nokia.AssessmentMange.Api.Models;
+using System.Text;
+using Nokia.AssessmentMange.Api.Controllers.Authentication;
+using Nokia.AssessmentMange.Api.Controllers.UserManage;
 
 namespace Nokia.AssessmentMange.Api
 {
@@ -32,8 +38,41 @@ namespace Nokia.AssessmentMange.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          
-           services.AddDbContext<AssessmentDbContext>(
+            //authentication
+            services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
+            var token = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
+            var secret = Encoding.ASCII.GetBytes(token.Secret);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(token.Secret)),
+                    ValidIssuer = token.Issuer,
+                    ValidAudience = token.Audience,
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            //    ValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(secret),
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false
+            //    };
+            //});
+            services.AddScoped<IAuthenticateService, TokenAuthenticationService>();
+            services.AddScoped<IUserManagementService, UserManagementService>();
+
+            services.AddDbContext<AssessmentDbContext>(
                options=> options.UseMySQL(
                    Configuration.GetConnectionString("Conn"),
                      b=>b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
@@ -104,7 +143,12 @@ namespace Nokia.AssessmentMange.Api
             {
                 c.DocumentPath = "/redoc";
             });
-            app.UseMvc();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseAuthentication();
+            app.UseMvc(routes =>
+            {
+                routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
+            });
         }
     }
 }

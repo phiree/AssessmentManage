@@ -36,6 +36,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         [Column("Annual", TypeName = "bit")]
         public bool Annual { get; protected set; }
         public DateTime CreatedTime { get; protected set; }
+        public IList<AssessmentSubject> Subjects { get;set;}
 
         
     }

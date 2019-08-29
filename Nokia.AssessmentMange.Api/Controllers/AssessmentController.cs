@@ -8,6 +8,7 @@ using Nokia.AssessmentMange.Domain.Application;
 using Nokia.AssessmentMange.Domain.DomainModels;
 namespace Nokia.AssessmentMange.Api.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class AssessmentController : ControllerBase
@@ -23,7 +24,12 @@ namespace Nokia.AssessmentMange.Api.Controllers
         { 
             assessmentApplication.CreateAssessment(assessment);
             return assessment;
-            }
-        
+        }
+        [HttpPost("create")]
+        public Assessment UpdateSubjects(string assessmentId,IList<string> subjectId)
+        {
+         throw new NotImplementedException();
+        }
+
     }
 }

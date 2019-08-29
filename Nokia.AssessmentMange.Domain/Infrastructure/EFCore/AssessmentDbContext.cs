@@ -19,7 +19,13 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         public DbSet<PersonGrade>  PersonGrades{ get; set; }
         public DbSet<User> Users { get; set; }
-      
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AssessmentSubject>()
+           .HasKey(t => new { t.AssessmentId, t.SubjectId});
+            
+        }
+
 
     }
 }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nokia.AssessmentMange.Domain.DomainModels.Entity
+namespace Nokia.AssessmentMange.Domain.DomainModels
 {
     /// <summary>
     /// 考核 项目 关联关系
     /// </summary>
-   public class AssessmentSubject:EntityBase
+   public class AssessmentSubject
     {
         protected AssessmentSubject() { }
         public string AssessmentId { get; set; }

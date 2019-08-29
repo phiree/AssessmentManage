@@ -1,0 +1,129 @@
+  IF EXISTS(SELECT 1 FROM information_schema.tables 
+  WHERE table_name = '__EFMigrationsHistory' AND table_schema = DATABASE()) 
+BEGIN
+`__efmigrationshistory`
+
+END;
+
+CREATE TABLE `Assessments` (
+    `Id` VARCHAR(100) NOT NULL,
+    `DepartmentId` TEXT NULL,
+    `Name` TEXT NULL,
+    `Annual` BIT NOT NULL,
+    `CreatedTime` DATETIME NOT NULL,
+    PRIMARY KEY (`Id`)
+);
+
+CREATE TABLE `Departments` (
+    `Id` VARCHAR(100) NOT NULL,
+    `Name` TEXT NULL,
+    `ParentId` VARCHAR(100) NULL,
+    PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_Departments_Departments_ParentId` FOREIGN KEY (`ParentId`) REFERENCES `Departments` (`Id`) ON DELETE RESTRICT
+);
+
+CREATE TABLE `Subjects` (
+    `Id` VARCHAR(100) NOT NULL,
+    `Name` TEXT NULL,
+    `SubjectType` INT NOT NULL,
+    `SexLimitation` INT NOT NULL,
+    `IsQualifiedConversion` BIT NOT NULL,
+    `Unit` TEXT NULL,
+    PRIMARY KEY (`Id`)
+);
+
+CREATE TABLE `Person` (
+    `Id` VARCHAR(100) NOT NULL,
+    `RealName` TEXT NULL,
+    `Birthday` TEXT NULL,
+    `Sex` INT NOT NULL,
+    `DepartmentId` VARCHAR(100) NULL,
+    PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_Person_Departments_DepartmentId` FOREIGN KEY (`DepartmentId`) REFERENCES `Departments` (`Id`) ON DELETE RESTRICT
+);
+
+CREATE TABLE `AssessmentSubjects` (
+    `AssessmentId` VARCHAR(100) NOT NULL,
+    `SubjectId` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`AssessmentId`, `SubjectId`),
+    CONSTRAINT `FK_1` FOREIGN KEY (`AssessmentId`) REFERENCES `Assessments` (`Id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_2` FOREIGN KEY (`SubjectId`) REFERENCES `Subjects` (`Id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `SubjectConversion` (
+    `Sex` INT NOT NULL,
+    `SubjectId` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`SubjectId`, `Sex`),
+    CONSTRAINT `FK_3` FOREIGN KEY (`SubjectId`) REFERENCES `Subjects` (`Id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `PersonGrades` (
+    `Id` VARCHAR(100) NOT NULL,
+    `AssessmentId` VARCHAR(100) NULL,
+    `PersonId` VARCHAR(100) NULL,
+    `IsAbsent` BIT NOT NULL,
+    `IsMakeup` BIT NOT NULL,
+    PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_4` FOREIGN KEY (`AssessmentId`) REFERENCES `Assessments` (`Id`) ON DELETE RESTRICT,
+    CONSTRAINT `FK_5` FOREIGN KEY (`PersonId`) REFERENCES `Person` (`Id`) ON DELETE RESTRICT
+);
+
+CREATE TABLE `Users` (
+    `Id` VARCHAR(100) NOT NULL,
+    `LoginName` TEXT NULL,
+    `Password` TEXT NULL,
+    `PersonId` VARCHAR(100) NULL,
+    `IsAdmin` BIT NOT NULL,
+    PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_6` FOREIGN KEY (`PersonId`) REFERENCES `Person` (`Id`) ON DELETE RESTRICT
+);
+
+CREATE TABLE `AgeConversion` (
+    `SubjectId` VARCHAR(100) NOT NULL,
+    `Sex` INT NOT NULL,
+    `FloorAge` INT NOT NULL,
+    `AgeRange_CellingAge` INT NOT NULL,
+    `AgeRange_FloorAge` INT NOT NULL,
+    PRIMARY KEY (`SubjectId`, `Sex`, `FloorAge`),
+    CONSTRAINT `FK_7` FOREIGN KEY (`SubjectId`, `Sex`) REFERENCES `SubjectConversion` (`SubjectId`, `Sex`) ON DELETE CASCADE
+);
+
+CREATE TABLE `SubjectGrade` (
+    `Id` VARCHAR(100) NOT NULL,
+    `SubjectId` VARCHAR(100) NULL,
+    `Grade` DOUBLE NULL,
+    `PersonAssessmentGradeId` VARCHAR(100) NULL,
+    PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_8` FOREIGN KEY (`PersonAssessmentGradeId`) REFERENCES `PersonGrades` (`Id`) ON DELETE RESTRICT,
+    CONSTRAINT `FK_9` FOREIGN KEY (`SubjectId`) REFERENCES `Subjects` (`Id`) ON DELETE RESTRICT
+);
+
+CREATE TABLE `ScoreGrade` (
+    `Score` DOUBLE NOT NULL,
+    `SubjectId` VARCHAR(100) NOT NULL,
+    `Sex` INT NOT NULL,
+    `FloorAge` INT NOT NULL,
+    `Grade` DOUBLE NOT NULL,
+    PRIMARY KEY (`SubjectId`, `Sex`, `FloorAge`, `Score`),
+    CONSTRAINT `FK_10` FOREIGN KEY (`SubjectId`, `Sex`, `FloorAge`) REFERENCES `AgeConversion` (`SubjectId`, `Sex`, `FloorAge`) ON DELETE CASCADE
+);
+
+CREATE INDEX `IX_AssessmentSubjects_SubjectId` ON `AssessmentSubjects` (`SubjectId`);
+
+CREATE INDEX `IX_Departments_ParentId` ON `Departments` (`ParentId`);
+
+CREATE INDEX `IX_Person_DepartmentId` ON `Person` (`DepartmentId`);
+
+CREATE INDEX `IX_PersonGrades_AssessmentId` ON `PersonGrades` (`AssessmentId`);
+
+CREATE INDEX `IX_PersonGrades_PersonId` ON `PersonGrades` (`PersonId`);
+
+CREATE INDEX `IX_SubjectGrade_PersonAssessmentGradeId` ON `SubjectGrade` (`PersonAssessmentGradeId`);
+
+CREATE INDEX `IX_SubjectGrade_SubjectId` ON `SubjectGrade` (`SubjectId`);
+
+CREATE INDEX `IX_Users_PersonId` ON `Users` (`PersonId`);
+
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20190829184731_initialcreate', '2.2.6-servicing-10079');
+

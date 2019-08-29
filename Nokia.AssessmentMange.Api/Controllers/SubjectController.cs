@@ -11,7 +11,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+     
     public class SubjectController : ControllerBase
     {
         ISubjectApplication subjectApplication;
@@ -45,7 +45,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="formula">计算公式</param>
         /// <param name="paramSubjects">参与计算的科目,key是顺序,value是科目id</param>
         /// <returns></returns>
-        [HttpPost("create")]
+        [HttpPost("createcomputed")]
         public Subject CreateComputedSubject(string name, SubjectType subjectType,
             SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
             IDictionary<int,string> paramSubjects, string formula)
@@ -107,7 +107,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="formula">计算公式</param>
         /// <param name="unit">参与计算的科目</param>
         /// <returns></returns>
-        [HttpPost("udpate")]
+        [HttpPost("udpatecomputed")]
         public Subject UpdateComputedSubject(string subjectId, string name, SubjectType subjectType,
             SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
             IDictionary<int, string> paramSubjects, string formula)

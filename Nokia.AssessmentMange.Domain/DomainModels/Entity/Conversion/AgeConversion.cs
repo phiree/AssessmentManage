@@ -7,8 +7,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 得分换算--年龄段的值.
     /// </summary>
-    public class AgeConversion : Entity.EntityBase
+    public class AgeConversion 
     {
+        protected AgeConversion() { }
         public AgeConversion( AgeRange ageRange, IList<ScoreGrade> scoreGrades)
         { 
             this.AgeRange=ageRange;
@@ -29,7 +30,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class AgeRange
     {
-        
+        protected AgeRange() { }
         public AgeRange(  int floorAge,int cellingAge)
         { 
             this.CellingAge=cellingAge;
@@ -43,8 +44,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             }
     }
 
-    public class  ScoreGrade
+    public class  ScoreGrade 
     { 
+        protected ScoreGrade(){}
         public ScoreGrade(double grade,double score)
         { 
             this.Grade=grade;

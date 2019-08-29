@@ -18,7 +18,8 @@ namespace Nokia.AssessmentMange.Domain.Application.Dtos.DtoMapper
             bool isNew = model is AssessmentCreateModel;
             // if new create 
             // else get from repository
-            throw new NotImplementedException();
+            Assessment assessment=new Assessment(model.DepartmentId,model.Name,model.Annual);
+           return assessment;
 
         }
     }

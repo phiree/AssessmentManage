@@ -22,12 +22,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AssessmentSubject>() .HasKey(t => new { t.AssessmentId, t.SubjectId});
-            //modelBuilder.Entity<AgeConversion>().OwnsOne(x=>x.AgeRange);
-            //modelBuilder.Entity<AgeConversion>().OwnsMany(x=>x.ScoreGrades,a=>{ 
-            //    a.HasForeignKey("AgeConversionId");
-            //    a.Property<double>("Score");
-            //    a.HasKey("AgeConversionId","Score");
-            //    });
+            //科目-->成绩换算表
             modelBuilder.Entity<Subject>().OwnsMany(x=>x.SubjectConversions,a=>
             { 
                 
@@ -48,7 +43,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                 });
 
                 });
-
+            //modelBuilder.Entity<PersonAssessmentGrade>().OwnsMany(x=>x.SubjectGrades)
         }
 
 

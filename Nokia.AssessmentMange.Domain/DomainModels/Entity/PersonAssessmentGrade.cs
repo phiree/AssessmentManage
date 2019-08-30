@@ -9,13 +9,13 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     {
         protected PersonAssessmentGrade() { }
         public PersonAssessmentGrade(Assessment assessment, Person person, bool isAbsent, 
-            bool isMakeup, IEnumerable<SubjectGrade> grades)
+            bool isMakeup, IEnumerable<SubjectGrade> subjectGrades)
         {
             this.Assessment  = assessment ;
             this.Person  = person ;
             this.IsAbsent = isAbsent;
             this.IsMakeup = isMakeup;
-            this.Grades = grades;
+            this.SubjectGrades = subjectGrades;
         }
         public string AssessmentId { get; protected set; }
         public Assessment Assessment { get;protected set;}
@@ -30,7 +30,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// 是否补考
         /// </summary>
         public bool IsMakeup { get; protected set; }
-        public IEnumerable<SubjectGrade> Grades { get; protected set; }
+        public IEnumerable<SubjectGrade> SubjectGrades { get; protected set; }
 
         public void Update(Assessment assessment, Person person, bool isAbsent,
             bool isMakeup, IEnumerable<SubjectGrade> grades)
@@ -39,7 +39,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.Person = person;
             this.IsAbsent = isAbsent;
             this.IsMakeup = isMakeup;
-            this.Grades = grades;
+            this.SubjectGrades = grades;
         }
         
                   

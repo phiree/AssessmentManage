@@ -8,7 +8,7 @@ using System.Data;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
-    public class EFCRepository<T> : IEFCRepository<T> where T :DomainModels.Entity.EntityBase 
+    public class EFCRepository<T> : IEFCRepository<T> where T :DomainModels.EntityBase 
     {
         
         AssessmentDbContext Conn;

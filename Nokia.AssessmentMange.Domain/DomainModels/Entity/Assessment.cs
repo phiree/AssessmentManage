@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
 {
-    public class Assessment : Entity.EntityBase
+    public class Assessment : EntityBase
     {
         protected Assessment() { }
         public Assessment(string departmentId, string name,   bool annual)

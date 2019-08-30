@@ -1,4 +1,4 @@
-﻿using Nokia.AssessmentMange.Domain.DomainModels.Entity;
+﻿ 
 using System;
 using System.Collections.Generic;
 using System.Text;

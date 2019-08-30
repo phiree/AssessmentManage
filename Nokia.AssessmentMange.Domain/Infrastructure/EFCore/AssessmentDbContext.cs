@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nokia.AssessmentMange.Domain.DomainModels;
-using Nokia.AssessmentMange.Domain.DomainModels.Entity;
+ 
 using System;
 using System.Collections.Generic;
 using System.Text;

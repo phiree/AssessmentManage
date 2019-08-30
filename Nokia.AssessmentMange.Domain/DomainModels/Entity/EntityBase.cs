@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nokia.AssessmentMange.Domain.DomainModels.Entity
+namespace Nokia.AssessmentMange.Domain.DomainModels
 {
     public interface IEntity<PrimaryKey> { 
         PrimaryKey Id { get;set;}

@@ -1,4 +1,5 @@
-﻿using Nokia.AssessmentMange.Domain.DomainModels.Entity;
+﻿using Nokia.AssessmentMange.Domain.DomainModels;
+ 
 using System.Collections.Generic;
 
 namespace Nokia.AssessmentMange.Domain.Application

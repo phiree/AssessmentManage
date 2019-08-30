@@ -7,7 +7,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 系统用户
     /// </summary>
-   public  class User:Entity.EntityBase
+   public  class User:EntityBase
     {
         protected User() { }
         public string LoginName { get;protected set;}

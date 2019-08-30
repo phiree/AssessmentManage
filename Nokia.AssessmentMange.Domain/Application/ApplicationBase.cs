@@ -1,11 +1,12 @@
-﻿using Nokia.AssessmentMange.Domain.DomainModels.Repository;
+﻿using Nokia.AssessmentMange.Domain.DomainModels;
+using Nokia.AssessmentMange.Domain.DomainModels.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.Application
 {
-    public class ApplicationBase<T> : IApplicationBase<T> where T : DomainModels.Entity.EntityBase
+    public class ApplicationBase<T> : IApplicationBase<T> where T :  EntityBase
     {
         IRepository<T> baseRepository;
         public ApplicationBase(IRepository<T> baseRepository)

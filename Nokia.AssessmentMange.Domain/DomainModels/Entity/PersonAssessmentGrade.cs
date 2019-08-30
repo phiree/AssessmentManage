@@ -5,7 +5,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 人员考核成绩
     /// </summary>
-    public class PersonAssessmentGrade : Entity.EntityBase
+    public class PersonAssessmentGrade : EntityBase
     {
         protected PersonAssessmentGrade() { }
         public PersonAssessmentGrade(Assessment assessment, Person person, bool isAbsent, 

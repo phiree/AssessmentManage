@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
 {
-   public   class Department:Entity.EntityBase
+   public   class Department:EntityBase
     {
         protected Department() { }
         public string Name { get;protected set;}

@@ -9,7 +9,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 科目基类
     /// </summary>
-    public class Subject : Entity.EntityBase
+    public class Subject : EntityBase
     {
         protected Subject() { }
         public Subject(string name, SubjectType subjectType, SexLimitation sexLimitation,
@@ -20,9 +20,10 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.SexLimitation = sexLimitation;
             this.IsQualifiedConversion = isQualifiedConversion;
             this.Unit = unit;
+            this.SubjectConversions = new List<SubjectConversion>();
         }
-        public IList<SubjectConversion> SubjectConversions { get;  set; }
-        
+        public IList<SubjectConversion> SubjectConversions { get; set; }
+
         /// <summary>
         /// 名称
         /// </summary>
@@ -47,18 +48,29 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.IsQualifiedConversion = isQualifiedConversion;
             this.Unit = unit;
         }
-        
 
-      
+
+        public void ValidateConversions()
+        {
+
+        }
         public string ComputeScore(Sex sex, int age, double grade)
         {
-            SubjectConversion SubjectConversion =null;
-            try { 
-              SubjectConversion=SubjectConversions.First(x=>x.Sex==sex);
+            SubjectConversion SubjectConversion = null;
+            if (SubjectConversions.Count == 0)
+            {
+                throw new Exceptions.ConversionNotCreated(Name);
             }
-            catch   { 
-            throw new Exceptions.ConversionNotFound(sex,age,this.Name); }
-            var _ageConversions = SubjectConversion. AgeConversions.Where(x => x.AgeRange.InRange(age));
+            try
+            {
+
+                SubjectConversion = SubjectConversions.First(x => x.Sex == sex);
+            }
+            catch
+            {
+                throw new Exceptions.ConversionNotFound(sex, age, this.Name);
+            }
+            var _ageConversions = SubjectConversion.AgeConversions.Where(x => x.AgeRange.InRange(age));
             if (_ageConversions.Count() != 1)
             {
                 throw new Exceptions.AgeNotSuitable(age, this.Name, SubjectConversion.Sex);
@@ -73,7 +85,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 //必须配置两条
                 if (scoreGrades.Count != 2)
                 {
-                    throw new Exceptions.QualifiedSubjectMapError( Name, scoreGrades.Count);
+                    throw new Exceptions.QualifiedSubjectMapError(Name, scoreGrades.Count);
                 }
                 //1:合格 0:不合格
                 //判断 成绩数值越大,得分越高.
@@ -109,10 +121,19 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             }
             else
             {
-                throw new Exception($"计算分值错误.成绩对照表没有找到对应分数或者临近分数.科目:{ Name},性别:{SubjectConversion. Sex.ToString()},人员成绩:{grade}");
+                throw new Exception($"计算分值错误.成绩对照表没有找到对应分数或者临近分数.科目:{ Name},性别:{SubjectConversion.Sex.ToString()},人员成绩:{grade}");
             }
 
         }
+
+        /// <summary>
+        /// 添加成绩换算表
+        /// </summary>
+        public void AddConversionItem(Sex sex,int floorAge,int cellingAge,double score,double grade)
+        {
+            
+        }
+
         /// <summary>
         /// 获取最近的对照项,如果精确匹配,返回一个,否则,返回两个.
         /// </summary>

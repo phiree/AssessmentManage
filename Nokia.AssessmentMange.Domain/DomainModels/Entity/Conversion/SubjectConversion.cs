@@ -12,15 +12,19 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     {
         protected SubjectConversion() { }
         public SubjectConversion(Sex sex, IList<AgeConversion> ageConversions)
-        { 
-             this.Sex=sex;
-            
-            this.AgeConversions=ageConversions;
-            }
+        {
+            this.Sex = sex;
+
+            this.AgeConversions = ageConversions;
+        }
         public Sex Sex { get; set; }
-        
+
         public IList<AgeConversion> AgeConversions { get; protected set; }
-       
+        /// <summary>
+        /// 换算条目: 年龄段, 得分, 成绩
+        /// </summary>
+        public Tuple<AgeRange, double, double?> ConversionItem { get; protected set; }
 
     }
+    
 }

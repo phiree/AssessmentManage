@@ -45,7 +45,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="formula">计算公式</param>
         /// <param name="paramSubjects">参与计算的科目,key是顺序,value是科目id</param>
         /// <returns></returns>
-        [HttpPost("createcomputed")]
+        [HttpPost("createcomputed")]        
         public Subject CreateComputedSubject(string name, SubjectType subjectType,
             SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
             IDictionary<int,string> paramSubjects, string formula)

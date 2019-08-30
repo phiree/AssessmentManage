@@ -16,6 +16,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Exceptions
             this.subjectName=subjectName;
             this.grade = grade;
             }
-        public override string Message => $"科目[{subjectName}]对照项不全,无法计算成绩[{grade}]的得分";
+        public override string Message => $"科目[{subjectName}]的成绩换算数据不全,无法计算成绩[{grade}]的得分";
     }
 }

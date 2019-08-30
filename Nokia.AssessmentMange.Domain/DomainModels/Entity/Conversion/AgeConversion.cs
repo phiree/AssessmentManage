@@ -28,11 +28,12 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 年龄范围
     /// </summary>
-    public class AgeRange
+    public class AgeRange:IEquatable<AgeRange>
     {
         protected AgeRange() { }
         public AgeRange(  int floorAge,int cellingAge)
-        { 
+        {
+            if (floorAge > cellingAge) { throw new Exceptions.AgeRangeError(cellingAge,floorAge); }
             this.CellingAge=cellingAge;
             this.FloorAge=floorAge;
             }
@@ -42,6 +43,21 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         { 
              return age>=FloorAge&&age<=CellingAge;
             }
+        /// <summary>
+        /// 重合判断
+        /// </summary>
+        /// <param name="ageRange"></param>
+        /// <returns></returns>
+        public bool IsCoincide(AgeRange ageRange)
+        {
+            return !(ageRange.FloorAge>CellingAge||ageRange.CellingAge<FloorAge);
+              
+            }
+
+        public bool Equals(AgeRange other)
+        {
+            return other.FloorAge == FloorAge && other.CellingAge == CellingAge;
+        }
     }
 
     public class  ScoreGrade 

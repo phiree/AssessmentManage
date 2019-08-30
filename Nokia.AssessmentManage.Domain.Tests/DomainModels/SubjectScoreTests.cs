@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
-using   Nokia.AssessmentMange.Domain.DomainModels.Entity;
+ 
 using Nokia.AssessmentMange.Domain.DomainModels;
 using Nokia.AssessmentMange.Domain.DomainModels.Exceptions;
 namespace Nokia.AssessmentManage.Domain.Tests.DomainModels

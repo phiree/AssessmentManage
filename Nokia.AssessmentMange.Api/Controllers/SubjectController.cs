@@ -9,6 +9,9 @@ using Nokia.AssessmentMange.Domain.Application;
 using Nokia.AssessmentMange.Domain.DomainModels;
 namespace Nokia.AssessmentMange.Api.Controllers
 {
+    /// <summary>
+    /// 科目管理
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
      
@@ -125,7 +128,6 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="score">分数</param>
         /// <param name="sex">性别,如果科目类型为4(不限性别,但是换算规则不同BothButWithDifirentConversion)则需要赋值,否则传空</param>
         /// <returns></returns>
-        //--初始化
         [HttpPost("InitConversionTable")]
         public void InitConversionTable(string subjectId,Sex sex, AgeRange ageRange,double score )
         { 

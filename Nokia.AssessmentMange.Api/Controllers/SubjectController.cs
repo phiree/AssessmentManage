@@ -115,6 +115,71 @@ namespace Nokia.AssessmentMange.Api.Controllers
            throw new NotImplementedException();
         }
 
+        
+         
+        /// <summary>
+        /// 初始化成绩换算表
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="ageRange">年龄范围</param>
+        /// <param name="score">分数</param>
+        /// <param name="sex">性别,如果科目类型为4(不限性别,但是换算规则不同BothButWithDifirentConversion)则需要赋值,否则传空</param>
+        /// <returns></returns>
+        //--初始化
+        [HttpPost("InitConversionTable")]
+        public void InitConversionTable(string subjectId,Sex sex, AgeRange ageRange,double score )
+        { 
+            throw new NotImplementedException();
+            
+            }
+        /// <summary>
+        /// 添加得分
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="sex"></param>
+        /// <param name="score"></param>
+        [HttpPost("AddScore")]
+        public void AddScore(string subjectId,Sex sex,double score)
+        { }
+        /// <summary>
+        /// 添加年龄范围
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="sex"></param>
+        /// <param name="ageRange"></param>
+        [HttpPost("AddAgeRange")]
+        public void AddAgeRange(string subjectId, Sex sex, AgeRange ageRange)
+        { }
+        /// <summary>
+        /// 移除得分
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="sex"></param>
+        /// <param name="score"></param>
+        [HttpPost("RemoveScore")]
+        public void RemoveScore(string subjectId, Sex sex, double score)
+        { }
+        /// <summary>
+        /// 移除年龄范围
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="sex"></param>
+        /// <param name="ageRange"></param>
+        [HttpPost("RemoveAgeRange")]
+        public void RemoveAgeRange(string subjectId, Sex sex, AgeRange ageRange)
+        { }
+
+        /// <summary>
+        /// 设置对应的成绩
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="sex"></param>
+        /// <param name="ageRange"></param>
+        /// <param name="score"></param>
+        /// <param name="grade"></param>
+        public void SetGrade(string subjectId,Sex sex,AgeRange ageRange,double score ,double grade)
+        { }
+
 
     }
 }

@@ -9,6 +9,9 @@ using Nokia.AssessmentMange.Api.Models;
 using Nokia.AssessmentMange.Api.Controllers.Authentication;
 namespace Nokia.AssessmentMange.Api.Controllers
 {
+    /// <summary>
+    /// 用户认证
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -18,6 +21,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
         {
             this.authenticateService = authenticateService;
         }
+        /// <summary>
+        /// 获取token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("RequestToken")]
         public ActionResult RequestToken([FromBody] TokenRequest request)
@@ -34,19 +42,6 @@ namespace Nokia.AssessmentMange.Api.Controllers
             return BadRequest("Invalid Request");
 
         }
-        [AllowAnonymous]
-        [HttpGet("RequestToken2")]
-        public ActionResult RequestToken2()
-        {
-            return Ok("bb");
-
-        }
-        [AllowAnonymous]
-        [HttpGet("RequestToken3")]
-        public ActionResult RequestToken3()
-        {
-            return Ok("cc");
-
-        }
+        
     }
 }

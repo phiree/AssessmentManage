@@ -10,7 +10,9 @@ using Nokia.AssessmentMange.Domain.Application.Dtos;
 using Nokia.AssessmentMange.Domain.DomainModels;
 namespace Nokia.AssessmentMange.Api.Controllers
 {
-    
+    /// <summary>
+    /// 考核管理
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AssessmentController : ControllerBase
@@ -44,13 +46,27 @@ namespace Nokia.AssessmentMange.Api.Controllers
         {
          throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// 获取当前用户的所有考核
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("getlist")]
         public IEnumerable<Assessment> GetList()
         { 
             //根据claims获取用户所在部门,再获取考核
             throw new NotImplementedException();
             }
+        /// <summary>
+        /// 删除考核
+        /// </summary>
+        /// <param name="assessmentId">id</param>
+        /// <returns></returns>
+        [HttpGet("delete")]
+        public void Delete(string assessmentId)
+        {
+            //根据claims获取用户所在部门,再获取考核
+            throw new NotImplementedException();
+        }
 
     }
 }

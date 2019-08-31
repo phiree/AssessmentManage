@@ -11,7 +11,9 @@ using Nokia.AssessmentMange.Domain.Application;
 
 namespace Nokia.AssessmentMange.Api.Controllers
 {
-
+    /// <summary>
+    /// 人员考核成绩管理
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class PersonAssessmentGradeController : ControllerBase
@@ -22,8 +24,24 @@ namespace Nokia.AssessmentMange.Api.Controllers
             this.personAssessmentGradeApplication= personAssessmentGradeApplication;
 
         }
-        [HttpPost("create")]
-        public PersonAssessmentGrade Create(PersonAssessementGradeCreateModel createModel)
+        /// <summary>
+        /// 获取人员考核成绩
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="assessmentId"></param>
+        /// <returns></returns>
+        [HttpGet("Get")]
+        public PersonAssessmentGrade Get(string personId,string assessmentId)
+        { 
+            throw new NotImplementedException();
+            }
+        /// <summary>
+        /// 录入人员成绩
+        /// </summary>
+        /// <param name="createModel"></param>
+        /// <returns></returns>
+        [HttpPost("EntryGrade")]
+        public PersonAssessmentGrade EntryGrade(PersonAssessementGradeCreateModel createModel)
         {
           return  personAssessmentGradeApplication.Create(createModel);
 

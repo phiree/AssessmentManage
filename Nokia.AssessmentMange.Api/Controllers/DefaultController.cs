@@ -9,13 +9,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ScoreConversionController : ControllerBase
+    public class DefaultController : ControllerBase
     {
-        /// <summary>
-        /// 创建
-        /// </summary>
-        /// <param name="subjectId"></param>
-        public void CreateConversion(string subjectId)
-        { }
     }
 }

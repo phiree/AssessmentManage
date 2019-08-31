@@ -24,7 +24,7 @@ build_job:
     - echo %CI_COMMIT_SHA% > %PublishPath%%publishingProject%\version.txt
     #3 拷贝到发布目录
     #--------------------修改点2 路径-------------------
-    - echo d|xcopy /s /Y %publishingProject%\bin\Debug\netcoreapp2.1\publish %PublishPath%%publishingProject%
+    - echo d|xcopy /s /Y %publishingProject%\bin\Debug\netcoreapp2.2\publish %PublishPath%%publishingProject%
     #4 app上线. 方法:删除app_offline文件
     - del  %PublishPath%%publishingProject%\app_offline.htm
     #5 打包文件
@@ -35,7 +35,7 @@ build_job:
   artifacts:
     paths:
     #--------------------修改点3 路径-------------------
-      - "%CI_PROJECT_NAME%/bin/debug/netcoreapp2.1/publish"
+      - "%CI_PROJECT_NAME%/bin/debug/netcoreapp2.2/publish"
     name: "%CI_PROJECT_NAME%_%CI_COMMIT_SHA%"
  
 

@@ -8,10 +8,11 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     {
         
         protected Department() { }
-        public Department(string name,string parentId)
+        public Department(string name, Department parent)
         { 
             this.Name=name;
-            this.ParentId=ParentId;
+            this.Parent=parent;
+            this.ParentId=parent.Id;
             }
         public string Name { get;protected set;}
         public string ParentId { get;set;}

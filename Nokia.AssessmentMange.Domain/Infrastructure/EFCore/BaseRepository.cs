@@ -11,7 +11,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
     public class EFCRepository<T> : IEFCRepository<T> where T :DomainModels.EntityBase 
     {
         
-        AssessmentDbContext Conn;
+        protected AssessmentDbContext Conn { get;private set;}
         public EFCRepository(AssessmentDbContext conn)
         {
             this.Conn = conn;
@@ -20,7 +20,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
        
         public T Get(string id)
         {
-            return Conn.Set<T>().First(x=>x.Id==id);
+            return Conn.Set<T>().Find(id);
             
         }
         public IEnumerable<T> GetList(IEnumerable<string> idList)

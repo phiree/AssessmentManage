@@ -31,6 +31,10 @@ namespace Nokia.AssessmentMange.Domain
         .As(typeof(IRepository<>))
         .InstancePerLifetimeScope();
 
+            builder.RegisterGeneric(typeof(ApplicationBase<>))
+      .As(typeof(IApplicationBase<>))
+      .InstancePerLifetimeScope();
+
             builder.RegisterType<GradeCalculater>()
    .As<IGradeCalculater>();
             builder.RegisterType<CodeRunner>()

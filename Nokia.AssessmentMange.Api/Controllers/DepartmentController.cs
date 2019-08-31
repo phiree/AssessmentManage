@@ -14,8 +14,8 @@ namespace Nokia.AssessmentMange.Api.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-       ApplicationBase<Department> departmentApplication;
-        public DepartmentController(ApplicationBase<Department> departmentApplication)
+       IDepartmentApplication  departmentApplication;
+        public DepartmentController(IDepartmentApplication departmentApplication)
         { 
             this.departmentApplication=departmentApplication;
             }
@@ -24,10 +24,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// </summary>
         /// <param name="departmentId"></param>
         /// <returns></returns>
-        [HttpPost("Get")]
+        [HttpGet("Get")]
         public Department Get(string departmentId)
         { 
-            return departmentApplication.Get(departmentId);
+            return departmentApplication.GetWithAllChildren(departmentId);
             }
         /// <summary>
         /// 创建部门
@@ -38,7 +38,8 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpPost("Create")]
         public Department Create(string name,string parentId)
         { 
-            Department department=new Department(name,parentId);
+            Department parent=departmentApplication.Get(parentId);
+            Department department=new Department(name,parent);
            departmentApplication.Create(department);
             return department;
             }

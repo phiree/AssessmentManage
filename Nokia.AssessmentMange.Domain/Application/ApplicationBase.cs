@@ -8,7 +8,7 @@ namespace Nokia.AssessmentMange.Domain.Application
 {
     public class ApplicationBase<T> : IApplicationBase<T> where T :  EntityBase
     {
-        IRepository<T> baseRepository;
+        protected IRepository<T> baseRepository { get;private set;}
         public ApplicationBase(IRepository<T> baseRepository)
         {
             this.baseRepository = baseRepository;

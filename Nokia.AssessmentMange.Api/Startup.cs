@@ -23,7 +23,9 @@ using Nokia.AssessmentMange.Api.Models;
 using System.Text;
 using Nokia.AssessmentMange.Api.Controllers.Authentication;
 using Nokia.AssessmentMange.Api.Controllers.UserManage;
- 
+using System.Web.Http;
+using Newtonsoft.Json;
+
 namespace Nokia.AssessmentMange.Api
 {
     public class Startup
@@ -96,7 +98,9 @@ namespace Nokia.AssessmentMange.Api
             //nswag
             services.AddOpenApiDocument();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddWebApiConventions();
+                .AddWebApiConventions()
+                //memo: 解决互相引用的对象 序列化时无限循环问题.
+                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
         }
@@ -107,6 +111,8 @@ namespace Nokia.AssessmentMange.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+           
+         
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -150,7 +156,7 @@ namespace Nokia.AssessmentMange.Api
             app.UseMvc(routes =>
             {
                 routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
-            });
+            }) ;
         }
     }
 }

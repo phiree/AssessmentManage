@@ -84,7 +84,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
             table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 100 });
             
                 table.SetGrade(new AgeRange(10, 20), 100, 13);
-           Assert.Equal(13,table.Grades[0].Grade);
+           Assert.Equal(13,table.Grades[0].Grade.GradeValue);
 
         }
         [Fact]

@@ -52,110 +52,49 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 
         public void ValidateConversions()
         {
-
         }
-        public string ComputeScore(Sex sex, int age, double grade)
+        public SubjectConversion GetSubjectConversion(Sex sex)
         {
             SubjectConversion SubjectConversion = null;
             if (SubjectConversions.Count == 0)
             {
                 throw new Exceptions.ConversionNotCreated(Name);
             }
-            try
+            //根据性别确定换算表
+            switch (SexLimitation)
             {
+                case SexLimitation.BothAndSameConversion:
+                    SubjectConversion = SubjectConversions[0];
+                    break;
+                case SexLimitation.BothButDiffirentConversion:
+                    try
+                    {
 
-                SubjectConversion = SubjectConversions.First(x => x.Sex == sex);
+                        SubjectConversion = SubjectConversions.First(x => x.Sex == sex);
+                    }
+                    catch
+                    {
+                        throw new Exceptions.ConversionNotFound(sex,  this.Name);
+                    }
+                    break;
+                case SexLimitation.FemaleOnly:
+                    if (sex == Sex.Female)
+                    
+                    { SubjectConversion = SubjectConversions[0]; }
+                    break;
+                case SexLimitation.MaleOnly:
+                    if (sex == Sex.Male)
+                     
+                    { SubjectConversion = SubjectConversions[0]; }
+                    break;
             }
-            catch
-            {
-                throw new Exceptions.ConversionNotFound(sex, age, this.Name);
-            }
-            var _ageConversions = SubjectConversion.AgeConversions.Where(x => x.AgeRange.InRange(age));
-            if (_ageConversions.Count() != 1)
-            {
-                throw new Exceptions.AgeNotSuitable(age, this.Name, SubjectConversion.Sex);
-            }
-            var scoreGrades = _ageConversions.First().ScoreGrades;
-            double maxGradeinConversion = scoreGrades.Max(x => x.Grade);
-            double minGradeinConversion = scoreGrades.Min(x => x.Grade);
-            var conversionWithMax = scoreGrades.Single(x => x.Grade == maxGradeinConversion);
-            var conversionWithMin = scoreGrades.Single(x => x.Grade == minGradeinConversion);
-            if (this.IsQualifiedConversion)
-            {
-                //必须配置两条
-                if (scoreGrades.Count != 2)
-                {
-                    throw new Exceptions.QualifiedSubjectMapError(Name, scoreGrades.Count);
-                }
-                //1:合格 0:不合格
-                //判断 成绩数值越大,得分越高.
-                bool biggerBetter = conversionWithMax.Score > conversionWithMin.Score
-                                    && maxGradeinConversion > minGradeinConversion;
-                bool isQualified = biggerBetter ? grade >= maxGradeinConversion : grade <= minGradeinConversion;
-
-                return isQualified ? "合格" : "不合格";
-            }
-
-            //数值成绩
-
-            if (grade > maxGradeinConversion)
-            {
-                throw new Exceptions.GradeBeyondMaximum(grade, maxGradeinConversion);
-            }
-            if (grade < minGradeinConversion)
-            {
-                throw new Exceptions.GradeBeyondMinimum(grade, minGradeinConversion);
-            }
-
-            var nearestConversions = GetNearest(scoreGrades, grade);
-            if (nearestConversions.Count == 1)
-            {
-                return nearestConversions[0].Score.ToString();
-            }
-            else if (nearestConversions.Count == 2)
-            {
-                var first = nearestConversions[0];
-                var second = nearestConversions[1];
-                var score = new InterpolationScore(first.Score, second.Score, first.Grade, second.Score, grade).GetValue();
-                return score.ToString();
-            }
-            else
-            {
-                throw new Exception($"计算分值错误.成绩对照表没有找到对应分数或者临近分数.科目:{ Name},性别:{SubjectConversion.Sex.ToString()},人员成绩:{grade}");
-            }
+            return SubjectConversion;
 
         }
 
-        /// <summary>
-        /// 添加成绩换算表
-        /// </summary>
-        public void AddConversionItem(Sex sex,int floorAge,int cellingAge,double score,double grade)
-        {
-            
-        }
-
-        /// <summary>
-        /// 获取最近的对照项,如果精确匹配,返回一个,否则,返回两个.
-        /// </summary>
-        /// <param name="scoreConversions"></param>
-        /// <param name="grade"></param>
-        /// <returns></returns>
-        public IList<ScoreGrade> GetNearest(IList<ScoreGrade> scoreGrade, double grade)
-        {
-            var nearest = scoreGrade.Where(x => x.Grade == grade);
-            if (nearest.Count() == 1)
-            {
-                return nearest.ToList();
-            }
-            nearest = scoreGrade.OrderBy(x => Math.Abs(x.Grade - grade));
-            if (nearest.Count() < 2)
-            {
-                throw new Exceptions.ScoreGradeMapIncomplete(Name, grade);
-            }
-            return nearest.Take(2).ToArray();
-
-        }
-
+        
+         
+        
     }
 
 

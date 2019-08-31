@@ -10,21 +10,23 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class SubjectConversion
     {
+        public static SubjectConversion Null
+        {
+            get { return new SubjectConversion(); }
+        }
         protected SubjectConversion() { }
-        public SubjectConversion(Sex sex, IList<AgeConversion> ageConversions)
+        public SubjectConversion(Sex? sex, ConversionTable conversionTable)
         {
             this.Sex = sex;
 
-            this.AgeConversions = ageConversions;
+            this.ConversionTable = conversionTable;
         }
-        public Sex Sex { get; set; }
+        public Sex? Sex { get; set; }
 
-        public IList<AgeConversion> AgeConversions { get; protected set; }
-        /// <summary>
-        /// 换算条目: 年龄段, 得分, 成绩
-        /// </summary>
-        public Tuple<AgeRange, double, double?> ConversionItem { get; protected set; }
+        public ConversionTable ConversionTable { get; protected set; }
+
+      
 
     }
-    
+
 }

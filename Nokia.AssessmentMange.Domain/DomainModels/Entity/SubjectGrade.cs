@@ -17,6 +17,19 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public string SubjectId { get;protected set;}
         public Subject Subject { get;protected set;}
         public double? Grade { get;   set; }
+        public double Score {get;set; }
+        public void SetScore(double score)
+        { 
+            Score=score;
+            }
+        public string DisplayScore {
+            get {
+                if (Subject.IsQualifiedConversion) { 
+                    return Score==0?"不合格":"合格";
+                    }
+                return Score.ToString("{0:2}");
+                }
+            }
 
         
     }

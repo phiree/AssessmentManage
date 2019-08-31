@@ -23,6 +23,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.SubjectConversions = new List<SubjectConversion>();
         }
         public IList<SubjectConversion> SubjectConversions { get; set; }
+        public IList<AssessmentSubject> Assessments { get;set;}
 
         /// <summary>
         /// 名称

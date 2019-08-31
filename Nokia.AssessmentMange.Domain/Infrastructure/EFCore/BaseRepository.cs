@@ -142,6 +142,11 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         {
             return Conn.Set<T>().Where(where);
         }
+
+        public void Delete(string id)
+        {
+           Conn.Set<T>().Remove(Get(id) );
+        }
     }
 
 }

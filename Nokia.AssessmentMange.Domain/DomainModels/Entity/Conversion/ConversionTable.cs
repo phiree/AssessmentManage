@@ -195,6 +195,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 
     public class ConversionCell
     {
+        protected ConversionCell() { }
         public ConversionCell(AgeRange ageRange, double score, Grade grade)
         {
             this.AgeRange = ageRange;

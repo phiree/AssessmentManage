@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nokia.AssessmentMange.Domain.DomainModels;
-
+using Nokia.AssessmentMange.Domain.Application;
 namespace Nokia.AssessmentMange.Api.Controllers
 {
     /// <summary>
@@ -14,7 +14,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-       
+       ApplicationBase<Department> departmentApplication;
+        public DepartmentController(ApplicationBase<Department> departmentApplication)
+        { 
+            this.departmentApplication=departmentApplication;
+            }
         /// <summary>
         /// 获取部门
         /// </summary>
@@ -23,7 +27,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpPost("Get")]
         public Department Get(string departmentId)
         { 
-            throw new NotImplementedException();
+            return departmentApplication.Get(departmentId);
             }
         /// <summary>
         /// 创建部门
@@ -34,7 +38,9 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpPost("Create")]
         public Department Create(string name,string parentId)
         { 
-            throw new NotImplementedException();
+            Department department=new Department(name,parentId);
+           departmentApplication.Create(department);
+            return department;
             }
         /// <summary>
         /// 更新部门

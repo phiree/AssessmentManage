@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Nokia.AssessmentMange.Domain.Migrations
 {
-    public partial class initialcreate : Migration
+    public partial class initcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"SET default_storage_engine=InnoDB;");
+            migrationBuilder.Sql(@"ALTER DATABASE CHARACTER SET utf8 COLLATE utf8_general_ci;");
             migrationBuilder.CreateTable(
                 name: "Assessments",
                 columns: table => new
@@ -34,7 +36,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 {
                     table.PrimaryKey("PK_Departments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Departments_Departments_ParentId",
+                        name: "fk1",
                         column: x => x.ParentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
@@ -63,7 +65,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     RealName = table.Column<string>(nullable: true),
-                    Birthday = table.Column<string>(nullable: true),
+                    Birthday = table.Column<DateTime>(nullable: false),
                     Sex = table.Column<int>(nullable: false),
                     DepartmentId = table.Column<string>(nullable: true)
                 },
@@ -71,7 +73,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 {
                     table.PrimaryKey("PK_Person", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Person_Departments_DepartmentId",
+                        name: "fk2",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
@@ -79,7 +81,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssessmentSubjects",
+                name: "AssessmentSubject",
                 columns: table => new
                 {
                     AssessmentId = table.Column<string>(nullable: false),
@@ -87,15 +89,15 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssessmentSubjects", x => new { x.AssessmentId, x.SubjectId });
+                    table.PrimaryKey("AssessmentSubjectId", x => new { x.SubjectId, x.AssessmentId });
                     table.ForeignKey(
-                        name: "FK_AssessmentSubjects_Assessments_AssessmentId",
+                        name: "fk3",
                         column: x => x.AssessmentId,
                         principalTable: "Assessments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AssessmentSubjects_Subjects_SubjectId",
+                        name: "fk4",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
@@ -111,9 +113,9 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubjectConversion", x => new { x.SubjectId, x.Sex });
+                    table.PrimaryKey("SubjectConversionId", x => new { x.SubjectId, x.Sex });
                     table.ForeignKey(
-                        name: "FK_SubjectConversion_Subjects_SubjectId",
+                        name: "fk5",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
@@ -134,13 +136,13 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 {
                     table.PrimaryKey("PK_PersonGrades", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PersonGrades_Assessments_AssessmentId",
+                        name: "fk6",
                         column: x => x.AssessmentId,
                         principalTable: "Assessments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PersonGrades_Person_PersonId",
+                        name: "fk7",
                         column: x => x.PersonId,
                         principalTable: "Person",
                         principalColumn: "Id",
@@ -161,7 +163,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Person_PersonId",
+                        name: "fk8",
                         column: x => x.PersonId,
                         principalTable: "Person",
                         principalColumn: "Id",
@@ -169,20 +171,24 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AgeConversion",
+                name: "ConversionCell",
                 columns: table => new
                 {
+                    Score = table.Column<double>(nullable: false),
                     SubjectId = table.Column<string>(nullable: false),
                     Sex = table.Column<int>(nullable: false),
                     FloorAge = table.Column<int>(nullable: false),
+                    AgeRange_Minimum = table.Column<int>(nullable: false),
+                    AgeRange_Maximum = table.Column<int>(nullable: false),
                     AgeRange_CellingAge = table.Column<int>(nullable: false),
-                    AgeRange_FloorAge = table.Column<int>(nullable: false)
+                    AgeRange_FloorAge = table.Column<int>(nullable: false),
+                    Grade_GradeValue = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AgeConversion", x => new { x.SubjectId, x.Sex, x.FloorAge });
+                    table.PrimaryKey("ConversionCellId", x => new { x.SubjectId, x.Sex, x.FloorAge, x.Score });
                     table.ForeignKey(
-                        name: "FK_AgeConversion_SubjectConversion_SubjectId_Sex",
+                        name: "fk9",
                         columns: x => new { x.SubjectId, x.Sex },
                         principalTable: "SubjectConversion",
                         principalColumns: new[] { "SubjectId", "Sex" },
@@ -193,53 +199,32 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 name: "SubjectGrade",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    SubjectId = table.Column<string>(nullable: true),
+                    SubjectId = table.Column<string>(nullable: false),
+                    PersonAssessmentGradeId = table.Column<string>(nullable: false),
                     Grade = table.Column<double>(nullable: true),
-                    PersonAssessmentGradeId = table.Column<string>(nullable: true)
+                    Score = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubjectGrade", x => x.Id);
+                    table.PrimaryKey("SubjectGradeId", x => new { x.PersonAssessmentGradeId, x.SubjectId });
                     table.ForeignKey(
-                        name: "FK_SubjectGrade_PersonGrades_PersonAssessmentGradeId",
+                        name: "fk10",
                         column: x => x.PersonAssessmentGradeId,
                         principalTable: "PersonGrades",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SubjectGrade_Subjects_SubjectId",
+                        name: "fk11",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ScoreGrade",
-                columns: table => new
-                {
-                    Score = table.Column<double>(nullable: false),
-                    SubjectId = table.Column<string>(nullable: false),
-                    Sex = table.Column<int>(nullable: false),
-                    FloorAge = table.Column<int>(nullable: false),
-                    Grade = table.Column<double>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ScoreGrade", x => new { x.SubjectId, x.Sex, x.FloorAge, x.Score });
-                    table.ForeignKey(
-                        name: "FK_ScoreGrade_AgeConversion_SubjectId_Sex_FloorAge",
-                        columns: x => new { x.SubjectId, x.Sex, x.FloorAge },
-                        principalTable: "AgeConversion",
-                        principalColumns: new[] { "SubjectId", "Sex", "FloorAge" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AssessmentSubjects_SubjectId",
-                table: "AssessmentSubjects",
-                column: "SubjectId");
+                name: "IX_AssessmentSubject_AssessmentId",
+                table: "AssessmentSubject",
+                column: "AssessmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Departments_ParentId",
@@ -262,11 +247,6 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubjectGrade_PersonAssessmentGradeId",
-                table: "SubjectGrade",
-                column: "PersonAssessmentGradeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SubjectGrade_SubjectId",
                 table: "SubjectGrade",
                 column: "SubjectId");
@@ -280,10 +260,10 @@ namespace Nokia.AssessmentMange.Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AssessmentSubjects");
+                name: "AssessmentSubject");
 
             migrationBuilder.DropTable(
-                name: "ScoreGrade");
+                name: "ConversionCell");
 
             migrationBuilder.DropTable(
                 name: "SubjectGrade");
@@ -292,22 +272,19 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "AgeConversion");
+                name: "SubjectConversion");
 
             migrationBuilder.DropTable(
                 name: "PersonGrades");
 
             migrationBuilder.DropTable(
-                name: "SubjectConversion");
+                name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "Assessments");
 
             migrationBuilder.DropTable(
                 name: "Person");
-
-            migrationBuilder.DropTable(
-                name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "Departments");

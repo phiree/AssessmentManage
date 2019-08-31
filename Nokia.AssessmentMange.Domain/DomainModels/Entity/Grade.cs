@@ -13,6 +13,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         {
             get { return new Grade(0); }
         }
+        protected Grade() { }
         
         public double GradeValue { get; protected set; } 
         public Grade(double? gradeValue)

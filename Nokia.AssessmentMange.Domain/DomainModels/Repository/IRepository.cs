@@ -33,6 +33,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         bool Update(T obj);
         bool Update(IEnumerable<T> list);
         bool Delete(T obj);
+        void Delete(Key id);
         bool Delete(IEnumerable<T> list);
         bool DeleteAll();
 

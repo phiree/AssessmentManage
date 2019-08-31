@@ -48,12 +48,6 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.ConversionTableController.CreateConversion(System.String)">
-            <summary>
-            创建
-            </summary>
-            <param name="subjectId"></param>
-        </member>
         <member name="T:Nokia.AssessmentMange.Api.Controllers.DepartmentController">
             <summary>
             部门管理
@@ -166,6 +160,11 @@
             移除人员关联的账号
             </summary>
                <param name="personId"></param>
+        </member>
+        <member name="T:Nokia.AssessmentMange.Api.Controllers.SubjectController">
+            <summary>
+            科目管理
+            </summary>
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.Create(System.String,Nokia.AssessmentMange.Domain.DomainModels.SubjectType,Nokia.AssessmentMange.Domain.DomainModels.SexLimitation,System.Boolean,System.String)">
             <summary>

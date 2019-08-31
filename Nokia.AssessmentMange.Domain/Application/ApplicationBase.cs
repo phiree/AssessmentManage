@@ -14,6 +14,15 @@ namespace Nokia.AssessmentMange.Domain.Application
             this.baseRepository = baseRepository;
 
         }
+        /// <summary>
+        /// 反模式.
+        /// 参数t 意味着 application需要负责对象的创建. 不要滥用此方法.
+        /// </summary>
+        /// <param name="t"></param>
+        public void Create(T t) { 
+            baseRepository.Insert(t);
+
+            }
         public T Get(string id)
         { 
             return baseRepository.Get(id);
@@ -25,6 +34,10 @@ namespace Nokia.AssessmentMange.Domain.Application
         public void Update(T t)
         {
           baseRepository.Update(t);
+        }
+        public void Delete(string id)
+        {
+            baseRepository.Delete(id);
         }
 
     }

@@ -75,5 +75,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         {
             return other. Minimum.Equals( Minimum)&& other.Maximum .Equals(Maximum);
         }
+        public override int GetHashCode()
+        {
+            return Maximum.GetHashCode();
+        }
     }
 }

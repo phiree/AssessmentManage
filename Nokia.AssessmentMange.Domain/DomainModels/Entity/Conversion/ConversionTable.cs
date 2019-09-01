@@ -18,10 +18,24 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public IEnumerable<AgeRange> AgeRanges
         {
             get {
+                //memo: distinct无法移除重复项.
+                var ageRanges = new List<AgeRange>();
+                foreach(var g in Grades)
+                { 
+                    if(ageRanges.Where(x=>x.CellingAge==g.AgeRange.CellingAge).Count()==0)
+                    { 
+                        ageRanges.Add(new AgeRange (g.AgeRange.FloorAge,g.AgeRange.CellingAge));
+                        }
+                    }
+                return ageRanges;
                 //memo: agerange虽然是值对象, 但是在c#中,它依然是引用类型. 这个对象是 cell主键的一部分.
-               // 新建一个cell时, 如果直接使用已有的agerange对象, ef会认为 这是一个更新,但是它又是主键,无法更新, 导致异常.
-               // return Grades.Select(x => x.AgeRange).Distinct();
+                // 新建一个cell时, 如果直接使用已有的agerange对象, ef会认为 这是一个更新,但是它又是主键,无法更新, 导致异常.
+                // return Grades.Select(x => x.AgeRange).Distinct();
+                
                 return   Grades.Select(x => x.AgeRange).Distinct().Select(x=>new AgeRange(x.FloorAge,x.CellingAge)).ToList(); }
+
+           
+            
         }
         //rows
         public IEnumerable<int> Scores
@@ -204,7 +218,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
     }
 
-    public class ConversionCell  :EntityBase
+    public class ConversionCell  
     {
         protected ConversionCell() { }
         public ConversionCell(AgeRange ageRange, int score, Grade grade)
@@ -220,46 +234,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public int Score { get;   set; }  //row
         public Grade Grade { get; protected set; }//cell
     }
-    /// <summary>
-    /// 年龄范围
-    /// </summary>
-    public sealed class AgeRange  :ICloneable
-    {
-
-        protected AgeRange() { }
-        public AgeRange(int floorAge, int cellingAge)
-        {
-          //  if (floorAge > cellingAge) { throw new Exceptions.AgeRangeError(cellingAge, floorAge); }
-            this.CellingAge = cellingAge;
-            this.FloorAge = floorAge;
-        }
-        public int AgeScope {
-            get { return CellingAge+FloorAge;}
-            set {  }
-            }
-        //  public int CellingAge { get { return Maximum; } set { Maximum = value; } }
-        public int CellingAge { get ;set ; }
-        // public int FloorAge { get { return Minimum; } set { Minimum = value; } }
-        public int FloorAge { get  ;set ; }
-        public bool IsCoincide(AgeRange range)
-        {
-            return !(range.FloorAge.CompareTo(CellingAge) > 0 || range.CellingAge.CompareTo(FloorAge) < 0);
-
-        }
-        public bool ContainsValue(int value)
-        {
-            return (this.FloorAge.CompareTo(value) <= 0) && (value.CompareTo(this.CellingAge) <= 0);
-        }
-        public override int GetHashCode()
-        {
-            return FloorAge.GetHashCode();
-        }
-
-        public object Clone()
-        {
-           return new AgeRange(FloorAge,CellingAge);
-        }
-    }
+    
 
     public class ScoreGrade
     {

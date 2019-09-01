@@ -9,8 +9,8 @@ using Nokia.AssessmentMange.Domain.Infrastructure.EFCore;
 namespace Nokia.AssessmentMange.Domain.Migrations
 {
     [DbContext(typeof(AssessmentDbContext))]
-    [Migration("20190831093217_initcreate")]
-    partial class initcreate
+    [Migration("20190831163609_ParamSubjectAddColumn")]
+    partial class ParamSubjectAddColumn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.Assessment", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
 
                     b.Property<short>("Annual")
                         .HasColumnName("Annual")
@@ -40,9 +41,11 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.AssessmentSubject", b =>
                 {
-                    b.Property<string>("SubjectId");
+                    b.Property<string>("SubjectId")
+                        .HasMaxLength(100);
 
-                    b.Property<string>("AssessmentId");
+                    b.Property<string>("AssessmentId")
+                        .HasMaxLength(100);
 
                     b.HasKey("SubjectId", "AssessmentId")
                         .HasName("AssessmentSubjectId");
@@ -55,9 +58,11 @@ namespace Nokia.AssessmentMange.Domain.Migrations
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.Department", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(100);
 
                     b.Property<string>("ParentId");
 
@@ -65,13 +70,17 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.HasIndex("ParentId");
 
+                    b.HasIndex("Name", "ParentId")
+                        .IsUnique();
+
                     b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.Person", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("Birthday");
 
@@ -91,7 +100,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.PersonAssessmentGrade", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
 
                     b.Property<string>("AssessmentId");
 
@@ -113,13 +123,18 @@ namespace Nokia.AssessmentMange.Domain.Migrations
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.Subject", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<short>("IsQualifiedConversion")
                         .HasColumnName("IsQualifiedConversion")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(100);
 
                     b.Property<int>("SexLimitation");
 
@@ -129,13 +144,19 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Subjects");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Subject");
                 });
 
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.User", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsAdmin");
 
@@ -150,6 +171,15 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                     b.HasIndex("PersonId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.ComputedSubject", b =>
+                {
+                    b.HasBaseType("Nokia.AssessmentMange.Domain.DomainModels.Subject");
+
+                    b.Property<string>("Formula");
+
+                    b.HasDiscriminator().HasValue("ComputedSubject");
                 });
 
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.AssessmentSubject", b =>
@@ -332,6 +362,35 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                     b.HasOne("Nokia.AssessmentMange.Domain.DomainModels.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId");
+                });
+
+            modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.ComputedSubject", b =>
+                {
+                    b.OwnsMany("Nokia.AssessmentMange.Domain.DomainModels.ParamSubject", "ParamSubjects", b1 =>
+                        {
+                            b1.Property<string>("SubjectId");
+
+                            b1.Property<int>("SortOrder");
+
+                            b1.Property<string>("PSubjectId");
+
+                            b1.Property<string>("PSubjectName");
+
+                            b1.HasKey("SubjectId", "SortOrder");
+
+                            b1.HasIndex("PSubjectId");
+
+                            b1.ToTable("ParamSubject");
+
+                            b1.HasOne("Nokia.AssessmentMange.Domain.DomainModels.Subject", "PSubject")
+                                .WithMany()
+                                .HasForeignKey("PSubjectId");
+
+                            b1.HasOne("Nokia.AssessmentMange.Domain.DomainModels.ComputedSubject")
+                                .WithMany("ParamSubjects")
+                                .HasForeignKey("SubjectId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -9,7 +9,8 @@ namespace Nokia.AssessmentMange.Domain.Application
     {
          Subject Create(string name, SubjectType subjectType, SexLimitation sexLimitation, 
              bool isQualifiedConversion, string unit);
-
-
+          Subject CreateComputedSubject(string name, SubjectType subjectType,
+          SexLimitation sexLimitation, bool isQualifiedConversion, string unit, string formula, IList<ParamSubject> paramSubjects);
+          Subject GetWithParamSubject(string id);
     }
 }

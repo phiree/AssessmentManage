@@ -177,7 +177,7 @@
             <param name="unit">单位</param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.CreateComputedSubject(System.String,Nokia.AssessmentMange.Domain.DomainModels.SubjectType,Nokia.AssessmentMange.Domain.DomainModels.SexLimitation,System.Boolean,System.String,System.Collections.Generic.IDictionary{System.Int32,System.String},System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.CreateComputedSubject(System.String,Nokia.AssessmentMange.Domain.DomainModels.SubjectType,Nokia.AssessmentMange.Domain.DomainModels.SexLimitation,System.Boolean,System.String,System.Collections.Generic.IList{Nokia.AssessmentMange.Domain.DomainModels.ParamSubject},System.String)">
             <summary>
             创建计算类型科目
             </summary>
@@ -187,7 +187,7 @@
             <param name="isQualifiedConversion">是否合格_不合格类型</param>
             <param name="unit">单位</param>
             <param name="formula">计算公式</param>
-            <param name="paramSubjects">参与计算的科目,key是顺序,value是科目id</param>
+            <param name="paramSubjects">参与计算的科目</param>
             <returns></returns>
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.Get(System.String)">

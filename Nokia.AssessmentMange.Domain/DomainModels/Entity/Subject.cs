@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -25,9 +26,11 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public IList<SubjectConversion> SubjectConversions { get; set; }
         public IList<AssessmentSubject> Assessments { get;set;}
 
+      
         /// <summary>
         /// 名称
         /// </summary>
+        [MaxLength(100)]
         public string Name { get; protected set; }
         /// <summary>
         /// 分类
@@ -105,29 +108,71 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class ComputedSubject : Subject
     {
-        public ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
-                   bool isQualifiedConversion, string unit, IDictionary<int, Subject> paramSubjects, string formula)
+     protected ComputedSubject() { }
+
+        private ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
+                   bool isQualifiedConversion, string unit,  string formula)
             : base(name, subjectType, sexLimitation, isQualifiedConversion, unit)
         {
-            this.ParamSubjects = paramSubjects;
-
             this.Formula = formula;
+        }
+        //
+        public ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
+                  bool isQualifiedConversion, string unit, IDictionary<int,string> paramSubjectIds, string formula)
+           : this(name, subjectType, sexLimitation, isQualifiedConversion, unit,formula)
+        {
+            this.ParamSubjects = paramSubjectIds.Select(x=>new ParamSubject(x.Key,x.Value)).ToList();
 
+         
+
+        }
+//单元测试使用
+        public ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
+                   bool isQualifiedConversion, string unit, IList<ParamSubject> paramSubjects, string formula)
+            : this(name, subjectType, sexLimitation, isQualifiedConversion, unit,formula)
+        {
+            this.ParamSubjects = paramSubjects;
         }
         /// <summary>
         /// 参与计算的科目
         /// </summary>
-        public IDictionary<int, Subject> ParamSubjects { get; protected set; }
+        public IList<ParamSubject> ParamSubjects { get; protected set; }
         /// <summary>
         /// 计算公式
         /// </summary>
         public string Formula { get; protected set; }
-        public void ChangeParamSubject(IDictionary<int, Subject> newParams)
+        public void ChangeParamSubject(IList<ParamSubject> newParams)
         {
             this.ParamSubjects.Clear();
             this.ParamSubjects = newParams;
 
         }
+    }
+    /// <summary>
+    /// 计算科目的 科目参数
+    /// </summary>
+    public class ParamSubject {
+        protected ParamSubject() { }
+        public ParamSubject(int sortOrder,string   subjectId) { 
+            this.SortOrder=sortOrder;this.PSubjectId=subjectId;
+            }
+        /// <summary>
+        /// 用于单元测试.
+        /// </summary>
+        /// <param name="sortOrder"></param>
+        /// <param name="subject"></param>
+        public ParamSubject(int sortOrder, Subject subject)
+        {
+            this.SortOrder = sortOrder; this.PSubject = subject;
+        }
+        public ParamSubject(int sortOrder,string pSubjectId, string pSubjectName):this(sortOrder,pSubjectId)
+        {
+           this.PSubjectName=pSubjectName;
+        }
+        public int SortOrder { get;  set; }
+        public string PSubjectId { get; set;}
+        public Subject PSubject { get; set;}
+        public string PSubjectName { get;  set; }
     }
 
 

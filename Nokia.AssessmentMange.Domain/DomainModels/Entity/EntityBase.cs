@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
@@ -11,6 +12,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     {
         public EntityBase() {this.Id=Guid.NewGuid().ToString();  }
       
+        [MaxLength(100)]
         public string Id { get;set;}
 
         

@@ -22,8 +22,8 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             {
                 var paramSubjects = ((ComputedSubject)subject).ParamSubjects;
                 var formula = ((ComputedSubject)subject).Formula;
-                var parameterSubjectsGrade = subjectGrades.Where(x => paramSubjects.Select(y => y.Value.Id).Contains(x.Subject.Id));
-                var parameterSubjectsGradeWithIndex = paramSubjects.ToDictionary(prop => prop.Key, prop => parameterSubjectsGrade.First(x => x.Subject.Id == prop.Value.Id).Grade);
+                var parameterSubjectsGrade = subjectGrades.Where(x => paramSubjects.Select(y => y.PSubject.Id).Contains(x.Subject.Id));
+                var parameterSubjectsGradeWithIndex = paramSubjects.ToDictionary(prop => prop.SortOrder, prop => parameterSubjectsGrade.First(x => x.Subject.Id == prop.PSubject.Id).Grade);
                 var formulaCode = new FormulaParser().Parse(formula, parameterSubjectsGradeWithIndex);
                 var formulaResult = Convert.ToDouble(codeRunner.RunCode(formulaCode));
                 subjectGrade.Grade = formulaResult;

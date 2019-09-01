@@ -46,15 +46,16 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="isQualifiedConversion">是否合格_不合格类型</param>
         /// <param name="unit">单位</param>
         /// <param name="formula">计算公式</param>
-        /// <param name="paramSubjects">参与计算的科目,key是顺序,value是科目id</param>
+        /// <param name="paramSubjects">参与计算的科目</param>
         /// <returns></returns>
         [HttpPost("createcomputed")]        
         public Subject CreateComputedSubject(string name, SubjectType subjectType,
             SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
-            IDictionary<int,string> paramSubjects, string formula)
+            IList<ParamSubject> paramSubjects, string formula)
         {
-            throw new NotImplementedException();
+         var subject=  subjectApplication.CreateComputedSubject(name, subjectType, sexLimitation, isQualifiedConversion, unit, formula, paramSubjects);
 
+            return subject;
         }
         /// <summary>
         /// 获取科目

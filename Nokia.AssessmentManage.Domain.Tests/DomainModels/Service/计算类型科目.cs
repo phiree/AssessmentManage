@@ -19,7 +19,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Service
             var subjectWeight = new Subject("体重", SubjectType.Intelligent, SexLimitation.BothAndSameConversion, false, "KG");
             var subject100Race = new Subject("百米跑", SubjectType.Intelligent, SexLimitation.BothAndSameConversion, false, "秒");
             var subjectBMI = new ComputedSubject("BMI", SubjectType.Intelligent, SexLimitation.BothAndSameConversion, false, "CM",
-                                new Dictionary<int, Subject> { { 1, subjectHeight } , {2, subjectWeight } }, "$1/$2");
+                                new List<ParamSubject> { new ParamSubject(1, subjectHeight ), new ParamSubject ( 2, subjectWeight ) }, "$1/$2");
             var subjectGrades= new List<SubjectGrade>
                    {
                         new SubjectGrade(subjectHeight,118),

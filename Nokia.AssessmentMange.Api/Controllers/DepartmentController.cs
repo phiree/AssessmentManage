@@ -38,7 +38,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpPost("Create")]
         public Department Create(string name,string parentId)
         { 
-            Department parent=departmentApplication.Get(parentId);
+            Department parent=null;
+            if(!string.IsNullOrEmpty(parentId))
+            { 
+              parent=departmentApplication.Get(parentId);
+            }
             Department department=new Department(name,parent);
            departmentApplication.Create(department);
             return department;

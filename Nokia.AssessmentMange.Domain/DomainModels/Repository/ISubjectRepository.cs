@@ -6,6 +6,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
 {
    public interface ISubjectRepository:IRepository<Subject>
     {
-        
+        Subject GetWithParamSubjects(string id);
     }
 }

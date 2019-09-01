@@ -241,11 +241,12 @@
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddScore(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Double)">
             <summary>
-            添加得分
+            换算表添加得分
             </summary>
             <param name="subjectId"></param>
             <param name="sex"></param>
             <param name="score"></param>
+            <returns></returns>
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddAgeRange(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,Nokia.AssessmentMange.Domain.DomainModels.AgeRange)">
             <summary>

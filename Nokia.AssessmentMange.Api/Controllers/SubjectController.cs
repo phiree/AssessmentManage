@@ -136,14 +136,19 @@ namespace Nokia.AssessmentMange.Api.Controllers
             
           }
         /// <summary>
-        /// 添加得分
+        /// 换算表添加得分
         /// </summary>
         /// <param name="subjectId"></param>
         /// <param name="sex"></param>
         /// <param name="score"></param>
+        /// <returns></returns>
         [HttpPost("AddScore")]
-        public void AddScore(string subjectId,Sex sex,double score)
-        { }
+        public ConversionTable AddScore(string subjectId, Sex sex,  double score)
+        {
+            return subjectApplication.AddScore(subjectId, sex,  score);
+
+        }
+         
         /// <summary>
         /// 添加年龄范围
         /// </summary>

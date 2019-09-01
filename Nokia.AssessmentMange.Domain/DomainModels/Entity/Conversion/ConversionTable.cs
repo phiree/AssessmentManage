@@ -77,7 +77,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 
             foreach (var ageRange in AgeRanges.ToArray())
             {
-                Grades.Add(new ConversionCell(ageRange, score, null));
+                Grades.Add(new ConversionCell(ageRange, score, Grade.NullGrade));
             }
         }
         public void SetGrade(AgeRange ageRange, double score, double? grade)
@@ -107,7 +107,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public void RemoveScore(double score)
         {
             var existedGrades = Grades.Where(x => x.Score == score && AgeRanges.Contains(x.AgeRange));
-            foreach (var grade in existedGrades)
+            foreach (var grade in existedGrades.ToList())
             {
                 Grades.Remove(grade);
             }
@@ -199,7 +199,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
     }
 
-    public class ConversionCell
+    public class ConversionCell 
     {
         protected ConversionCell() { }
         public ConversionCell(AgeRange ageRange, double score, Grade grade)
@@ -207,8 +207,11 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.AgeRange = ageRange;
             this.Score = score;
             this.Grade = grade;
+            this.FloorAgeAsKey=ageRange.FloorAge;
         }
-        public AgeRange AgeRange { get; protected set; }//column
+        int _floorAgeAsKey;
+        public int FloorAgeAsKey { get;set; }
+        public AgeRange AgeRange { get;   set; }//column
         public double Score { get; protected set; }  //row
         public Grade Grade { get; protected set; }//cell
     }
@@ -225,6 +228,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.CellingAge = cellingAge;
             this.FloorAge = floorAge;
         }
+        
         public int CellingAge { get { return Maximum; } set { Maximum = value; } }
         public int FloorAge { get { return Minimum; } set { Minimum = value; } }
 

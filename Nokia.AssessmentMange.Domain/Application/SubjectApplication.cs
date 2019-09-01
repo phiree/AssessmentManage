@@ -47,8 +47,21 @@ namespace Nokia.AssessmentMange.Domain.Application
             subjectRepository.SaveChanges();
             return table;
             }
+        public ConversionTable AddScore(string subjectId, Sex sex, double score)
+        {
 
+            //memo: System.InvalidOperationException:“The property 'ConversionCellScore' on entity type 'AgeRange' is part of a key and so cannot be modified or marked as modified. To change the principal of an existing entity with an identifying foreign key first delete the dependent and invoke 'SaveChanges' then associate the dependent with the new principal.”
+
+            Subject subject = subjectRepository.Get(subjectId);
+
+           var table= subject.GetSubjectConversion(sex).ConversionTable;
+            table.AddScore(score);
          
+            subjectRepository.SaveChanges();
+            return table;
+        }
+
+
 
     }
 }

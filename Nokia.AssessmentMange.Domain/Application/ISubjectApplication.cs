@@ -20,5 +20,6 @@ namespace Nokia.AssessmentMange.Domain.Application
         /// <param name="ageRange"></param>
         /// <param name="score"></param>
         ConversionTable InitConversion(string subjectId, Sex sex, AgeRange ageRange, double score);
+        ConversionTable AddScore(string subjectId, Sex sex, double score);
     }
 }

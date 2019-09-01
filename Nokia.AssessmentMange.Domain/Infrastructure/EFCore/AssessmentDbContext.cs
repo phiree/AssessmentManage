@@ -70,7 +70,10 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                {
 
                    a.HasForeignKey("SubjectId");
-                   a.Property<Sex?>("Sex");
+                  
+                   a.Property<Sex>(x=>x.Sex).HasConversion(v => ((int)v).ToString(),
+                v => (Sex)Enum.Parse(typeof(Sex), v))
+                .IsUnicode(false);
                    a.HasKey("SubjectId", "Sex").HasName("SubjectConversionId");
                    a.OwnsOne(x => x.ConversionTable, b =>
                    {
@@ -78,11 +81,14 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                        b.OwnsMany(x => x.Grades, c =>
                        {
                            c.HasForeignKey("SubjectId", "Sex");
+                           c.Property(x=>x.Score)
+                            .HasConversion(x=>(int)x,x=>(int)x);
                            c.OwnsOne(x => x.AgeRange);
-                           c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
+                         //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
+                           c.Property(x=>x.FloorAgeAsKey);
                            c.OwnsOne(x => x.Grade);
-                           c.HasKey("SubjectId","Sex", "FloorAge", "Score").HasName("ConversionCellId");
-
+                           c.HasKey("SubjectId","Sex", "FloorAgeAsKey", "Score"). HasName("ConversionCellId");
+                           
                        });
                    });
 

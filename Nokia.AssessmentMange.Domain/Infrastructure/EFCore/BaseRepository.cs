@@ -22,6 +22,11 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public T Get(string id)
         {
             return Conn.Set<T>()
+
+               .Find(id);
+
+                ;
+            return Conn.Set<T>()
                 
                 .Include(Conn.GetIncludePaths(typeof(T)))
                 .First(x=>x.Id==id)

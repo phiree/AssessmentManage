@@ -39,7 +39,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
             db.Add(subject);
             db.SaveChanges();
             subject=db.Find<Subject>(subject.Id);
-            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12,24) }, new List<double> { 100 });
+            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12,24),new AgeRange(25,27) }, new List<int> { 100,90 });
             subject.SubjectConversions.Add(
                 new SubjectConversion(
                     Sex.Female, table
@@ -62,7 +62,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
             db.Add(subject);
             db.SaveChanges();
             subject = db.Find<Subject>(subject.Id);
-            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12, 24) }, new List<double> { 100 });
+            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12, 24), new AgeRange(25, 27) }, new List<int> { 100 });
             subject.SubjectConversions.Add(
                 new SubjectConversion(
                     Sex.Female, table
@@ -70,11 +70,22 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
 
             db.SaveChanges();
 
-            subject=db.Subjects.Find(subject.Id);
-            subject.GetSubjectConversion(Sex.Female).ConversionTable.AddAgeRange(new AgeRange(26,30));
-
-            
+            //  subject=db.Subjects.Find(subject.Id);
+            //  subject.GetSubjectConversion(Sex.Female).ConversionTable.AddAgeRange(new AgeRange(26,30));
+            //  db.SaveChanges();
+            subject = db.Subjects.Find(subject.Id);
+            subject.GetSubjectConversion(Sex.Female).ConversionTable.AddScore(90);
+            db.Attach(subject);
             db.SaveChanges();
+            
+            subject = db.Subjects.Find(subject.Id);
+            subject.GetSubjectConversion(Sex.Female).ConversionTable.SetGrade(new AgeRange(12,24),100,13);
+          //  db.SaveChanges();
+
+            subject = db.Subjects.Find(subject.Id);
+            subject.GetSubjectConversion(Sex.Female).ConversionTable.AddScore(90);
+          
+           // db.SaveChanges();
 
             //Assert.Equal(0,subject.SubjectConversions[0].ConversionTable.Grades[0].Grade.GradeValue);
         }
@@ -146,23 +157,32 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
                 v => (Sex)Enum.Parse(typeof(Sex), v))
                 .IsUnicode(false);
                         a.HasKey("SubjectId", "Sex").HasName("SubjectConversionId");
-                        a.OwnsOne(x => x.ConversionTable, b =>
+                        a.OwnsOne( x => x.ConversionTable
+                        , b =>
                         {
+                             // b.HasMany(x=>x.Grades );
 
                             b.OwnsMany(x => x.Grades, c =>
                             {
                                 c.HasForeignKey("SubjectId", "Sex");
-                                c.OwnsOne(x => x.AgeRange);
-                                //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
-                                c.Property(x => x.FloorAgeAsKey).HasColumnName("FloorAgeAsKey");
+                               c.OwnsOne(x => x.AgeRange);
+                               //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
+                               // c.Property(x => x.FloorAgeAsKey).HasColumnName("FloorAgeAsKey");
                                 c.OwnsOne(x => x.Grade);
-                                c.HasKey("SubjectId", "Sex", "FloorAgeAsKey").HasName("ConversionCellId");
-                                
+                                //c.Property(x => x.Score);
+                                c.HasKey("SubjectId", "Sex",   "Score", "FloorAgeAsKey");//.HasName("ConversionCellId");
+
+                                //  c.HasIndex("SubjectId", "Sex", "FloorAgeAsKey", "Score").IsUnique(true).HasName("ConversionCellId");
+                                // c.HasKey(x => x.Id);
                             });
-                        });
+                        }
+                        );
 
                     });
                 //modelBuilder.Entity<PersonAssessmentGrade>().OwnsMany(x=>x.SubjectGrades)
+
+                //modelBuilder.Entity<ConversionCell>()
+                //    .OwnsOne(x=>x.AgeRange);
 
                 modelBuilder.Entity<ComputedSubject>().OwnsMany(x => x.ParamSubjects, m => {
                     m.HasForeignKey("SubjectId");

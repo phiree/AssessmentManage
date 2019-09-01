@@ -33,11 +33,11 @@ namespace Nokia.AssessmentMange.Domain.Application
         { 
            return subjectRepository.GetWithParamSubjects(id);
          }
-        public ConversionTable InitConversion(string subjectId, Sex sex, AgeRange ageRange, double score)
+        public ConversionTable InitConversion(string subjectId, Sex sex, AgeRange ageRange, int score)
         { 
              Subject subject=subjectRepository.Get(subjectId);
            
-            var table= new ConversionTable().Init(new List<AgeRange> { ageRange }, new List<double> { score });
+            var table= new ConversionTable().Init(new List<AgeRange> { ageRange }, new List<int> { score });
             subject.SubjectConversions.Add(
                 new SubjectConversion(
                     sex, table
@@ -47,7 +47,7 @@ namespace Nokia.AssessmentMange.Domain.Application
             subjectRepository.SaveChanges();
             return table;
             }
-        public ConversionTable AddScore(string subjectId, Sex sex, double score)
+        public ConversionTable AddScore(string subjectId, Sex sex, int score)
         {
 
             //memo: System.InvalidOperationException:“The property 'ConversionCellScore' on entity type 'AgeRange' is part of a key and so cannot be modified or marked as modified. To change the principal of an existing entity with an identifying foreign key first delete the dependent and invoke 'SaveChanges' then associate the dependent with the new principal.”

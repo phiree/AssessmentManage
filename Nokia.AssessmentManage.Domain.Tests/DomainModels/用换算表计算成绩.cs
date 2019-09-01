@@ -20,7 +20,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels
         public void 合格类型科_不合格()
         { 
              var conversionTable=new ConversionTable();
-            conversionTable.Init(new List<AgeRange> { new AgeRange(21,25)},new List<double> { 0,1} );
+            conversionTable.Init(new List<AgeRange> { new AgeRange(21,25)},new List<int> { 0,1} );
             conversionTable.SetGrade(new AgeRange(21, 25),0,169);
             conversionTable.SetGrade(new AgeRange(21, 25), 1, 170);
             var result=conversionTable.CalculateScore(true,21,168);
@@ -38,7 +38,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels
         public void 合格类型_换算表数据不足()
         {
             var conversionTable = new ConversionTable();
-            conversionTable.Init(new List<AgeRange> { new AgeRange(21, 25) }, new List<double> {  1 });
+            conversionTable.Init(new List<AgeRange> { new AgeRange(21, 25) }, new List<int> {  1 });
            
             conversionTable.SetGrade(new AgeRange(21, 25), 1, 170);
           
@@ -53,7 +53,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels
         public void 数值精确匹配()
         {
             var conversionTable = new ConversionTable();
-            conversionTable.Init(new List<AgeRange> { new AgeRange(21, 25) }, new List<double> { 100,90,70 });
+            conversionTable.Init(new List<AgeRange> { new AgeRange(21, 25) }, new List<int> { 100,90,70 });
             conversionTable.SetGrade(new AgeRange(21, 25), 100, 13);
             conversionTable.SetGrade(new AgeRange(21, 25), 90, 14);
             conversionTable.SetGrade(new AgeRange(21, 25), 70, 15);
@@ -72,7 +72,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels
         public void 插值算法计算()
         {
             var conversionTable = new ConversionTable();
-            conversionTable.Init(new List<AgeRange> { new AgeRange(21, 25) }, new List<double> { 100, 90, 80 });
+            conversionTable.Init(new List<AgeRange> { new AgeRange(21, 25) }, new List<int> { 100, 90, 80 });
             conversionTable.SetGrade(new AgeRange(21, 25), 100, 13);
             conversionTable.SetGrade(new AgeRange(21, 25), 90, 14);
             conversionTable.SetGrade(new AgeRange(21, 25), 80, 15);

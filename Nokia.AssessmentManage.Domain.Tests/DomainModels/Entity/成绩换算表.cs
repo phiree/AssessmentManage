@@ -22,7 +22,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
         public void AddCoincideScore ()
         {
             ConversionTable table = new ConversionTable();
-            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 13 });
+            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 13 });
             
             Assert.Throws<AgeRangeCoincide>(() => {
                 table.AddAgeRange(new AgeRange(9, 10)); 
@@ -39,7 +39,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
         public void AddAlreadyExistedScore()
         {
             ConversionTable table = new ConversionTable();
-            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 13 });
+            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 13 });
 
             Assert.Throws<ScoreAlreadyExisted>(() => {
                 table.AddScore(13);
@@ -51,17 +51,17 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
         public void AddScoreTest()
         {
             ConversionTable table = new ConversionTable();
-            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 13 });
+            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 13 });
             // table.AddAgeRange
             table.AddScore(14);
             Assert.Equal(2, table.Grades.Count);
-            Assert.Null(table.Grades[1].Grade);
+            Assert.Equal(0,table.Grades[1].Grade.GradeValue);
         }
         [Fact]
         public void AddAgeRangeTEst()
         {
             ConversionTable table = new ConversionTable();
-            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 13 });
+            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 13 });
 
             Assert.Throws<ScoreAlreadyExisted>(() => {
                 table.AddScore(13);
@@ -71,7 +71,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
         public void 设置分数_没有对应的单元格()
         {
             ConversionTable table = new ConversionTable();
-            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 100 });
+            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 100 });
             Assert.Throws<ConversionCellNotFound>(() => { 
            table.SetGrade(new AgeRange(10,21),100,13);
             });
@@ -81,7 +81,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
         public void 设置分数()
         {
             ConversionTable table = new ConversionTable();
-            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 100 });
+            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 100 });
             
                 table.SetGrade(new AgeRange(10, 20), 100, 13);
            Assert.Equal(13,table.Grades[0].Grade.GradeValue);
@@ -91,7 +91,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
         public void 增加年龄段和分数()
         {
             ConversionTable table = new ConversionTable();
-            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<double> { 100 });
+            table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 100 });
 
             table.AddAgeRange(new AgeRange(21, 30));
             table.AddAgeRange(new AgeRange(31, 40));

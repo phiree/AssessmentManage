@@ -130,7 +130,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="sex">性别,如果科目类型为4(不限性别,但是换算规则不同BothButWithDifirentConversion)则需要赋值,否则传空</param>
         /// <returns></returns>
         [HttpPost("InitConversionTable")]
-        public ConversionTable InitConversionTable(string subjectId,Sex sex, AgeRange ageRange,double score )
+        public ConversionTable InitConversionTable(string subjectId,Sex sex, AgeRange ageRange,int score )
         { 
           return  subjectApplication.InitConversion(subjectId,sex,ageRange,score);
             
@@ -143,7 +143,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="score"></param>
         /// <returns></returns>
         [HttpPost("AddScore")]
-        public ConversionTable AddScore(string subjectId, Sex sex,  double score)
+        public ConversionTable AddScore(string subjectId, Sex sex, int score)
         {
             return subjectApplication.AddScore(subjectId, sex,  score);
 

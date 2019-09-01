@@ -229,7 +229,7 @@
             <param name="unit">参与计算的科目</param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.InitConversionTable(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,Nokia.AssessmentMange.Domain.DomainModels.AgeRange,System.Double)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.InitConversionTable(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,Nokia.AssessmentMange.Domain.DomainModels.AgeRange,System.Int32)">
             <summary>
             初始化成绩换算表
             </summary>
@@ -239,7 +239,7 @@
             <param name="sex">性别,如果科目类型为4(不限性别,但是换算规则不同BothButWithDifirentConversion)则需要赋值,否则传空</param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddScore(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Double)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddScore(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Int32)">
             <summary>
             换算表添加得分
             </summary>

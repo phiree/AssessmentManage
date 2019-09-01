@@ -19,7 +19,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             get { return Grades.Select(x => x.AgeRange).Distinct(); }
         }
         //rows
-        public IEnumerable<double> Scores
+        public IEnumerable<int> Scores
         {
             get
             {
@@ -28,12 +28,12 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
         // cells 
         public IList<ConversionCell> Grades { get; protected set; }
-        public ConversionTable Init(IList<AgeRange> ageRanges, IList<double> scores)
+        public ConversionTable Init(IList<AgeRange> ageRanges, IList<int> scores)
         {
 
             foreach (AgeRange ar in ageRanges)
             {
-                foreach (double score in scores)
+                foreach (int score in scores)
                 {
                     /*memo: efcore中值类型 不能为null,否则会抛出异常
                          "InvalidOperationException: The entity of type 'ConversionCell' is sharing the table 'ConversionCell' with entities of type 'Grade',
@@ -63,7 +63,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 Grades.Add(new ConversionCell(ageRange, score, null));
             }
         }
-        public void AddScore(double score)
+        public void AddScore(int score)
         {
             if (Grades.Count == 0)
             {
@@ -80,7 +80,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 Grades.Add(new ConversionCell(ageRange, score, Grade.NullGrade));
             }
         }
-        public void SetGrade(AgeRange ageRange, double score, double? grade)
+        public void SetGrade(AgeRange ageRange, int score, double? grade)
         {
             ConversionCell existed = null;
             try
@@ -199,10 +199,10 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
     }
 
-    public class ConversionCell 
+    public class ConversionCell  :EntityBase
     {
         protected ConversionCell() { }
-        public ConversionCell(AgeRange ageRange, double score, Grade grade)
+        public ConversionCell(AgeRange ageRange, int score, Grade grade)
         {
             this.AgeRange = ageRange;
             this.Score = score;
@@ -212,26 +212,36 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         int _floorAgeAsKey;
         public int FloorAgeAsKey { get;set; }
         public AgeRange AgeRange { get;   set; }//column
-        public double Score { get; protected set; }  //row
+        public int Score { get;   set; }  //row
         public Grade Grade { get; protected set; }//cell
     }
     /// <summary>
     /// 年龄范围
     /// </summary>
-    public class AgeRange : Range<int>
+    public class AgeRange  
     {
 
         protected AgeRange() { }
         public AgeRange(int floorAge, int cellingAge)
         {
-            if (floorAge > cellingAge) { throw new Exceptions.AgeRangeError(cellingAge, floorAge); }
+          //  if (floorAge > cellingAge) { throw new Exceptions.AgeRangeError(cellingAge, floorAge); }
             this.CellingAge = cellingAge;
             this.FloorAge = floorAge;
         }
-        
-        public int CellingAge { get { return Maximum; } set { Maximum = value; } }
-        public int FloorAge { get { return Minimum; } set { Minimum = value; } }
 
+        //  public int CellingAge { get { return Maximum; } set { Maximum = value; } }
+        public int CellingAge { get ;set ; }
+        // public int FloorAge { get { return Minimum; } set { Minimum = value; } }
+        public int FloorAge { get  ;set ; }
+        public bool IsCoincide(AgeRange range)
+        {
+            return !(range.FloorAge.CompareTo(CellingAge) > 0 || range.CellingAge.CompareTo(FloorAge) < 0);
+
+        }
+        public bool ContainsValue(int value)
+        {
+            return (this.FloorAge.CompareTo(value) <= 0) && (value.CompareTo(this.CellingAge) <= 0);
+        }
     }
 
     public class ScoreGrade

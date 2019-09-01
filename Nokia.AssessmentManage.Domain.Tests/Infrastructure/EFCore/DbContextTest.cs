@@ -20,6 +20,7 @@ using System.Text;
  
 using Newtonsoft.Json;
 using Xunit;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
 {
@@ -62,7 +63,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
             db.Add(subject);
             db.SaveChanges();
             subject = db.Find<Subject>(subject.Id);
-            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12, 24), new AgeRange(25, 27) }, new List<int> { 100 });
+            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12, 24) }, new List<int> { 100 });
             subject.SubjectConversions.Add(
                 new SubjectConversion(
                     Sex.Female, table
@@ -74,9 +75,27 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
             //  subject.GetSubjectConversion(Sex.Female).ConversionTable.AddAgeRange(new AgeRange(26,30));
             //  db.SaveChanges();
             subject = db.Subjects.Find(subject.Id);
-            subject.GetSubjectConversion(Sex.Female).ConversionTable.AddScore(90);
-            db.Attach(subject);
+          
+            var cell=subject.GetSubjectConversion(Sex.Female).ConversionTable.Grades[0];
+            foreach(var entry in db.ChangeTracker.Entries())
+            {
+              string changed=string.Format("Entity: {0},  State: {1} ", entry.Entity.GetType().Name, entry.State.ToString());
+Console.WriteLine(changed);
+            }
+
+            foreach(var a in subject.GetSubjectConversion(Sex.Female).ConversionTable.AgeRanges)
+            {
+              //  var ageRange=a.AgeRange;// new AgeRange(a.AgeRange.FloorAge,a.AgeRange.CellingAge);
+                subject.GetSubjectConversion(Sex.Female).ConversionTable.Grades.Add(new ConversionCell(a, 90, Grade.NullGrade));
+            }
+           // worked subject.GetSubjectConversion(Sex.Female).ConversionTable.Grades.Add(new ConversionCell(new AgeRange(12, 24),90,Grade.NullGrade));
             db.SaveChanges();
+
+            /*
+     //
+           subject.GetSubjectConversion(Sex.Female).ConversionTable.AddScore(90);
+            db.Attach(cell);
+          
             
             subject = db.Subjects.Find(subject.Id);
             subject.GetSubjectConversion(Sex.Female).ConversionTable.SetGrade(new AgeRange(12,24),100,13);
@@ -88,6 +107,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
            // db.SaveChanges();
 
             //Assert.Equal(0,subject.SubjectConversions[0].ConversionTable.Grades[0].Grade.GradeValue);
+            */
         }
         public class AssessmentDbContextTest : DbContext
         {
@@ -160,12 +180,15 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
                         a.OwnsOne( x => x.ConversionTable
                         , b =>
                         {
+                            b.Ignore(x=>x.Scores);
+                            b.Ignore(x=>x.AgeRanges);
                              // b.HasMany(x=>x.Grades );
 
                             b.OwnsMany(x => x.Grades, c =>
                             {
                                 c.HasForeignKey("SubjectId", "Sex");
                                c.OwnsOne(x => x.AgeRange);
+                                
                                //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
                                // c.Property(x => x.FloorAgeAsKey).HasColumnName("FloorAgeAsKey");
                                 c.OwnsOne(x => x.Grade);

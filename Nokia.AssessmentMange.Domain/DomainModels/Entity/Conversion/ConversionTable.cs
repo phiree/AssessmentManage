@@ -14,16 +14,21 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             Grades = new List<ConversionCell>();
         }
         //columns
+        
         public IEnumerable<AgeRange> AgeRanges
         {
-            get { return Grades.Select(x => x.AgeRange).Distinct(); }
+            get {
+                //memo: agerange虽然是值对象, 但是在c#中,它依然是引用类型. 这个对象是 cell主键的一部分.
+               // 新建一个cell时, 如果直接使用已有的agerange对象, ef会认为 这是一个更新,但是它又是主键,无法更新, 导致异常.
+               // return Grades.Select(x => x.AgeRange).Distinct();
+                return   Grades.Select(x => x.AgeRange).Distinct().Select(x=>new AgeRange(x.FloorAge,x.CellingAge)).ToList(); }
         }
         //rows
         public IEnumerable<int> Scores
         {
             get
             {
-                return Grades.Select(x => x.Score).Distinct();
+                return   Grades.Select(x => x.Score).Distinct();
             }
         }
         // cells 
@@ -60,7 +65,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             }
             foreach (var score in Scores.ToArray())
             {
-                Grades.Add(new ConversionCell(ageRange, score, null));
+                Grades.Add(new ConversionCell(ageRange, score, Grade.NullGrade));
             }
         }
         public void AddScore(int score)
@@ -218,7 +223,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 年龄范围
     /// </summary>
-    public class AgeRange  
+    public sealed class AgeRange  :ICloneable
     {
 
         protected AgeRange() { }
@@ -228,7 +233,10 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.CellingAge = cellingAge;
             this.FloorAge = floorAge;
         }
-
+        public int AgeScope {
+            get { return CellingAge+FloorAge;}
+            set {  }
+            }
         //  public int CellingAge { get { return Maximum; } set { Maximum = value; } }
         public int CellingAge { get ;set ; }
         // public int FloorAge { get { return Minimum; } set { Minimum = value; } }
@@ -241,6 +249,15 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public bool ContainsValue(int value)
         {
             return (this.FloorAge.CompareTo(value) <= 0) && (value.CompareTo(this.CellingAge) <= 0);
+        }
+        public override int GetHashCode()
+        {
+            return FloorAge.GetHashCode();
+        }
+
+        public object Clone()
+        {
+           return new AgeRange(FloorAge,CellingAge);
         }
     }
 

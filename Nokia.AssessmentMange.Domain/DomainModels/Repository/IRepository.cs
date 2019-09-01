@@ -45,5 +45,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
     {
           T FindOne(Expression<Func<T, bool>> where);
         IEnumerable< T> Find(Expression<Func<T, bool>> where);
+         void SaveChanges();
     }
 }

@@ -130,11 +130,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="sex">性别,如果科目类型为4(不限性别,但是换算规则不同BothButWithDifirentConversion)则需要赋值,否则传空</param>
         /// <returns></returns>
         [HttpPost("InitConversionTable")]
-        public void InitConversionTable(string subjectId,Sex sex, AgeRange ageRange,double score )
+        public ConversionTable InitConversionTable(string subjectId,Sex sex, AgeRange ageRange,double score )
         { 
-            throw new NotImplementedException();
+          return  subjectApplication.InitConversion(subjectId,sex,ageRange,score);
             
-            }
+          }
         /// <summary>
         /// 添加得分
         /// </summary>

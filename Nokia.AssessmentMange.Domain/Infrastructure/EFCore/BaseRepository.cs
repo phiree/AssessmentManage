@@ -86,28 +86,25 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         public bool Update(T obj)
         {
-            try{ Conn.Update(obj);
+              Conn.Update(obj);
                 Conn.SaveChanges();
                 
-                return true;}
-            catch { 
-                return false;
-                }
+                return true; 
+           
              
 
         }
+        public void SaveChanges()
+        { 
+            Conn.SaveChanges();
+            }
 
         public bool Update(IEnumerable<T> list)
         {
-            try { 
+            
               Conn.UpdateRange(list);
                 return true;
-            }
-            catch
-            { 
-                return false;
-                }
-            throw new NotImplementedException();
+           
         }
 
         public IEnumerable<T> Search(IDictionary<string, object> param)

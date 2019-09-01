@@ -32,7 +32,23 @@ namespace Nokia.AssessmentMange.Domain.Application
         public Subject GetWithParamSubject(string id)
         { 
            return subjectRepository.GetWithParamSubjects(id);
+         }
+        public ConversionTable InitConversion(string subjectId, Sex sex, AgeRange ageRange, double score)
+        { 
+             Subject subject=subjectRepository.Get(subjectId);
+           
+            var table= new ConversionTable().Init(new List<AgeRange> { ageRange }, new List<double> { score });
+            subject.SubjectConversions.Add(
+                new SubjectConversion(
+                    sex, table
+                    
+                    ));
+            //subjectRepository.Update(subject);
+            subjectRepository.SaveChanges();
+            return table;
             }
+
+         
 
     }
 }

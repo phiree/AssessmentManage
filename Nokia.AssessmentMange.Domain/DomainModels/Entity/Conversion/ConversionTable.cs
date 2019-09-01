@@ -28,17 +28,23 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
         // cells 
         public IList<ConversionCell> Grades { get; protected set; }
-        public void Init(IList<AgeRange> ageRanges, IList<double> scores)
+        public ConversionTable Init(IList<AgeRange> ageRanges, IList<double> scores)
         {
 
             foreach (AgeRange ar in ageRanges)
             {
                 foreach (double score in scores)
                 {
-                    var gradeCellValue = new ConversionCell(ar, score, null);
+                    /*memo: efcore中值类型 不能为null,否则会抛出异常
+                         "InvalidOperationException: The entity of type 'ConversionCell' is sharing the table 'ConversionCell' with entities of type 'Grade',
+                         but there is no entity of this type with the same key value '{SubjectId: d8e56dff-18eb-4278-aaae-1859c399be9e, Sex: 0, FloorAge: 0, Score: 100}' that has been marked as 'Added'.
+                     * * */
+                    // var gradeCellValue = new ConversionCell(ar, score, null);
+                    var gradeCellValue = new ConversionCell(ar, score, Grade.NullGrade);
                     Grades.Add(gradeCellValue);
                 }
             }
+            return this;
         }
 
         public void AddAgeRange(AgeRange ageRange)

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
 {
-   public interface ISubjectRepository:IRepository<Subject>
+   public interface ISubjectRepository:IEFCRepository<Subject>
     {
         Subject GetWithParamSubjects(string id);
     }

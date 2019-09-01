@@ -11,7 +11,15 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
     {
 
         public AssessmentDbContext(DbContextOptions<AssessmentDbContext> options)
-            : base(options) { }
+            : base(options) {
+          
+            }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
         public DbSet<Assessment> Assessments { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<ComputedSubject> ComputedSubjects { get; set; }
@@ -21,6 +29,8 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
             modelBuilder.Entity<PersonAssessmentGrade>().Property(x=>x.Id).HasMaxLength(100);
             modelBuilder.Entity<Department>().HasIndex(p=>new { p.Name,p.ParentId}).IsUnique(true);
 
@@ -71,7 +81,6 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                            c.OwnsOne(x => x.AgeRange);
                            c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
                            c.OwnsOne(x => x.Grade);
-                            
                            c.HasKey("SubjectId","Sex", "FloorAge", "Score").HasName("ConversionCellId");
 
                        });

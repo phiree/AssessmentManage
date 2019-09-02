@@ -10,6 +10,14 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
    public class AssessmentSubject
     {
         protected AssessmentSubject() { }
+        public AssessmentSubject(Assessment Assessment, Subject Subject) { 
+            this.Assessment=Assessment;
+            this.Subject=Subject;
+            this.AssessmentId=Assessment.Id;
+            this.SubjectId=Subject.Id;
+            }
+
+        
         public string AssessmentId { get; set; }
         public Assessment Assessment { get;set;}
 

@@ -7,6 +7,13 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     public class Person : EntityBase
     {
         protected Person() { }
+        public Person(string realName,DateTime birthday,Sex sex,string departmentId)
+        { 
+            this.RealName=realName;
+            this.Birthday=birthday;
+            this.Sex=sex;
+            this.DepartmentId=departmentId;
+            }
         public string RealName { get; protected set; }
         public DateTime Birthday { get; protected set; }
         public int Age

@@ -31,6 +31,7 @@ namespace Nokia.AssessmentMange.Domain.Application.Dtos.DtoMapper
            var person= personRepository.Get( createModel.PersonId);
             var assessment=assessmentRepository.Get(createModel.AssessmentId);
             PersonAssessmentGrade personAssessmentGrade=null;
+          
            var grades=new List<SubjectGrade>();
             foreach(var gradeModel in createModel.Grades)
             {
@@ -39,16 +40,17 @@ namespace Nokia.AssessmentMange.Domain.Application.Dtos.DtoMapper
                 grade.Equals(grade);
 
             }
-            if(isNew)
+            var assessmentGrade = new AssessmentGrade(createModel.IsAbsent, createModel.IsMakeup,grades);
+            if (isNew)
             { 
                 personAssessmentGrade=new PersonAssessmentGrade(
-                    assessment,person,createModel.IsAbsent,createModel.IsMakeup,grades);
+                    assessment,person,new List<AssessmentGrade>{ assessmentGrade});
                 }
             else
             { 
                 string id=((PersonAssessementGradeUpdateModel)createModel).Id;
                 personAssessmentGrade=personAssessmentGradeRepository.Get(id);
-                personAssessmentGrade.Update(assessment, person, createModel.IsAbsent, createModel.IsMakeup, grades);
+             //   personAssessmentGrade.Update(assessment, person, createModel.IsAbsent, createModel.IsMakeup, grades);
                 }
             //  convert to entity
             throw new NotImplementedException();

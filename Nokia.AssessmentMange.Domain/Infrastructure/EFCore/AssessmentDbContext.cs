@@ -31,15 +31,19 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         {
 
 
-            modelBuilder.Entity<PersonAssessmentGrade>().Property(x=>x.Id).HasMaxLength(100);
+            
             modelBuilder.Entity<Department>().HasIndex(p=>new { p.Name,p.ParentId}).IsUnique(true);
-
             modelBuilder.Entity<PersonAssessmentGrade>()
-                .OwnsMany(x=>x.SubjectGrades
+                .OwnsMany(x=>x.AssessmentGrades
                 ,m=>{ 
                     m.HasForeignKey("PersonAssessmentGradeId");
-                    m.Property(x=>x.SubjectId);
-                    m.HasKey("PersonAssessmentGradeId","SubjectId").HasName("SubjectGradeId");
+                    m.Property(x=>x.IsMakeup);//最多只有一次补考,可以作为联合组建
+                    m.HasKey("PersonAssessmentGradeId","IsMakeup").HasName("AssessmentGradeId");
+                    m.OwnsMany(x => x.SubjectGrades, n => { 
+                        n.HasForeignKey("PersonAssessmentGradeId","IsMakeup");
+                        n.Property(x=>x.SubjectId);
+                        n.HasKey("PersonAssessmentGradeId", "IsMakeup","SubjectId").HasName("PMS");
+                        });
                     });
             modelBuilder.Entity<AssessmentSubject>()
                 .Property(x=>x.AssessmentId).HasMaxLength(100)

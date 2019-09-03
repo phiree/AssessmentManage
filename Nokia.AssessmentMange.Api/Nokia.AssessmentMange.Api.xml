@@ -94,13 +94,16 @@
             </summary>
             <param name="personId"></param>
             <param name="assessmentId"></param>
-            <returns></returns>
+            <returns>人员考核成绩. 提交成绩时,需要传入此对象的Id</returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonAssessmentGradeController.EntryGrade(Nokia.AssessmentMange.Domain.Application.Dtos.PersonAssessementGradeCreateModel)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonAssessmentGradeController.CommitGrade(System.String,System.Boolean,System.Boolean,System.Collections.Generic.IList{Nokia.AssessmentMange.Domain.Application.Dtos.SubjectGradeModel})">
             <summary>
-            录入人员成绩
+            录入成绩
             </summary>
-            <param name="createModel"></param>
+            <param name="personAssessmentId">人员考核成绩Id</param>
+            <param name="isAbsent">是否缺考</param>
+            <param name="isMakeup">是否补考</param>
+            <param name="subjectGrades">各科目的成绩</param>
             <returns></returns>
         </member>
         <member name="T:Nokia.AssessmentMange.Api.Controllers.PersonController">

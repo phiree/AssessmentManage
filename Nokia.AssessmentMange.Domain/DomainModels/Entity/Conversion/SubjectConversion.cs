@@ -22,7 +22,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.ConversionTable = conversionTable;
         }
         public Sex Sex { get; set; }
-
+        /// <summary>
+        /// 得分对照表
+        /// </summary>
         public ConversionTable ConversionTable { get; protected set; }
 
       

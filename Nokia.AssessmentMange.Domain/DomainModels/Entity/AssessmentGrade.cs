@@ -6,7 +6,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// <summary>
     /// 人员考核成绩
     /// </summary>
-    public class  AssessmentGrade : EntityBase
+    public class  AssessmentGrade  
     {
         
         protected AssessmentGrade() { }

@@ -13,11 +13,20 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         {
             AssessmentGrades = new List<AssessmentGrade>();
         }
-        public PersonAssessmentGrade(Assessment assessment, Person person,
-            IEnumerable<AssessmentGrade> assessmentGrades
-              )
+        public PersonAssessmentGrade(string assessmentId, string personId
+
+             ) : this()
         {
-            this.AssessmentGrades = assessmentGrades;
+
+            this.PersonId = personId;
+            this.AssessmentId = assessmentId;
+
+        }
+        public PersonAssessmentGrade(Assessment assessment, Person person 
+           
+              ):this()
+        {
+            
             this.Person = person;
             this.Assessment=assessment;
 
@@ -26,7 +35,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public Person Person { get; protected set; }
         public string AssessmentId { get; protected set; }
         public Assessment Assessment { get; protected set; }
-        public IEnumerable<AssessmentGrade> AssessmentGrades { get; protected set; }
+        public ICollection<AssessmentGrade> AssessmentGrades { get; protected set; }
 
         //提交成绩
         public void CommitGrade(AssessmentGrade assessmentGrade)
@@ -90,7 +99,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 }
 
             }
-            if (isNew) {this.AssessmentGrades= AssessmentGrades.Append(assessmentGrade); }
+            if (isNew) {this. AssessmentGrades.Add(assessmentGrade); }
             else
             {
                 AssessmentGrades.First().Update(assessmentGrade.IsAbsent, assessmentGrade.IsMakeup, assessmentGrade.SubjectGrades);

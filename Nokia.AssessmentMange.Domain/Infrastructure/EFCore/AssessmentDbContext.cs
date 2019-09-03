@@ -66,7 +66,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
             modelBuilder.Entity<Person>().Ignore(x => x.Age);
             //科目-->成绩换算表
-            modelBuilder.Entity<Subject>().Property(x=>x.Id).HasMaxLength(100);
+         
             modelBuilder.Entity<Subject>(). HasIndex(p=>new {p.Name }).IsUnique(true);
             modelBuilder.Entity<Subject>()
                

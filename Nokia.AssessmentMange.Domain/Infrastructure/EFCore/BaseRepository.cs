@@ -38,6 +38,27 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                  
             
         }
+        /// <summary>
+        /// 贪婪加载
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public T GetEager(string id)
+        {
+            
+            ;
+            return Conn.Set<T>()
+
+                .Include(Conn.GetIncludePaths(typeof(T)))
+                .First(x => x.Id == id)
+
+                ;
+
+
+
+
+
+        }
         public IEnumerable<T> GetList(IEnumerable<string> idList)
         {
             return idList.Select(x => Get(x)).ToList();

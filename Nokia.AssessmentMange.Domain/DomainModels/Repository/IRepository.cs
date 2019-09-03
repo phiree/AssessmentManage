@@ -43,6 +43,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
 
     public interface IEFCRepository<T>:IRepository<T>
     {
+          T GetEager(string id);
           T FindOne(Expression<Func<T, bool>> where);
         IEnumerable< T> Find(Expression<Func<T, bool>> where);
          void SaveChanges();

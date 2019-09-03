@@ -42,7 +42,7 @@ namespace Nokia.AssessmentMange.Domain.Application
         public PersonAssessmentGrade CommitGrades(string personAssessmentGradeId, bool isAbsent, bool isMakeup, IList<SubjectGradeModel> subjectGradeModels)
         {
 
-            var personAssessementGrade = personAssessementGradeRepository.Get(personAssessmentGradeId);
+            var personAssessementGrade = personAssessementGradeRepository.GetEager(personAssessmentGradeId);
 
             var subjectGrades = subjectGradeMapper.ToEntityList(subjectGradeModels);
 

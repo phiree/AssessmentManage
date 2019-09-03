@@ -37,7 +37,9 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                 .OwnsMany(x=>x.AssessmentGrades
                 ,m=>{ 
                     m.HasForeignKey("PersonAssessmentGradeId");
-                    m.Property(x=>x.IsMakeup);//最多只有一次补考,可以作为联合组建
+                    m.Property(x=>x.IsMakeup).HasColumnType("TINYINT(1)");//.HasConversion(v =>v?1:0,  v =>v==0?false:true );
+                    m.Property(x=>x.IsAbsent).HasColumnType("TINYINT(1)");
+                ;//最多只有一次补考,可以作为联合组建
                     m.HasKey("PersonAssessmentGradeId","IsMakeup").HasName("AssessmentGradeId");
                     m.OwnsMany(x => x.SubjectGrades, n => { 
                         n.HasForeignKey("PersonAssessmentGradeId","IsMakeup");
@@ -75,9 +77,10 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
                    a.HasForeignKey("SubjectId");
                   
-                   a.Property<Sex>(x=>x.Sex).HasConversion(v => ((int)v).ToString(),
-                v => (Sex)Enum.Parse(typeof(Sex), v))
-                .IsUnicode(false);
+                //   a.Property<Sex>(x=>x.Sex).HasConversion(v => ((int)v).ToString(),
+                //v => (Sex)Enum.Parse(typeof(Sex), v))
+                //.IsUnicode(false);
+                   a.Property(x=>x.Sex);
                    a.HasKey("SubjectId", "Sex").HasName("SubjectConversionId");
                    a.OwnsOne(x => x.ConversionTable, b =>
                    {
@@ -85,8 +88,8 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                        b.OwnsMany(x => x.Grades, c =>
                        {
                            c.HasForeignKey("SubjectId", "Sex");
-                           c.Property(x=>x.Score)
-                            .HasConversion(x=>(int)x,x=>(int)x);
+                           c.Property(x=>x.Score);
+                          // HasConversion(x=>(int)x,x=>(int)x);
                            c.OwnsOne(x => x.AgeRange);
                          //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
                            c.Property(x=>x.FloorAgeAsKey);

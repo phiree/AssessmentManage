@@ -7,10 +7,13 @@
   <ItemGroup>
     <Compile Remove="Infrastructure\Dapper\**" />
     <Compile Remove="Infrastructure\NHibernate\**" />
+    <Compile Remove="Migrations\**" />
     <EmbeddedResource Remove="Infrastructure\Dapper\**" />
     <EmbeddedResource Remove="Infrastructure\NHibernate\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <None Remove="Infrastructure\Dapper\**" />
     <None Remove="Infrastructure\NHibernate\**" />
+    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +26,12 @@
     <None Remove="appsettings.json" />
     <None Remove="appsettings.Production.Development.json" />
     <None Remove="appsettings.Production.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20190903172906_InitialCreate.cs" />
+    <Compile Include="Migrations\20190903172906_InitialCreate.designer.cs" />
+    <Compile Include="Migrations\AssessmentDbContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>

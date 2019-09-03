@@ -74,20 +74,20 @@ namespace Nokia.AssessmentMange.Api
             //});
             services.AddScoped<IAuthenticateService, TokenAuthenticationService>();
             services.AddScoped<IUserManagementService, UserManagementService>();
-            
-            //services.AddDbContext<AssessmentDbContext>(
-            //   options=> options.UseMySQL(
-            //       Configuration.GetConnectionString("Conn"),
-            //         b=>b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
-            //   );
-            services.AddDbContext<AssessmentDbContext>( // replace "YourDbContext" with the class name of your DbContext
-            options => options.UseMySql(
-                Configuration.GetConnectionString("Conn"), // replace with your Connection String
-                mySqlOptions =>
-                {
-                    mySqlOptions.ServerVersion(new Version(8, 0, 11), ServerType.MySql); // replace with your Server Version and Type
-                    }
-        ));
+
+            services.AddDbContext<AssessmentDbContext>(
+               options => options.UseMySQL(
+                   Configuration.GetConnectionString("Conn"),
+                     b => b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
+               );
+            //    services.AddDbContext<AssessmentDbContext>( // replace "YourDbContext" with the class name of your DbContext
+            //    options => options.UseMySql(
+            //        Configuration.GetConnectionString("Conn"), // replace with your Connection String
+            //        mySqlOptions =>
+            //        {
+            //            mySqlOptions.ServerVersion(new Version(8, 0, 11), ServerType.MySql); // replace with your Server Version and Type
+            //            }
+            //));
 
             //--------------
             services.AddSingleton<IExcelExporter, ExcelExporter>();

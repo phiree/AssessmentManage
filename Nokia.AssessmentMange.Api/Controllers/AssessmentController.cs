@@ -15,7 +15,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class AssessmentController : BaseController
+    public class AssessmentController : ControllerBase
     {
         IAssessmentApplication assessmentApplication;
 

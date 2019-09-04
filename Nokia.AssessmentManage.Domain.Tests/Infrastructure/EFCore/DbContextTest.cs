@@ -39,13 +39,43 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
             db.Add(subject);
             db.SaveChanges();
             subject=db.Find<Subject>(subject.Id);
-            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12,24),new AgeRange(25,27) }, new List<int> { 100,90 });
+            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12,24) }, new List<int> { 100 });
             subject.SubjectConversions.Add(
                 new SubjectConversion(
                     Sex.Female, table
                     ));
+            ConversionTable conversion;
             db.SaveChanges();
+
+            AgeRange ageRange=null;
+            //增加年龄
+            conversion = db.Subjects.Find(subject.Id).GetSubjectConversion(Sex.Female).ConversionTable;
+           conversion.AddAgeRange(new AgeRange(29,30));
+            db.SaveChanges();
+            //增加分数
+            conversion = db.Subjects.Find(subject.Id).GetSubjectConversion(Sex.Female).ConversionTable;
+            conversion.AddScore(80);
+            db.SaveChanges();
+            //增加年龄
+              ageRange= new AgeRange(31, 38);
+            conversion = db.Subjects.Find(subject.Id).GetSubjectConversion(Sex.Female).ConversionTable;
+            conversion.AddAgeRange(ageRange);
+            ConversionCell cell=new ConversionCell(new AgeRange(31, 38),90,new Grade(12));
+          
+            conversion.Grades.Add(cell);
+            db.SaveChanges();
+            //增加分数
             
+            conversion = db.Subjects.Find(subject.Id).GetSubjectConversion(Sex.Female).ConversionTable;
+            conversion.AddScore(180);
+            
+            db.SaveChanges();
+            //增加年龄
+            conversion = db.Subjects.Find(subject.Id).GetSubjectConversion(Sex.Female).ConversionTable;
+            conversion.AddAgeRange(new AgeRange(39, 43));
+            db.SaveChanges();
+
+
             //Assert.Equal(0,subject.SubjectConversions[0].ConversionTable.Grades[0].Grade.GradeValue);
         }
         [Fact]
@@ -82,7 +112,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
 Console.WriteLine(changed);
             }
 
-            foreach(var a in subject.GetSubjectConversion(Sex.Female).ConversionTable.AgeRanges)
+            foreach(var a in subject.GetSubjectConversion(Sex.Female).ConversionTable.AgeRangeList2)
             {
               //  var ageRange=a.AgeRange;// new AgeRange(a.AgeRange.FloorAge,a.AgeRange.CellingAge);
                 subject.GetSubjectConversion(Sex.Female).ConversionTable.Grades.Add(new ConversionCell(a, 90, Grade.NullGrade));
@@ -258,19 +288,22 @@ Console.WriteLine(changed);
                         , b =>
                         {
                             b.Ignore(x=>x.Scores);
-                            b.Ignore(x=>x.AgeRanges);
+                            b.Ignore(x=>x.AgeRangeList2);
                              // b.HasMany(x=>x.Grades );
 
                             b.OwnsMany(x => x.Grades, c =>
                             {
+                                c.Ignore(x=>x.AgeRange);
                                 c.HasForeignKey("SubjectId", "Sex");
+                                c.Property(x => x.FloorAgeAsKey);
+                                c.Property(x=>x.Score);
                                c.OwnsOne(x => x.AgeRange);
                                 
                                //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
-                               // c.Property(x => x.FloorAgeAsKey).HasColumnName("FloorAgeAsKey");
+                           
                                 c.OwnsOne(x => x.Grade);
                                 //c.Property(x => x.Score);
-                                c.HasKey("SubjectId", "Sex",   "Score", "FloorAgeAsKey");//.HasName("ConversionCellId");
+                                c.HasKey("SubjectId", "Sex", "FloorAgeAsKey",  "Score");//.HasName("ConversionCellId");
 
                                 //  c.HasIndex("SubjectId", "Sex", "FloorAgeAsKey", "Score").IsUnique(true).HasName("ConversionCellId");
                                 // c.HasKey(x => x.Id);

@@ -53,6 +53,12 @@
             部门管理
             </summary>
         </member>
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.GetAll">
+            <summary>
+            获取所有部门
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.Get(System.String)">
             <summary>
             获取部门
@@ -60,28 +66,23 @@
             <param name="departmentId"></param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.Create(System.String,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.Create(Nokia.AssessmentMange.Api.Models.DepartmentVO)">
             <summary>
             创建部门
             </summary>
-            <param name="name"></param>
-            <param name="parentId"></param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.Update(System.String,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.Update(Nokia.AssessmentMange.Api.Models.DepartmentChangeVO)">
             <summary>
             更新部门
             </summary>
-            <param name="name"></param>
-            <param name="parentId"></param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.Delete(System.String,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.DepartmentController.Delete(System.String)">
             <summary>
             删除部门
             </summary>
-            <param name="name"></param>
-            <param name="parentId"></param>
+            <param name="departmentId"></param>
         </member>
         <member name="T:Nokia.AssessmentMange.Api.Controllers.PersonAssessmentGradeController">
             <summary>
@@ -111,7 +112,17 @@
             人员管理
             </summary>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.CreatePerson(System.String,System.DateTime,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.String,System.String,Nokia.AssessmentMange.Domain.DomainModels.MilitaryRank,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.GetPersons(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            获取人员集合
+            </summary>
+            <param name="name"></param>
+            <param name="idNo"></param>
+            <param name="pageSize"></param>
+            <param name="pageCurrent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.CreatePerson(Nokia.AssessmentMange.Api.Models.PersonVO)">
             <summary>
             创建人员
             </summary>
@@ -123,7 +134,7 @@
             <param name="rank">军衔</param>
             <param name="idNo">证件号</param>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.UpdatePerson(System.String,System.String,System.DateTime,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.String,System.String,Nokia.AssessmentMange.Domain.DomainModels.MilitaryRank,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.UpdatePerson(Nokia.AssessmentMange.Api.Models.PersonChangeVO)">
             <summary>
             修改人员
             </summary>
@@ -142,34 +153,37 @@
             </summary>
                <param name="personId"></param>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.CreateUserForPerson(System.String,System.String,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.CreateUserForPerson(System.String,System.String,System.String,System.Boolean)">
             <summary>
             从人员创建登录账号
             </summary>
-               <param name="personId"></param>
+            <param name="personId"></param>
             <param name="loginName"></param>
             <param name="password"></param>
-        </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.UpdateUserForPerson(System.String,System.String,System.String)">
-            <summary>
-            修改人员关联的账号
-            </summary>
-               <param name="personId"></param>
-            <param name="loginName"></param>
-            <param name="password"></param>
+            <param name="isAdmin"></param>
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.RemoveUserForPerson(System.String)">
             <summary>
             移除人员关联的账号
             </summary>
-               <param name="personId"></param>
+             <param name="userID"></param>
+        </member>
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.PersonController.GetUsers(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            获取人员集合
+            </summary>
+            <param name="name"></param>
+            <param name="loginName"></param>
+            <param name="pageSize"></param>
+            <param name="pageCurrent"></param>
+            <returns></returns>
         </member>
         <member name="T:Nokia.AssessmentMange.Api.Controllers.SubjectController">
             <summary>
             科目管理
             </summary>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.Create(System.String,Nokia.AssessmentMange.Domain.DomainModels.SubjectType,Nokia.AssessmentMange.Domain.DomainModels.SexLimitation,System.Boolean,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.Create(Nokia.AssessmentMange.Api.Models.SubjectVO)">
             <summary>
             创建科目
             </summary>
@@ -178,19 +192,6 @@
             <param name="sexLimitation">性别限制</param>
             <param name="isQualifiedConversion">是否合格_不合格类型</param>
             <param name="unit">单位</param>
-            <returns></returns>
-        </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.CreateComputedSubject(System.String,Nokia.AssessmentMange.Domain.DomainModels.SubjectType,Nokia.AssessmentMange.Domain.DomainModels.SexLimitation,System.Boolean,System.String,System.Collections.Generic.IList{Nokia.AssessmentMange.Domain.DomainModels.ParamSubject},System.String)">
-            <summary>
-            创建计算类型科目
-            </summary>
-            <param name="name">名称</param>
-            <param name="subjectType">类型</param>
-            <param name="sexLimitation">性别限制</param>
-            <param name="isQualifiedConversion">是否合格_不合格类型</param>
-            <param name="unit">单位</param>
-            <param name="formula">计算公式</param>
-            <param name="paramSubjects">参与计算的科目</param>
             <returns></returns>
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.Get(System.String)">
@@ -206,7 +207,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.Update(System.String,System.String,Nokia.AssessmentMange.Domain.DomainModels.SubjectType,Nokia.AssessmentMange.Domain.DomainModels.SexLimitation,System.Boolean,System.String)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.Update(Nokia.AssessmentMange.Api.Models.SubjectChangeVO)">
             <summary>
             更新科目
             </summary>
@@ -218,31 +219,26 @@
             <param name="unit">单位</param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.UpdateComputedSubject(System.String,System.String,Nokia.AssessmentMange.Domain.DomainModels.SubjectType,Nokia.AssessmentMange.Domain.DomainModels.SexLimitation,System.Boolean,System.String,System.Collections.Generic.IDictionary{System.Int32,System.String},System.String)">
-            <summary>
-            更新计算类型科目
-            </summary>
-            <param name="subjectId">科目Id</param>
-            <param name="name">名称</param>
-            <param name="subjectType">类型</param>
-            <param name="sexLimitation">性别限制类型</param>
-            <param name="isQualifiedConversion">是否合格_不合格类型</param>
-            <param name="unit">单位</param>
-            <param name="formula">计算公式</param>
-            <param name="unit">参与计算的科目</param>
-            <returns></returns>
-        </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.InitConversionTable(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,Nokia.AssessmentMange.Domain.DomainModels.AgeRange,System.Int32)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.InitConversionTable(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Int32,System.Int32,System.Int32)">
             <summary>
             初始化成绩换算表
             </summary>
             <param name="subjectId"></param>
-            <param name="ageRange">年龄范围</param>
+            <param name="floorAge">年龄范围</param>
+            <param name="cellingAge">年龄范围</param>
             <param name="score">分数</param>
             <param name="sex">性别,如果科目类型为4(不限性别,但是换算规则不同BothButWithDifirentConversion)则需要赋值,否则传空</param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddScore(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Int32)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.GetConversionTable(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex)">
+            <summary>
+            获取成绩换算表
+            </summary>
+            <param name="subjectId"></param>
+            <param name="sex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddScore(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Double)">
             <summary>
             换算表添加得分
             </summary>
@@ -251,13 +247,14 @@
             <param name="score"></param>
             <returns></returns>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddAgeRange(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,Nokia.AssessmentMange.Domain.DomainModels.AgeRange)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.AddAgeRange(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Int32,System.Int32)">
             <summary>
             添加年龄范围
             </summary>
             <param name="subjectId"></param>
             <param name="sex"></param>
-            <param name="ageRange"></param>
+            <param name="floorAge"></param>
+            <param name="cellingAge"></param>
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.RemoveScore(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Double)">
             <summary>
@@ -267,13 +264,14 @@
             <param name="sex"></param>
             <param name="score"></param>
         </member>
-        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.RemoveAgeRange(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,Nokia.AssessmentMange.Domain.DomainModels.AgeRange)">
+        <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.RemoveAgeRange(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,System.Int32,System.Int32)">
             <summary>
             移除年龄范围
             </summary>
             <param name="subjectId"></param>
             <param name="sex"></param>
-            <param name="ageRange"></param>
+            <param name="floorAge"></param>
+            <param name="cellingAge"></param>
         </member>
         <member name="M:Nokia.AssessmentMange.Api.Controllers.SubjectController.SetGrade(System.String,Nokia.AssessmentMange.Domain.DomainModels.Sex,Nokia.AssessmentMange.Domain.DomainModels.AgeRange,System.Double,System.Double)">
             <summary>
@@ -284,6 +282,121 @@
             <param name="ageRange"></param>
             <param name="score"></param>
             <param name="grade"></param>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.DepartmentVO.Name">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.DepartmentVO.ParentId">
+            <summary>
+            父级部门
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.DepartmentChangeVO.ID">
+            <summary>
+            部门ID；修改时使用
+            </summary>
+        </member>
+        <member name="T:Nokia.AssessmentMange.Api.Models.DtoMapper.AssessmentManageVOProfile">
+            <summary>
+            VO转换类
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonVO.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonVO.Birthday">
+            <summary>
+            生日
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonVO.Sex">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonVO.Position">
+            <summary>
+            职务
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonVO.DepartmentId">
+            <summary>
+            部门
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonVO.Rank">
+            <summary>
+            军衔
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonVO.IdNo">
+            <summary>
+            证件号
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.PersonChangeVO.Id">
+            <summary>
+            用户Id
+            </summary>
+        </member>
+        <member name="T:Nokia.AssessmentMange.Api.Models.SubjectVO">
+            <summary>
+            科目
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.SubjectVO.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.SubjectVO.SubjectType">
+            <summary>
+            分类
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.SubjectVO.IsQualifiedConversion">
+            <summary>
+            得分换算表是否使用 合格/不合格  
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.SubjectVO.Unit">
+            <summary>
+            单位
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.SubjectVO.Formula">
+            <summary>
+            计算公式
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.SubjectVO.ParamSubjects">
+            <summary>
+            计算科目
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.SubjectChangeVO.SubjectId">
+            <summary>
+            科目计算Id
+            </summary>
+        </member>
+        <member name="T:Nokia.AssessmentMange.Api.Models.ParamSubjectVO">
+            <summary>
+            计算科目
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.ParamSubjectVO.SubjectId">
+            <summary>
+            科目ID
+            </summary>
+        </member>
+        <member name="P:Nokia.AssessmentMange.Api.Models.ParamSubjectVO.SortOrder">
+            <summary>
+            排序
+            </summary>
         </member>
         <member name="T:Nokia.AssessmentMange.Api.Models.TokenRequest">
             <summary>

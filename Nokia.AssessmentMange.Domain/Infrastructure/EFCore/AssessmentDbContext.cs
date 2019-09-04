@@ -87,14 +87,15 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                    a.HasKey("SubjectId", "Sex").HasName("SubjectConversionId");
                    a.OwnsOne(x => x.ConversionTable, b =>
                    {
-
+                       b.Ignore(x => x.Scores);
+                       b.Ignore(x=>x.AgeRangeList2);
                        b.OwnsMany(x => x.Grades, c =>
                        {
                            c.HasForeignKey("SubjectId", "Sex");
                            c.Property(x=>x.Score);
                           // HasConversion(x=>(int)x,x=>(int)x);
 
-                           c.OwnsOne(x => x.AgeRange);
+                           c.Ignore(x => x.AgeRange);
                            //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?
                            c.Property(x => x.FloorAgeAsKey);
                            c.OwnsOne(x => x.Grade);

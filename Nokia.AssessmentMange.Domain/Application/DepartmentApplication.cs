@@ -8,22 +8,28 @@ namespace Nokia.AssessmentMange.Domain.Application
 {
     public class DepartmentApplication : ApplicationBase<Department>, IDepartmentApplication
     {
-        IDepartmentRepository  departmentRepository;
-        public DepartmentApplication(IDepartmentRepository departmentRepository) 
-            :base(departmentRepository)
-        { 
-            this.departmentRepository=departmentRepository;
-            }
+        IDepartmentRepository departmentRepository;
+        public DepartmentApplication(IDepartmentRepository departmentRepository)
+            : base(departmentRepository)
+        {
+            this.departmentRepository = departmentRepository;
+        }
 
         public Department Create(string name, Department parent)
         {
             throw new NotImplementedException();
         }
+        public List<Department> GetWithAllChildren()
+        {
+            return departmentRepository.GetWithAllChildren();
+        }
+
         public Department GetWithAllChildren(string id)
         {
-           var department= departmentRepository.GetWithAllChildren(id);
+            var department = departmentRepository.GetWithAllChildren(id);
             return department;
         }
+
 
     }
 }

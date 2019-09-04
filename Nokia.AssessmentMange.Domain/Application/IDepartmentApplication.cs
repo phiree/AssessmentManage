@@ -5,9 +5,10 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.Application
 {
-    public interface IDepartmentApplication:IApplicationBase<Department>
+    public interface IDepartmentApplication : IApplicationBase<Department>
     {
         // Department Create(string name,Department parent);
-          Department GetWithAllChildren(string id);
+        List<Department> GetWithAllChildren();
+        Department GetWithAllChildren(string id);
     }
 }

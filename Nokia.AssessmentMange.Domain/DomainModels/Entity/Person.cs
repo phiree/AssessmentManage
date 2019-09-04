@@ -6,9 +6,12 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 {
     public class Person : EntityBase
     {
-        protected Person() { }
-        public string RealName { get; protected set; }
-        public DateTime Birthday { get; protected set; }
+        public Person() { }
+        public string RealName { get; set; }
+        public DateTime Birthday { get; set; }
+        public string DepartmentId { get; set; }
+        public Department Department { get; set; }
+
         public int Age
         {
             get
@@ -21,11 +24,21 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 return age;
             }
         }
-        public Sex Sex { get; protected set; }
 
-        public string DepartmentId { get; set; }
-        public Department Department { get; protected set; }
+        /// <summary>
+        /// 军衔
+        /// </summary>
+        public MilitaryRank MilitaryRank { get; set; }
+        /// <summary>
+        /// 职务
+        /// </summary>
+        public string Position { get; set; }
 
+        public Sex Sex { get; set; }
+        /// <summary>
+        /// 证件号
+        /// </summary>
+        public string IdNo { get; set; }
     }
     public enum Sex
     {

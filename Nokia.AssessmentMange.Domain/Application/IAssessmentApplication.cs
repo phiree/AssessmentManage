@@ -10,5 +10,7 @@ namespace Nokia.AssessmentMange.Domain.Application
         IEnumerable<Assessment> GetAllAssessment();
         PersonAssessmentGrade GetPersonGrade(string assessmentId, string personId);
         PersonAssessmentGrade SavePersonGrade(string assessmentId, string personId, bool isMakeup, IDictionary<string, double> grades);
+
+        Assessment UpdateSubjects(AssessmentModel assessmentModel);
     }
 }

@@ -13,7 +13,6 @@ using Nokia.AssessmentMange.Domain.Infrastructure;
 using Nokia.AssessmentMange.Domain.Infrastructure.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
-using MySql.Data.EntityFrameworkCore.Extensions;
 using Autofac;
  
 using System.Text;

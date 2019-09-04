@@ -25,6 +25,8 @@ using Nokia.AssessmentMange.Api.Controllers.Authentication;
 using Nokia.AssessmentMange.Api.Controllers.UserManage;
 using System.Web.Http;
 using Newtonsoft.Json;
+using AutoMapper;
+using Nokia.AssessmentMange.Api.Models.DtoMapper;
 
 namespace Nokia.AssessmentMange.Api
 {
@@ -40,6 +42,9 @@ namespace Nokia.AssessmentMange.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAutoMapper(typeof(AssessmentManageVOProfile));
+
             //authentication
             services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
             var token = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
@@ -73,18 +78,18 @@ namespace Nokia.AssessmentMange.Api
             //});
             services.AddScoped<IAuthenticateService, TokenAuthenticationService>();
             services.AddScoped<IUserManagementService, UserManagementService>();
-            
+
             services.AddDbContext<AssessmentDbContext>(
-               options=> options.UseMySQL(
+               options => options.UseMySQL(
                    Configuration.GetConnectionString("Conn"),
-                     b=>b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
+                     b => b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
                )
                 ;
-          
+
             //--------------
             services.AddSingleton<IExcelExporter, ExcelExporter>();
             //注册配置类
-            
+
             services.Configure<SampleOption>(Configuration);
             services.Configure<SampleOption2>(Configuration);
             //Add swaggergen 
@@ -111,8 +116,8 @@ namespace Nokia.AssessmentMange.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           
-         
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -152,11 +157,11 @@ namespace Nokia.AssessmentMange.Api
             });
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
-            }) ;
+            });
         }
     }
 }

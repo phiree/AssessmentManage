@@ -84,6 +84,12 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.Property<string>("DepartmentId");
 
+                    b.Property<string>("IdNo");
+
+                    b.Property<int>("MilitaryRank");
+
+                    b.Property<string>("Position");
+
                     b.Property<string>("RealName");
 
                     b.Property<int>("Sex");
@@ -156,7 +162,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsAdmin");
+                    b.Property<short>("IsAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LoginName");
 
@@ -254,7 +261,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                         {
                             b1.Property<string>("SubjectId");
 
-                            b1.Property<int>("Sex");
+                            b1.Property<string>("Sex")
+                                .IsUnicode(false);
 
                             b1.HasKey("SubjectId", "Sex")
                                 .HasName("SubjectConversionId");
@@ -270,7 +278,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                 {
                                     b2.Property<string>("SubjectConversionSubjectId");
 
-                                    b2.Property<int>("SubjectConversionSex");
+                                    b2.Property<string>("SubjectConversionSex");
 
                                     b2.HasKey("SubjectConversionSubjectId", "SubjectConversionSex");
 
@@ -285,13 +293,13 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                         {
                                             b3.Property<string>("SubjectId");
 
-                                            b3.Property<int>("Sex");
+                                            b3.Property<string>("Sex");
 
-                                            b3.Property<int>("FloorAge");
+                                            b3.Property<int>("FloorAgeAsKey");
 
-                                            b3.Property<double>("Score");
+                                            b3.Property<int>("Score");
 
-                                            b3.HasKey("SubjectId", "Sex", "FloorAge", "Score")
+                                            b3.HasKey("SubjectId", "Sex", "FloorAgeAsKey", "Score")
                                                 .HasName("ConversionCellId");
 
                                             b3.ToTable("ConversionCell");
@@ -305,11 +313,11 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                                 {
                                                     b4.Property<string>("ConversionCellSubjectId");
 
-                                                    b4.Property<int>("ConversionCellSex");
+                                                    b4.Property<string>("ConversionCellSex");
 
-                                                    b4.Property<int>("ConversionCellFloorAge");
+                                                    b4.Property<int>("ConversionCellFloorAgeAsKey");
 
-                                                    b4.Property<double>("ConversionCellScore");
+                                                    b4.Property<int>("ConversionCellScore");
 
                                                     b4.Property<int>("CellingAge");
 
@@ -319,13 +327,13 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                                                     b4.Property<int>("Minimum");
 
-                                                    b4.HasKey("ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAge", "ConversionCellScore");
+                                                    b4.HasKey("ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAgeAsKey", "ConversionCellScore");
 
                                                     b4.ToTable("ConversionCell");
 
                                                     b4.HasOne("Nokia.AssessmentMange.Domain.DomainModels.ConversionCell")
                                                         .WithOne("AgeRange")
-                                                        .HasForeignKey("Nokia.AssessmentMange.Domain.DomainModels.AgeRange", "ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAge", "ConversionCellScore")
+                                                        .HasForeignKey("Nokia.AssessmentMange.Domain.DomainModels.AgeRange", "ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAgeAsKey", "ConversionCellScore")
                                                         .OnDelete(DeleteBehavior.Cascade);
                                                 });
 
@@ -333,21 +341,21 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                                 {
                                                     b4.Property<string>("ConversionCellSubjectId");
 
-                                                    b4.Property<int>("ConversionCellSex");
+                                                    b4.Property<string>("ConversionCellSex");
 
-                                                    b4.Property<int>("ConversionCellFloorAge");
+                                                    b4.Property<int>("ConversionCellFloorAgeAsKey");
 
-                                                    b4.Property<double>("ConversionCellScore");
+                                                    b4.Property<int>("ConversionCellScore");
 
                                                     b4.Property<double>("GradeValue");
 
-                                                    b4.HasKey("ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAge", "ConversionCellScore");
+                                                    b4.HasKey("ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAgeAsKey", "ConversionCellScore");
 
                                                     b4.ToTable("ConversionCell");
 
                                                     b4.HasOne("Nokia.AssessmentMange.Domain.DomainModels.ConversionCell")
                                                         .WithOne("Grade")
-                                                        .HasForeignKey("Nokia.AssessmentMange.Domain.DomainModels.Grade", "ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAge", "ConversionCellScore")
+                                                        .HasForeignKey("Nokia.AssessmentMange.Domain.DomainModels.Grade", "ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAgeAsKey", "ConversionCellScore")
                                                         .OnDelete(DeleteBehavior.Cascade);
                                                 });
                                         });
@@ -374,7 +382,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                             b1.Property<string>("PSubjectName");
 
-                            b1.HasKey("SubjectId", "SortOrder");
+                            b1.HasKey("SubjectId", "SortOrder", "PSubjectId");
 
                             b1.HasIndex("PSubjectId");
 
@@ -382,7 +390,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                             b1.HasOne("Nokia.AssessmentMange.Domain.DomainModels.Subject", "PSubject")
                                 .WithMany()
-                                .HasForeignKey("PSubjectId");
+                                .HasForeignKey("PSubjectId")
+                                .OnDelete(DeleteBehavior.Cascade);
 
                             b1.HasOne("Nokia.AssessmentMange.Domain.DomainModels.ComputedSubject")
                                 .WithMany("ParamSubjects")

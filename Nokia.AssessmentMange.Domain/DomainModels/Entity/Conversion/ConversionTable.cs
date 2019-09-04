@@ -15,7 +15,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
         //columns
 
-        public IEnumerable<AgeRange> AgeRanges
+        public IEnumerable<AgeRange> AgeRangeList2
         {
             get
             {
@@ -23,9 +23,10 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 var ageRanges = new List<AgeRange>();
                 foreach (var g in Grades)
                 {
-                    if (ageRanges.Where(x => x.CellingAge == g.AgeRange.CellingAge).Count() == 0)
+                    if (ageRanges.Where(x=>x.FloorAge==g.FloorAge).Count()==0)
                     {
-                        ageRanges.Add(new AgeRange(g.AgeRange.FloorAge, g.AgeRange.CellingAge));
+                       // ageRanges.Add(g.AgeRange);
+                        ageRanges.Add(new AgeRange(g.FloorAge, g.CellingAge));
                     }
                 }
                 return ageRanges;
@@ -74,7 +75,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             {
                 throw new Exceptions.ConversionTableNotInitialized();
             }
-            if (AgeRanges.Where(x => x.IsCoincide(ageRange)).Count() > 0)
+            if (AgeRangeList2.Where(x => x.IsCoincide(ageRange)).Count() > 0)
             {
                 throw new Exceptions.AgeRangeCoincide(ageRange);
             }
@@ -85,7 +86,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
         public void AddScore(double score)
         {
-            if (AgeRanges.Count() == 0)
+            if (AgeRangeList2.Count() == 0)
             {
                 throw new Exceptions.ConversionTableNotInitialized();
             }
@@ -94,7 +95,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 throw new Exceptions.ScoreAlreadyExisted(score);
             }
 
-            foreach (var ageRange in AgeRanges.ToArray())
+            foreach (var ageRange in AgeRangeList2.ToArray())
             {
                 Grades.Add(new ConversionCell(ageRange, score, Grade.NullGrade));
             }
@@ -125,7 +126,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
         public void RemoveScore(double score)
         {
-            var existedGrades = Grades.Where(x => x.Score == score && AgeRanges.Contains(x.AgeRange));
+            var existedGrades = Grades.Where(x => x.Score == score && AgeRangeList2.Contains(x.AgeRange));
             foreach (var grade in existedGrades.ToList())
             {
                 Grades.Remove(grade);
@@ -226,13 +227,19 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.AgeRange = ageRange;
             this.Score = score;
             this.Grade = grade;
-            this.FloorAgeAsKey = ageRange.FloorAge;
+             this.FloorAgeAsKey = ageRange.FloorAge;
+            this.CellingAge=ageRange.CellingAge;
+            this.FloorAge=ageRange.FloorAge;
         }
         int _floorAgeAsKey;
-        public int FloorAgeAsKey { get; set; }
+        public int FloorAgeAsKey { get;set; }
+
+        public int FloorAge { get;set;}
+        public int CellingAge { get;set;}
+
         public AgeRange AgeRange { get; set; }//column
         public double Score { get; set; }  //row
-        public Grade Grade { get; protected set; }//cell
+        public Grade Grade { get;   set; }//cell
     }
 
 

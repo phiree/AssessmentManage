@@ -81,16 +81,20 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="rank">军衔</param>
         /// <param name="idNo">证件号</param>
         [HttpPost("UpdatePerson")]
-        public Person UpdatePerson([FromBody]PersonVO model)
+        public Person UpdatePerson([FromBody]PersonChangeVO model)
         {
             Department department = null;
             if (!string.IsNullOrEmpty(model.DepartmentId))
             {
                 department = _departmentApplication.Get(model.DepartmentId);
             }
+            User user = _userApplication.GetUserByPersonID(model.Id);
+
             Person person = _mapper.Map<Person>(model);
             person.Department = department;
+            person.User = user;
             _personApplication.Update(person);
+
             return person;
         }
         /// <summary>
@@ -100,8 +104,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpGet("DeletePerson")]
         public bool DeletePerson(string personId)
         {
-            _personApplication.Delete(personId);
-            return true;
+            return _personApplication.DeletePersons(personId);
         }
         /// <summary>
         /// 从人员创建登录账号
@@ -176,6 +179,5 @@ namespace Nokia.AssessmentMange.Api.Controllers
         {
             return _userApplication.GetUsers(name, loginName, pageSize, pageCurrent);
         }
-
     }
 }

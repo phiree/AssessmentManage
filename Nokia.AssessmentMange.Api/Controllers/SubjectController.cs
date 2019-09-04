@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Nokia.AssessmentMange.Api.Models;
 using Nokia.AssessmentMange.Domain.Application;
 using Nokia.AssessmentMange.Domain.DomainModels;
 namespace Nokia.AssessmentMange.Api.Controllers
@@ -14,7 +15,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-     
+
     public class SubjectController : ControllerBase
     {
         ISubjectApplication subjectApplication;
@@ -32,11 +33,23 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="unit">单位</param>
         /// <returns></returns>
         [HttpPost("create")]
-        public Subject Create(string name, SubjectType subjectType, SexLimitation sexLimitation, bool isQualifiedConversion, string unit)
+        public Subject Create([FromBody]SubjectVO model)
         {
-            return subjectApplication.Create(name, subjectType, sexLimitation, isQualifiedConversion, unit);
-
+            if (model.ParamSubjects != null && model.ParamSubjects.Count != 0)
+            {
+                IList<ParamSubject> paramSubjects = new List<ParamSubject>();
+                foreach (var ps in model.ParamSubjects)
+                {
+                    paramSubjects.Add(new ParamSubject(ps.SortOrder, ps.SubjectId));
+                }
+                return subjectApplication.CreateComputedSubject(model.Name, model.SubjectType, model.SexLimitation, model.IsQualifiedConversion, model.Unit, model.Formula, paramSubjects);
+            }
+            else
+            {
+                return subjectApplication.Create(model.Name, model.SubjectType, model.SexLimitation, model.IsQualifiedConversion, model.Unit);
+            }
         }
+
         /// <summary>
         /// 创建计算类型科目
         /// </summary>
@@ -48,15 +61,14 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="formula">计算公式</param>
         /// <param name="paramSubjects">参与计算的科目</param>
         /// <returns></returns>
-        [HttpPost("createcomputed")]        
-        public Subject CreateComputedSubject(string name, SubjectType subjectType,
-            SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
-            IList<ParamSubject> paramSubjects, string formula)
-        {
-         var subject=  subjectApplication.CreateComputedSubject(name, subjectType, sexLimitation, isQualifiedConversion, unit, formula, paramSubjects);
-
-            return subject;
-        }
+        //[HttpPost("createcomputed")]
+        //public Subject CreateComputedSubject(string name, SubjectType subjectType,
+        //    SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
+        //    IList<ParamSubject> paramSubjects, string formula)
+        //{
+        //    var subject = subjectApplication.CreateComputedSubject(name, subjectType, sexLimitation, isQualifiedConversion, unit, formula, paramSubjects);
+        //    return subject;
+        //}
         /// <summary>
         /// 获取科目
         /// </summary>
@@ -65,7 +77,6 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpGet("Get")]
         public Subject Get(string subjectId)
         {
-
             return subjectApplication.Get(subjectId);
         }
         /// <summary>
@@ -88,16 +99,32 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="unit">单位</param>
         /// <returns></returns>
         [HttpPost("udpate")]
-        public Subject Update(string subjectId, string name, SubjectType subjectType,
-            SexLimitation sexLimitation, bool isQualifiedConversion, string unit)
+        public Subject Update([FromBody]SubjectChangeVO model)
         {
-            var old = subjectApplication.Get(subjectId);
-            old.Update(name, subjectType,
-              sexLimitation, isQualifiedConversion, unit);
+            if (model.ParamSubjects != null && model.ParamSubjects.Count != 0)
+            {
+                IList<ParamSubject> paramSubjects = new List<ParamSubject>();
+                foreach (var ps in model.ParamSubjects)
+                {
+                    paramSubjects.Add(new ParamSubject(ps.SortOrder, ps.SubjectId));
+                }
+
+                ComputedSubject subject = (ComputedSubject)subjectApplication.Get(model.SubjectId);
+                subject.UpdateComputedSubject(model.Name, model.SubjectType,
+                  model.SexLimitation, model.IsQualifiedConversion, model.Unit, model.Formula, paramSubjects);
+                subjectApplication.Update(subject);
+                return subject;
+            }
+            else
+            {
+                Subject subject = subjectApplication.Get(model.SubjectId);
+                subject.Update(model.Name, model.SubjectType,
+                  model.SexLimitation, model.IsQualifiedConversion, model.Unit);
+                subjectApplication.Update(subject);
+                return subject;
+            }
 
 
-            subjectApplication.Update(old);
-            return old;
         }
         /// <summary>
         /// 更新计算类型科目
@@ -111,30 +138,42 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="formula">计算公式</param>
         /// <param name="unit">参与计算的科目</param>
         /// <returns></returns>
-        [HttpPost("udpatecomputed")]
-        public Subject UpdateComputedSubject(string subjectId, string name, SubjectType subjectType,
-            SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
-            IDictionary<int, string> paramSubjects, string formula)
-        {
-           throw new NotImplementedException();
-        }
+        //[HttpPost("udpatecomputed")]
+        //public Subject UpdateComputedSubject(string subjectId, string name, SubjectType subjectType,
+        //    SexLimitation sexLimitation, bool isQualifiedConversion, string unit,
+        //    IDictionary<int, string> paramSubjects, string formula)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        
-         
+
         /// <summary>
         /// 初始化成绩换算表
         /// </summary>
         /// <param name="subjectId"></param>
-        /// <param name="ageRange">年龄范围</param>
+        /// <param name="floorAge">年龄范围</param>
+        /// <param name="cellingAge">年龄范围</param>
         /// <param name="score">分数</param>
         /// <param name="sex">性别,如果科目类型为4(不限性别,但是换算规则不同BothButWithDifirentConversion)则需要赋值,否则传空</param>
         /// <returns></returns>
-        [HttpPost("InitConversionTable")]
-        public ConversionTable InitConversionTable(string subjectId,Sex sex, AgeRange ageRange,int score )
-        { 
-          return  subjectApplication.InitConversion(subjectId,sex,ageRange,score);
-            
-          }
+        [HttpGet("InitConversionTable")]
+        public ConversionTable InitConversionTable(string subjectId, Sex sex, int floorAge, int cellingAge, int score)
+        {
+            return subjectApplication.InitConversion(subjectId, sex, new AgeRange(floorAge, cellingAge), score);
+        }
+        /// <summary>
+        /// 获取成绩换算表
+        /// </summary>
+        /// <param name="subjectId"></param>
+        /// <param name="sex"></param>
+        /// <returns></returns>
+        [HttpGet("GetConversionTable")]
+        public ConversionTable GetConversionTable(string subjectId, Sex sex)
+        {
+            return subjectApplication.GetConversionTable(subjectId, sex);
+        }
+
+
         /// <summary>
         /// 换算表添加得分
         /// </summary>
@@ -142,40 +181,47 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="sex"></param>
         /// <param name="score"></param>
         /// <returns></returns>
-        [HttpPost("AddScore")]
-        public ConversionTable AddScore(string subjectId, Sex sex, int score)
+        [HttpGet("AddScore")]
+        public ConversionTable AddScore(string subjectId, Sex sex, double score)
         {
-            return subjectApplication.AddScore(subjectId, sex,  score);
-
+            return subjectApplication.AddScore(subjectId, sex, score);
         }
-         
+
         /// <summary>
         /// 添加年龄范围
         /// </summary>
         /// <param name="subjectId"></param>
         /// <param name="sex"></param>
-        /// <param name="ageRange"></param>
-        [HttpPost("AddAgeRange")]
-        public void AddAgeRange(string subjectId, Sex sex, AgeRange ageRange)
-        { }
+        /// <param name="floorAge"></param>
+        /// <param name="cellingAge"></param>
+        [HttpGet("AddAgeRange")]
+        public ConversionTable AddAgeRange(string subjectId, Sex sex, int floorAge, int cellingAge)
+        {
+            return subjectApplication.AddAgeRange(subjectId, sex, new AgeRange(floorAge, cellingAge));
+        }
         /// <summary>
         /// 移除得分
         /// </summary>
         /// <param name="subjectId"></param>
         /// <param name="sex"></param>
         /// <param name="score"></param>
-        [HttpPost("RemoveScore")]
-        public void RemoveScore(string subjectId, Sex sex, double score)
-        { }
+        [HttpGet("RemoveScore")]
+        public ConversionTable RemoveScore(string subjectId, Sex sex, double score)
+        {
+            return subjectApplication.RemoveScore(subjectId, sex, score);
+        }
         /// <summary>
         /// 移除年龄范围
         /// </summary>
         /// <param name="subjectId"></param>
         /// <param name="sex"></param>
-        /// <param name="ageRange"></param>
-        [HttpPost("RemoveAgeRange")]
-        public void RemoveAgeRange(string subjectId, Sex sex, AgeRange ageRange)
-        { }
+        /// <param name="floorAge"></param>
+        /// <param name="cellingAge"></param>
+        [HttpGet("RemoveAgeRange")]
+        public ConversionTable RemoveAgeRange(string subjectId, Sex sex, int floorAge, int cellingAge)
+        {
+            return subjectApplication.RemoveAgeRange(subjectId, sex, new AgeRange(floorAge, cellingAge));
+        }
 
         /// <summary>
         /// 设置对应的成绩
@@ -185,9 +231,9 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="ageRange"></param>
         /// <param name="score"></param>
         /// <param name="grade"></param>
-        public void SetGrade(string subjectId,Sex sex,AgeRange ageRange,double score ,double grade)
-        { }
+        public void SetGrade(string subjectId, Sex sex, AgeRange ageRange, double score, double grade)
+        {
 
-
+        }
     }
 }

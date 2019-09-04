@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nokia.AssessmentMange.Domain.Infrastructure.EFCore;
 
 namespace Nokia.AssessmentMange.Domain.Migrations
 {
     [DbContext(typeof(AssessmentDbContext))]
-    partial class AssessmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190903161928_personassessmentgrade_change")]
+    partial class personassessmentgrade_change
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,12 +86,6 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.Property<string>("DepartmentId");
 
-                    b.Property<string>("IdNo");
-
-                    b.Property<int>("MilitaryRank");
-
-                    b.Property<string>("Position");
-
                     b.Property<string>("RealName");
 
                     b.Property<int>("Sex");
@@ -158,8 +154,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100);
 
-                    b.Property<short>("IsAdmin")
-                        .HasColumnType("bit");
+                    b.Property<bool>("IsAdmin");
 
                     b.Property<string>("LoginName");
 
@@ -226,11 +221,13 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                         {
                             b1.Property<string>("PersonAssessmentGradeId");
 
-                            b1.Property<byte>("IsMakeup")
-                                .HasColumnType("TINYINT(1)");
+                            b1.Property<bool>("IsMakeup");
 
-                            b1.Property<byte>("IsAbsent")
-                                .HasColumnType("TINYINT(1)");
+                            b1.Property<string>("Id")
+                                .IsRequired()
+                                .HasMaxLength(100);
+
+                            b1.Property<bool>("IsAbsent");
 
                             b1.HasKey("PersonAssessmentGradeId", "IsMakeup")
                                 .HasName("AssessmentGradeId");
@@ -246,7 +243,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                 {
                                     b2.Property<string>("PersonAssessmentGradeId");
 
-                                    b2.Property<byte>("IsMakeup");
+                                    b2.Property<bool>("IsMakeup");
 
                                     b2.Property<string>("SubjectId");
 
@@ -280,7 +277,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                         {
                             b1.Property<string>("SubjectId");
 
-                            b1.Property<int>("Sex");
+                            b1.Property<string>("Sex")
+                                .IsUnicode(false);
 
                             b1.HasKey("SubjectId", "Sex")
                                 .HasName("SubjectConversionId");
@@ -296,7 +294,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                 {
                                     b2.Property<string>("SubjectConversionSubjectId");
 
-                                    b2.Property<int>("SubjectConversionSex");
+                                    b2.Property<string>("SubjectConversionSex");
 
                                     b2.HasKey("SubjectConversionSubjectId", "SubjectConversionSex");
 
@@ -311,7 +309,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                         {
                                             b3.Property<string>("SubjectId");
 
-                                            b3.Property<int>("Sex");
+                                            b3.Property<string>("Sex");
 
                                             b3.Property<int>("FloorAgeAsKey");
 
@@ -331,7 +329,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                                 {
                                                     b4.Property<string>("ConversionCellSubjectId");
 
-                                                    b4.Property<int>("ConversionCellSex");
+                                                    b4.Property<string>("ConversionCellSex");
 
                                                     b4.Property<int>("ConversionCellFloorAgeAsKey");
 
@@ -359,7 +357,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                                 {
                                                     b4.Property<string>("ConversionCellSubjectId");
 
-                                                    b4.Property<int>("ConversionCellSex");
+                                                    b4.Property<string>("ConversionCellSex");
 
                                                     b4.Property<int>("ConversionCellFloorAgeAsKey");
 

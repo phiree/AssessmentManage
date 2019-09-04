@@ -27,6 +27,8 @@ using System.Web.Http;
 using Newtonsoft.Json;
 using AutoMapper;
 using Nokia.AssessmentMange.Api.Models.DtoMapper;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+
 
 namespace Nokia.AssessmentMange.Api
 {
@@ -83,8 +85,8 @@ namespace Nokia.AssessmentMange.Api
                options => options.UseMySQL(
                    Configuration.GetConnectionString("Conn"),
                      b => b.MigrationsAssembly("Nokia.AssessmentMange.Domain"))
-               )
-                ;
+               );
+ 
 
             //--------------
             services.AddSingleton<IExcelExporter, ExcelExporter>();

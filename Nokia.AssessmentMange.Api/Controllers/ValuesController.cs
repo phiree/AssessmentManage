@@ -26,8 +26,9 @@ namespace Nokia.AssessmentMange.Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public string Post( string value, string val1)
         {
+            return string.Concat(value, "==", val1);
         }
 
         // PUT api/values/5

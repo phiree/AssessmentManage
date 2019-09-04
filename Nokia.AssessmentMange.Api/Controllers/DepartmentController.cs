@@ -64,7 +64,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("Update")]
-        public Department Update([FromBody]DepartmentVO model)
+        public Department Update([FromBody]DepartmentChangeVO model)
         {
             Department parent = null;
             if (!string.IsNullOrEmpty(model.ParentId))

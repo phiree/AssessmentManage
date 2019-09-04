@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
@@ -31,6 +32,27 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
                 .Include(Conn.GetIncludePaths(typeof(T)))
                 .First(x => x.Id == id);
+
+        }
+        /// <summary>
+        /// 贪婪加载
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public T GetEager(string id)
+        {
+
+            ;
+            return Conn.Set<T>()
+
+                .Include(Conn.GetIncludePaths(typeof(T)))
+                .First(x => x.Id == id)
+
+                ;
+
+
+
+
 
         }
         public IEnumerable<T> GetList(IEnumerable<string> idList)
@@ -124,9 +146,9 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
             throw new NotImplementedException();
         }
 
-        public IDbTransaction BeginTransaction()
+        public IDbContextTransaction BeginTransaction()
         {
-            throw new NotImplementedException();
+            return Conn.Database.BeginTransaction();
         }
 
         public IEnumerable<T> SearchWithPage(IDictionary<string, object> param, int pageIndex, int pageSize)

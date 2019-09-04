@@ -26,7 +26,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.Infrastructure.EFCore
    public class DbContextTest
     {
         [Fact]
-        public void Modify_SharedOwned()
+        public void 成绩对照单()
         {
             var options = new DbContextOptionsBuilder<AssessmentDbContext>()
                .UseInMemoryDatabase(databaseName: "inmemo")
@@ -108,6 +108,66 @@ Console.WriteLine(changed);
             //Assert.Equal(0,subject.SubjectConversions[0].ConversionTable.Grades[0].Grade.GradeValue);
             */
         }
+
+        [Fact]
+        public void 录入人员成绩()
+        {
+            var options = new DbContextOptionsBuilder<AssessmentDbContextTest>()
+               .UseInMemoryDatabase(databaseName: "inmemo")
+               .Options;
+            var db = new AssessmentDbContextTest(options);
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+            //添加一个科目
+            var subject = new Subject("百米", SubjectType.PhysicalFitness, SexLimitation.BothAndSameConversion, false, "秒");
+            db.Add(subject);
+            db.SaveChanges();
+            //添加一个得分换算表
+            subject = db.Find<Subject>(subject.Id);
+            var table = new ConversionTable().Init(new List<AgeRange> { new AgeRange(12, 24) }, new List<int> { 100 });
+            subject.SubjectConversions.Add(
+                new SubjectConversion(
+                    Sex.Female, table
+                    ));
+            
+            subject.GetSubjectConversion(Sex.Female).ConversionTable.SetGrade(new AgeRange(12, 24), 100, 14);
+            db.SaveChanges();
+
+            //添加一个年龄段
+             subject=db.Subjects.Find(subject.Id);
+             subject.GetSubjectConversion(Sex.Female).ConversionTable.AddAgeRange(new AgeRange(26,30));
+            subject.GetSubjectConversion(Sex.Female).ConversionTable.SetGrade(new AgeRange(26,30),100,13 );
+            db.SaveChanges();
+
+            //增加一个部门
+            Department department=new Department("一连",null);
+            db.Add(department);
+            db.SaveChanges();
+            //增加一个人员
+            Person person=new Person("zhangsan", new DateTime(1991,10,10),Sex.Female,department.Id);
+            db.Add(person);
+            db.SaveChanges();
+            //增加一个考核
+            Assessment assessment=new Assessment(department.Id,"9月考核",false);
+            db.Add(assessment);
+            db.SaveChanges();
+            //考核增加一个科目
+            assessment.Subjects=new List<AssessmentSubject> {new AssessmentSubject(assessment,subject) };
+            db.SaveChanges();
+            //添加人员考核.
+            PersonAssessmentGrade personAssessmentGrade=new PersonAssessmentGrade(assessment,person);
+            db.Add(personAssessmentGrade);
+            db.SaveChanges();
+            //录入成绩
+            personAssessmentGrade=db.PersonGrades.Find(personAssessmentGrade.Id);
+            personAssessmentGrade.CommitGrade(new AssessmentGrade(false,false,new List<SubjectGrade>{new SubjectGrade(subject.Id,13)}));
+            db.SaveChanges();
+
+            personAssessmentGrade= db.PersonGrades.Find(personAssessmentGrade.Id);
+
+            Assert.Equal(13,personAssessmentGrade.AssessmentGrades.First().SubjectGrades.First().Grade);
+            
+        }
         public class AssessmentDbContextTest : DbContext
         {
 
@@ -137,12 +197,17 @@ Console.WriteLine(changed);
                 modelBuilder.Entity<Department>().HasIndex(p => new { p.Name, p.ParentId }).IsUnique(true);
 
                 modelBuilder.Entity<PersonAssessmentGrade>()
-                    .OwnsMany(x => x.SubjectGrades
-                    , m => {
-                        m.HasForeignKey("PersonAssessmentGradeId");
-                        m.Property(x => x.SubjectId);
-                        m.HasKey("PersonAssessmentGradeId", "SubjectId").HasName("SubjectGradeId");
+                .OwnsMany(x => x.AssessmentGrades
+                , m => {
+                    m.HasForeignKey("PersonAssessmentGradeId");
+                    m.Property(x => x.IsMakeup);//最多只有一次补考,可以作为联合组建
+                    m.HasKey("PersonAssessmentGradeId", "IsMakeup").HasName("AssessmentGradeId");
+                    m.OwnsMany(x => x.SubjectGrades, n => {
+                        n.HasForeignKey("PersonAssessmentGradeId", "IsMakeup");
+                        n.Property(x => x.SubjectId);
+                        n.HasKey("PersonAssessmentGradeId", "IsMakeup", "SubjectId").HasName("PMS");
                     });
+                });
                 modelBuilder.Entity<AssessmentSubject>()
                     .Property(x => x.AssessmentId).HasMaxLength(100)
                     ;

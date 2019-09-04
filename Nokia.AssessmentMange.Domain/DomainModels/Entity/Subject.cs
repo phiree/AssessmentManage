@@ -24,9 +24,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.SubjectConversions = new List<SubjectConversion>();
         }
         public IList<SubjectConversion> SubjectConversions { get; set; }
-        public IList<AssessmentSubject> Assessments { get;set;}
+        public IList<AssessmentSubject> Assessments { get; set; }
 
-      
+
         /// <summary>
         /// 名称
         /// </summary>
@@ -78,17 +78,17 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                     }
                     catch
                     {
-                        throw new Exceptions.ConversionNotFound(sex,  this.Name);
+                        throw new Exceptions.ConversionNotFound(sex, this.Name);
                     }
                     break;
                 case SexLimitation.FemaleOnly:
                     if (sex == Sex.Female)
-                    
+
                     { SubjectConversion = SubjectConversions[0]; }
                     break;
                 case SexLimitation.MaleOnly:
                     if (sex == Sex.Male)
-                     
+
                     { SubjectConversion = SubjectConversions[0]; }
                     break;
             }
@@ -96,9 +96,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 
         }
 
-        
-         
-        
+
+
+
     }
 
 
@@ -108,28 +108,28 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// </summary>
     public class ComputedSubject : Subject
     {
-     protected ComputedSubject() { }
+        protected ComputedSubject() { }
 
         private ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
-                   bool isQualifiedConversion, string unit,  string formula)
+                   bool isQualifiedConversion, string unit, string formula)
             : base(name, subjectType, sexLimitation, isQualifiedConversion, unit)
         {
             this.Formula = formula;
         }
         //
         public ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
-                  bool isQualifiedConversion, string unit, IDictionary<int,string> paramSubjectIds, string formula)
-           : this(name, subjectType, sexLimitation, isQualifiedConversion, unit,formula)
+                  bool isQualifiedConversion, string unit, IDictionary<int, string> paramSubjectIds, string formula)
+           : this(name, subjectType, sexLimitation, isQualifiedConversion, unit, formula)
         {
-            this.ParamSubjects = paramSubjectIds.Select(x=>new ParamSubject(x.Key,x.Value)).ToList();
+            this.ParamSubjects = paramSubjectIds.Select(x => new ParamSubject(x.Key, x.Value)).ToList();
 
-         
+
 
         }
-//单元测试使用
+        //单元测试使用
         public ComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation,
                    bool isQualifiedConversion, string unit, IList<ParamSubject> paramSubjects, string formula)
-            : this(name, subjectType, sexLimitation, isQualifiedConversion, unit,formula)
+            : this(name, subjectType, sexLimitation, isQualifiedConversion, unit, formula)
         {
             this.ParamSubjects = paramSubjects;
         }
@@ -145,17 +145,29 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         {
             this.ParamSubjects.Clear();
             this.ParamSubjects = newParams;
+        }
 
+        public void UpdateComputedSubject(string name, SubjectType subjectType, SexLimitation sexLimitation, bool isQualifiedConversion, string unit, string formula, IList<ParamSubject> paramSubjects)
+        {
+            this.Name = name;
+            this.SubjectType = subjectType;
+            this.SexLimitation = sexLimitation;
+            this.IsQualifiedConversion = isQualifiedConversion;
+            this.Unit = unit;
+            this.Formula = formula;
+            this.ParamSubjects = paramSubjects;
         }
     }
     /// <summary>
     /// 计算科目的 科目参数
     /// </summary>
-    public class ParamSubject {
+    public class ParamSubject
+    {
         protected ParamSubject() { }
-        public ParamSubject(int sortOrder,string   subjectId) { 
-            this.SortOrder=sortOrder;this.PSubjectId=subjectId;
-            }
+        public ParamSubject(int sortOrder, string subjectId)
+        {
+            this.SortOrder = sortOrder; this.PSubjectId = subjectId;
+        }
         /// <summary>
         /// 用于单元测试.
         /// </summary>
@@ -165,14 +177,14 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         {
             this.SortOrder = sortOrder; this.PSubject = subject;
         }
-        public ParamSubject(int sortOrder,string pSubjectId, string pSubjectName):this(sortOrder,pSubjectId)
+        public ParamSubject(int sortOrder, string pSubjectId, string pSubjectName) : this(sortOrder, pSubjectId)
         {
-           this.PSubjectName=pSubjectName;
+            this.PSubjectName = pSubjectName;
         }
-        public int SortOrder { get;  set; }
-        public string PSubjectId { get; set;}
-        public Subject PSubject { get; set;}
-        public string PSubjectName { get;  set; }
+        public int SortOrder { get; set; }
+        public string PSubjectId { get; set; }
+        public Subject PSubject { get; set; }
+        public string PSubjectName { get; set; }
     }
 
 

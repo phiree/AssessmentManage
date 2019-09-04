@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
@@ -37,7 +38,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         bool Delete(IEnumerable<T> list);
         bool DeleteAll();
 
-        IDbTransaction BeginTransaction();
+        IDbContextTransaction BeginTransaction();
 
 
         List<T> SearchWithPage(Expression<Func<T, bool>> where, int pageIndex, int pageSize, out int rowCount);
@@ -47,8 +48,10 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
 
     public interface IEFCRepository<T> : IRepository<T>
     {
+        T GetEager(string id);
         T FindOne(Expression<Func<T, bool>> where);
         IEnumerable<T> Find(Expression<Func<T, bool>> where);
         void SaveChanges();
+
     }
 }

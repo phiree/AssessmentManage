@@ -14,35 +14,37 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             Grades = new List<ConversionCell>();
         }
         //columns
-        
+
         public IEnumerable<AgeRange> AgeRanges
         {
-            get {
+            get
+            {
                 //memo: distinct无法移除重复项.
                 var ageRanges = new List<AgeRange>();
-                foreach(var g in Grades)
-                { 
-                    if(ageRanges.Where(x=>x.CellingAge==g.AgeRange.CellingAge).Count()==0)
-                    { 
-                        ageRanges.Add(new AgeRange (g.AgeRange.FloorAge,g.AgeRange.CellingAge));
-                        }
+                foreach (var g in Grades)
+                {
+                    if (ageRanges.Where(x => x.CellingAge == g.AgeRange.CellingAge).Count() == 0)
+                    {
+                        ageRanges.Add(new AgeRange(g.AgeRange.FloorAge, g.AgeRange.CellingAge));
                     }
+                }
                 return ageRanges;
                 //memo: agerange虽然是值对象, 但是在c#中,它依然是引用类型. 这个对象是 cell主键的一部分.
                 // 新建一个cell时, 如果直接使用已有的agerange对象, ef会认为 这是一个更新,但是它又是主键,无法更新, 导致异常.
                 // return Grades.Select(x => x.AgeRange).Distinct();
-                
-                return   Grades.Select(x => x.AgeRange).Distinct().Select(x=>new AgeRange(x.FloorAge,x.CellingAge)).ToList(); }
 
-           
-            
+                return Grades.Select(x => x.AgeRange).Distinct().Select(x => new AgeRange(x.FloorAge, x.CellingAge)).ToList();
+            }
+
+
+
         }
         //rows
-        public IEnumerable<int> Scores
+        public IEnumerable<double> Scores
         {
             get
             {
-                return   Grades.Select(x => x.Score).Distinct();
+                return Grades.Select(x => x.Score).Distinct();
             }
         }
         // cells 
@@ -75,23 +77,21 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             if (AgeRanges.Where(x => x.IsCoincide(ageRange)).Count() > 0)
             {
                 throw new Exceptions.AgeRangeCoincide(ageRange);
-
             }
             foreach (var score in Scores.ToArray())
             {
                 Grades.Add(new ConversionCell(ageRange, score, Grade.NullGrade));
             }
         }
-        public void AddScore(int score)
+        public void AddScore(double score)
         {
-            if (Grades.Count == 0)
+            if (AgeRanges.Count() == 0)
             {
                 throw new Exceptions.ConversionTableNotInitialized();
             }
             if (Scores.Contains(score))
             {
                 throw new Exceptions.ScoreAlreadyExisted(score);
-
             }
 
             foreach (var ageRange in AgeRanges.ToArray())
@@ -143,7 +143,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             //年龄对应的换算项
             var ageConversions = Grades.Where(x => x.AgeRange.ContainsValue(age));
 
-            if (ageConversions.Count() ==0)
+            if (ageConversions.Count() == 0)
             {
                 throw new Exceptions.AgeConversionNotFound(age);
             }
@@ -186,13 +186,13 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             var nearestConversions = GetNearest(grade);
             if (nearestConversions.Count == 1)
             {
-                return nearestConversions[0].Score ;
+                return nearestConversions[0].Score;
             }
 
             var first = nearestConversions[0];
             var second = nearestConversions[1];
             var score = new InterpolationScore(first.Score, second.Score, first.Grade.GradeValue, second.Score, grade).GetValue();
-            return score ;
+            return score;
 
         }
         /// <summary>
@@ -218,23 +218,23 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         }
     }
 
-    public class ConversionCell  
+    public class ConversionCell
     {
         protected ConversionCell() { }
-        public ConversionCell(AgeRange ageRange, int score, Grade grade)
+        public ConversionCell(AgeRange ageRange, double score, Grade grade)
         {
             this.AgeRange = ageRange;
             this.Score = score;
             this.Grade = grade;
-            this.FloorAgeAsKey=ageRange.FloorAge;
+            this.FloorAgeAsKey = ageRange.FloorAge;
         }
         int _floorAgeAsKey;
-        public int FloorAgeAsKey { get;set; }
-        public AgeRange AgeRange { get;   set; }//column
-        public int Score { get;   set; }  //row
+        public int FloorAgeAsKey { get; set; }
+        public AgeRange AgeRange { get; set; }//column
+        public double Score { get; set; }  //row
         public Grade Grade { get; protected set; }//cell
     }
-    
+
 
     public class ScoreGrade
     {

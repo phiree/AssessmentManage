@@ -16,9 +16,10 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
            throw new NotImplementedException();
         }
 
-        public void SavePersonGrades(PersonAssessmentGrade personGrade)
+        public new void Get(string Id)
+            
         { 
-             
+            
          }
     }
 }

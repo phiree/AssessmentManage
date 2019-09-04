@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.Application
 {
-    public interface  ISubjectApplication:IApplicationBase<Subject>
+    public interface ISubjectApplication : IApplicationBase<Subject>
     {
-         Subject Create(string name, SubjectType subjectType, SexLimitation sexLimitation, 
-             bool isQualifiedConversion, string unit);
-          Subject CreateComputedSubject(string name, SubjectType subjectType,
-          SexLimitation sexLimitation, bool isQualifiedConversion, string unit, string formula, IList<ParamSubject> paramSubjects);
-          Subject GetWithParamSubject(string id);
+        Subject Create(string name, SubjectType subjectType, SexLimitation sexLimitation,
+            bool isQualifiedConversion, string unit);
+        Subject CreateComputedSubject(string name, SubjectType subjectType,
+        SexLimitation sexLimitation, bool isQualifiedConversion, string unit, string formula, IList<ParamSubject> paramSubjects);
+        Subject GetWithParamSubject(string id);
         /// <summary>
         /// 初始化 成绩换算表
         /// </summary>
@@ -20,6 +20,11 @@ namespace Nokia.AssessmentMange.Domain.Application
         /// <param name="ageRange"></param>
         /// <param name="score"></param>
         ConversionTable InitConversion(string subjectId, Sex sex, AgeRange ageRange, int score);
-        ConversionTable AddScore(string subjectId, Sex sex, int score);
+        ConversionTable GetConversionTable(string subjectId, Sex sex);
+        ConversionTable AddScore(string subjectId, Sex sex, double score);
+        ConversionTable AddAgeRange(string subjectId, Sex sex, AgeRange ageRange);
+
+        ConversionTable RemoveScore(string subjectId, Sex sex, double score);
+        ConversionTable RemoveAgeRange(string subjectId, Sex sex, AgeRange ageRange);
     }
 }

@@ -18,10 +18,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
     [ApiController]
     public class PersonAssessmentGradeController : ControllerBase
     {
-       PersonAssessmentGradeApplication personAssessmentGradeApplication;
-        public PersonAssessmentGradeController(PersonAssessmentGradeApplication personAssessmentGradeApplication)
+        IPersonAssessmentGradeApplication personAssessmentGradeApplication;
+        public PersonAssessmentGradeController(IPersonAssessmentGradeApplication personAssessmentGradeApplication)
         {
-            this.personAssessmentGradeApplication= personAssessmentGradeApplication;
+            this.personAssessmentGradeApplication = personAssessmentGradeApplication;
 
         }
         /// <summary>
@@ -29,30 +29,26 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// </summary>
         /// <param name="personId"></param>
         /// <param name="assessmentId"></param>
-        /// <returns></returns>
+        /// <returns>人员考核成绩. 提交成绩时,需要传入此对象的Id</returns>
         [HttpGet("Get")]
-        public PersonAssessmentGrade Get(string personId,string assessmentId)
-        { 
-            throw new NotImplementedException();
-            }
+        public PersonAssessmentGrade Get(string personId, string assessmentId)
+        {
+            return personAssessmentGradeApplication.Get(assessmentId, personId);
+        }
         /// <summary>
-        /// 录入人员成绩
+        /// 录入成绩
         /// </summary>
-        /// <param name="createModel"></param>
+        /// <param name="personAssessmentId">人员考核成绩Id</param>
+        /// <param name="isAbsent">是否缺考</param>
+        /// <param name="isMakeup">是否补考</param>
+        /// <param name="subjectGrades">各科目的成绩</param>
         /// <returns></returns>
-        [HttpPost("EntryGrade")]
-        public PersonAssessmentGrade EntryGrade(PersonAssessementGradeCreateModel createModel)
+        [HttpPost("CommitGrade")]
+        public PersonAssessmentGrade CommitGrade(string personAssessmentId, bool isAbsent, bool isMakeup, IList<SubjectGradeModel> subjectGrades)
         {
-          return  personAssessmentGradeApplication.Create(createModel);
+            return personAssessmentGradeApplication.CommitGrades(personAssessmentId, isAbsent, isMakeup, subjectGrades);
 
         }
-        [HttpPost("update")]
-        public PersonAssessmentGrade Update(PersonAssessementGradeUpdateModel updateModel)
-        {
-            return personAssessmentGradeApplication.Create(updateModel);
 
-           
-
-        }
     }
 }

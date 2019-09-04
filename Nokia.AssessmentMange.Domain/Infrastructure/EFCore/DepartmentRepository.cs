@@ -14,7 +14,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public DepartmentRepository(AssessmentDbContext conn) : base(conn) { }
         public Department GetWithAllChildren(string id)
         {
-            var department = Conn.Departments.Include(c => c.Children).AsEnumerable().First(x => x.Id == id);
+            var department = Conn.Departments.Include(c => c.Children).AsEnumerable().FirstOrDefault(x => x.Id == id);
             return department;
         }
 

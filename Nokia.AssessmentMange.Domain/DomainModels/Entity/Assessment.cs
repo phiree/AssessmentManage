@@ -17,6 +17,14 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.CreatedTime = DateTime.Now;
 
         }
+        public Assessment(string departmentId, string name, bool annual,IList<Subject> subjects)
+        {
+            this.DepartmentId = departmentId;
+             this.Subjects = subjects.Select(x=>new AssessmentSubject(this,x)).ToArray();
+            this.Annual = annual;
+            this.CreatedTime = DateTime.Now;
+
+        }
         /// <summary>
         /// 对应的部门
         /// </summary>

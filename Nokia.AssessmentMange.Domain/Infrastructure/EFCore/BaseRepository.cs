@@ -6,37 +6,33 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
-    public class EFCRepository<T> : IEFCRepository<T> where T :DomainModels.EntityBase 
+    public class EFCRepository<T> : IEFCRepository<T> where T : DomainModels.EntityBase
     {
-        
-        protected AssessmentDbContext Conn { get;private set;}
+
+        protected AssessmentDbContext Conn { get; private set; }
         public EFCRepository(AssessmentDbContext conn)
         {
             this.Conn = conn;
 
         }
-       
+
         public T Get(string id)
         {
             return Conn.Set<T>()
 
                .Find(id);
 
-                ;
+            ;
             return Conn.Set<T>()
-                
+
                 .Include(Conn.GetIncludePaths(typeof(T)))
-                .First(x=>x.Id==id)
-                
-                ;
-                
-                 
-                
-                 
-            
+                .First(x => x.Id == id);
+
         }
         /// <summary>
         /// 贪婪加载
@@ -45,7 +41,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         /// <returns></returns>
         public T GetEager(string id)
         {
-            
+
             ;
             return Conn.Set<T>()
 
@@ -65,17 +61,20 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         }
         public bool Delete(T obj)
         {
-            try{ Conn.Remove(obj);
+            try
+            {
+                Conn.Remove(obj);
                 Conn.SaveChanges();
                 return true;
-                }
-            catch { 
+            }
+            catch
+            {
                 return false;
-                }
-            
+            }
+
 
         }
-        
+
 
         public bool Delete(IEnumerable<T> list)
         {
@@ -84,76 +83,72 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         public bool DeleteAll()
         {
-
             throw new NotImplementedException("Too dangrouse to implement");
         }
 
         public IEnumerable<T> GetAll()
         {
-            return Conn.Set <T>() ;
-            
+            return Conn.Set<T>();
+
         }
 
         public void Insert(T obj, IDbTransaction transaction = null)
         {
             Conn.Add(obj);
-           
+
             Conn.SaveChanges();
-           
+
         }
 
         public void Insert(IEnumerable<T> list)
         {
             Conn.AddRange(list);
             Conn.SaveChanges();
-           // return Conn.Insert<IEnumerable<T>>(list);
-            
+            // return Conn.Insert<IEnumerable<T>>(list);
+
         }
 
         public bool Update(T obj)
         {
-              Conn.Update(obj);
-                Conn.SaveChanges();
-                
-                return true; 
-           
-             
+            Conn.Update(obj);
+            Conn.SaveChanges();
+
+            return true;
+
+
 
         }
         public void SaveChanges()
-        { 
+        {
             Conn.SaveChanges();
-            }
+        }
 
         public bool Update(IEnumerable<T> list)
         {
-            
-              Conn.UpdateRange(list);
-                return true;
-           
+
+            Conn.UpdateRange(list);
+            return true;
+
         }
 
         public IEnumerable<T> Search(IDictionary<string, object> param)
         {
-          throw new NotImplementedException();
-        }
-        public IEnumerable<T> Search(string sql, dynamic param)
-        {
-            throw new NotImplementedException();
-        }
-        public T FindOne(IDictionary<string, object> param)
-        {
-            throw new NotImplementedException();
 
+            throw new NotImplementedException();
+        }
+        public IEnumerable<T> Search(string sql, IDictionary<string, object> param)
+        {
+            return Conn.Set<T>().FromSql(sql, param);
+            //throw new NotImplementedException();
         }
         public IEnumerable<T> Search(string sql, dynamic param, int page, int itemsPerPage)
         {
             throw new NotImplementedException();
         }
 
-        public IDbTransaction BeginTransaction()
+        public IDbContextTransaction BeginTransaction()
         {
-           throw new NotImplementedException();
+            return Conn.Database.BeginTransaction();
         }
 
         public IEnumerable<T> SearchWithPage(IDictionary<string, object> param, int pageIndex, int pageSize)
@@ -168,7 +163,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         public T FindOne(Expression<Func<T, bool>> where)
         {
-            return Conn.Set<T>().Single(where);
+            return Conn.Set<T>().SingleOrDefault(where);
         }
 
         public IEnumerable<T> Find(Expression<Func<T, bool>> where)
@@ -178,7 +173,15 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         public void Delete(string id)
         {
-           Conn.Set<T>().Remove(Get(id) );
+            Conn.Set<T>().Remove(Get(id));
+            Conn.SaveChanges();
+        }
+
+        public List<T> SearchWithPage(Expression<Func<T, bool>> where, int pageIndex, int pageSize, out int rowCount)
+        {
+            var rowList = Conn.Set<T>().Where(where);
+            rowCount = rowList.Count();
+            return rowList.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
@@ -11,7 +12,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
     {
         IEnumerable<T> GetList(IEnumerable<Key> idList);
         T Get(Key id);
-        T FindOne(IDictionary<string, object> param);
+        T FindOne(Expression<Func<T, bool>> where);
         /// <summary>
         /// 针对于该类型的简单查询
         /// </summary>
@@ -25,7 +26,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         /// <param name="sql"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        IEnumerable<T> Search(string sql, dynamic param);
+        IEnumerable<T> Search(string sql, IDictionary<string, object> param);
         IEnumerable<T> SearchWithPage(string sql, dynamic param, int pageIndex, int pageSize);
         IEnumerable<T> GetAll();
         void Insert(T obj, IDbTransaction transaction = null);
@@ -37,15 +38,20 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         bool Delete(IEnumerable<T> list);
         bool DeleteAll();
 
-        IDbTransaction BeginTransaction();
+        IDbContextTransaction BeginTransaction();
+
+
+        List<T> SearchWithPage(Expression<Func<T, bool>> where, int pageIndex, int pageSize, out int rowCount);
+
     }
 
 
-    public interface IEFCRepository<T>:IRepository<T>
+    public interface IEFCRepository<T> : IRepository<T>
     {
-          T GetEager(string id);
-          T FindOne(Expression<Func<T, bool>> where);
-        IEnumerable< T> Find(Expression<Func<T, bool>> where);
-         void SaveChanges();
+        T GetEager(string id);
+        T FindOne(Expression<Func<T, bool>> where);
+        IEnumerable<T> Find(Expression<Func<T, bool>> where);
+        void SaveChanges();
+
     }
 }

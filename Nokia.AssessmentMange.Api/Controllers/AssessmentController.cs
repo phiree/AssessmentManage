@@ -15,14 +15,14 @@ namespace Nokia.AssessmentMange.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class AssessmentController : ControllerBase
+    public class AssessmentController : BaseController
     {
         IAssessmentApplication assessmentApplication;
-        
-        public AssessmentController(IAssessmentApplication assessmentApplication  )
+
+        public AssessmentController(IAssessmentApplication assessmentApplication)
         {
-            this.assessmentApplication=assessmentApplication;
-         
+            this.assessmentApplication = assessmentApplication;
+
         }
         /// <summary>
         /// 创建一个考核
@@ -31,9 +31,9 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <returns></returns>
         [HttpPost("create")]
         public Assessment Create(AssessmentCreateModel createModel)
-        { 
-            
-           var assessment= assessmentApplication.CreateAssessment(createModel);
+        {
+
+            var assessment = assessmentApplication.CreateAssessment(createModel);
             return assessment;
         }
         /// <summary>
@@ -44,7 +44,8 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpPost("update")]
         public Assessment UpdateSubjects(AssessmentModel assessmentModel)
         {
-         throw new NotImplementedException();
+            var assessment = assessmentApplication.UpdateSubjects(assessmentModel);
+            return assessment;
         }
         /// <summary>
         /// 获取当前用户的所有考核
@@ -52,10 +53,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <returns></returns>
         [HttpGet("getlist")]
         public IEnumerable<Assessment> GetList()
-        { 
+        {
             //根据claims获取用户所在部门,再获取考核
+
             throw new NotImplementedException();
-            }
+        }
         /// <summary>
         /// 删除考核
         /// </summary>

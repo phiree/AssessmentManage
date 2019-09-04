@@ -35,13 +35,13 @@ namespace Nokia.AssessmentMange.Api.Controllers
                 return BadRequest("Invalid Request");
             }
             string token;
-            if(authenticateService.IsAuthenticated(request,out token))
-            { 
+            if (authenticateService.IsAuthenticated(request, out token))
+            {
                 return Ok(token);
-                }
+            }
             return BadRequest("Invalid Request");
 
         }
-        
+
     }
 }

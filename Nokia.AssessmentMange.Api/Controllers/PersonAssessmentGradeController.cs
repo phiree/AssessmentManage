@@ -18,10 +18,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
     [ApiController]
     public class PersonAssessmentGradeController : ControllerBase
     {
-       IPersonAssessmentGradeApplication personAssessmentGradeApplication;
+        IPersonAssessmentGradeApplication personAssessmentGradeApplication;
         public PersonAssessmentGradeController(IPersonAssessmentGradeApplication personAssessmentGradeApplication)
         {
-            this.personAssessmentGradeApplication= personAssessmentGradeApplication;
+            this.personAssessmentGradeApplication = personAssessmentGradeApplication;
 
         }
         /// <summary>
@@ -31,10 +31,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="assessmentId"></param>
         /// <returns>人员考核成绩. 提交成绩时,需要传入此对象的Id</returns>
         [HttpGet("Get")]
-        public PersonAssessmentGrade Get(string   personId,string assessmentId)
-        { 
-           return personAssessmentGradeApplication.Get(assessmentId,personId);
-            }
+        public PersonAssessmentGrade Get(string personId, string assessmentId)
+        {
+            return personAssessmentGradeApplication.Get(assessmentId, personId);
+        }
         /// <summary>
         /// 录入成绩
         /// </summary>
@@ -44,11 +44,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="subjectGrades">各科目的成绩</param>
         /// <returns></returns>
         [HttpPost("CommitGrade")]
-        public PersonAssessmentGrade CommitGrade(string personAssessmentId,bool isAbsent,bool isMakeup, IList<SubjectGradeModel> subjectGrades)
+        public PersonAssessmentGrade CommitGrade(string personAssessmentId, bool isAbsent, bool isMakeup, IList<SubjectGradeModel> subjectGrades)
         {
-          return  personAssessmentGradeApplication.CommitGrades(personAssessmentId,isAbsent,isMakeup,subjectGrades);
+            return personAssessmentGradeApplication.CommitGrades(personAssessmentId, isAbsent, isMakeup, subjectGrades);
 
         }
-        
+
     }
 }

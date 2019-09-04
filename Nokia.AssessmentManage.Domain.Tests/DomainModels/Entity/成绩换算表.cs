@@ -56,6 +56,9 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
             table.AddScore(14);
             Assert.Equal(2, table.Grades.Count);
             Assert.Equal(0,table.Grades[1].Grade.GradeValue);
+            Assert.Throws<ScoreAlreadyExisted>(() => {
+                table.AddScore(13);
+            });
         }
         [Fact]
         public void AddAgeRangeTEst()
@@ -63,9 +66,8 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Entity
             ConversionTable table = new ConversionTable();
             table.Init(new List<AgeRange> { new AgeRange(10, 20) }, new List<int> { 13 });
 
-            Assert.Throws<ScoreAlreadyExisted>(() => {
-                table.AddScore(13);
-            });
+            table.AddAgeRange(new AgeRange(21,23));
+           
         }
         [Fact]
         public void 设置分数_没有对应的单元格()

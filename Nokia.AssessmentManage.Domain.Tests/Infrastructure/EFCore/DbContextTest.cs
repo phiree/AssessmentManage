@@ -167,7 +167,20 @@ Console.WriteLine(changed);
             personAssessmentGrade= db.PersonGrades.Find(personAssessmentGrade.Id);
 
             Assert.Equal(13,personAssessmentGrade.AssessmentGrades.First().SubjectGrades.First().Grade);
-            
+            //第二次录入_非补考
+            personAssessmentGrade.CommitGrade(new AssessmentGrade(false, false, new List<SubjectGrade> { new SubjectGrade(subject.Id, 14) }));
+
+            personAssessmentGrade = db.PersonGrades.Find(personAssessmentGrade.Id);
+            Assert.Equal(1, personAssessmentGrade.AssessmentGrades.Count);
+            Assert.Equal(14, personAssessmentGrade.AssessmentGrades.First().SubjectGrades.First().Grade);
+            //第二次录入_补考
+            personAssessmentGrade.CommitGrade(new AssessmentGrade(false, true, new List<SubjectGrade> { new SubjectGrade(subject.Id, 19) }));
+
+            personAssessmentGrade = db.PersonGrades.Find(personAssessmentGrade.Id);
+            Assert.Equal(2, personAssessmentGrade.AssessmentGrades.Count);
+            Assert.Equal(19, personAssessmentGrade.AssessmentGrades.First(x=>x.IsMakeup).SubjectGrades.First().Grade);
+            Assert.Equal(14, personAssessmentGrade.AssessmentGrades.First(x => !x.IsMakeup).SubjectGrades.First().Grade);
+
         }
         public class AssessmentDbContextTest : DbContext
         {

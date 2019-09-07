@@ -22,20 +22,20 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             this.AssessmentId = assessmentId;
 
         }
-        public PersonAssessmentGrade(Assessment assessment, Person person 
-           
-              ):this()
+        public PersonAssessmentGrade(Assessment assessment, Person person
+
+              ) : this()
         {
-            
+
             this.Person = person;
-            this.Assessment=assessment;
+            this.Assessment = assessment;
 
         }
         public string PersonId { get; protected set; }
         public Person Person { get; protected set; }
         public string AssessmentId { get; protected set; }
         public Assessment Assessment { get; protected set; }
-        public ICollection<AssessmentGrade> AssessmentGrades { get; protected set; }
+        public IList<AssessmentGrade> AssessmentGrades { get; protected set; }
 
         //提交成绩
         public void CommitGrade(AssessmentGrade assessmentGrade)
@@ -93,13 +93,13 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
             {
 
                 //科目不属于考核
-                if (Assessment.Subjects.Where(x => x.SubjectId == grade.SubjectId).Count() == 0)
+                if (Assessment.SubjectList.Where(x => x.SubjectId == grade.SubjectId).Count() == 0)
                 {
                     throw new Exceptions.SubjectNotInAssessment(Assessment.Name, grade.Subject.Name);
                 }
 
             }
-            if (isNew) {this. AssessmentGrades.Add(assessmentGrade); }
+            if (isNew) { this.AssessmentGrades.Add(assessmentGrade); }
             else
             {
                 AssessmentGrades.First().Update(assessmentGrade.IsAbsent, assessmentGrade.IsMakeup, assessmentGrade.SubjectGrades);

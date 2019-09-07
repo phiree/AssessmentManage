@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nokia.AssessmentMange.Domain.DomainModels;
 using Nokia.AssessmentMange.Domain.Application;
 using Nokia.AssessmentMange.Api.Models;
+using Nokia.AssessmentMange.Api.Controllers.Authentication;
 
 namespace Nokia.AssessmentMange.Api.Controllers
 {
@@ -14,10 +15,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentController : ControllerBase
+    public class DepartmentController : BaseController
     {
         IDepartmentApplication departmentApplication;
-        public DepartmentController(IDepartmentApplication departmentApplication)
+        public DepartmentController(IDepartmentApplication departmentApplication, IAuthenticateService authenticateService) : base(authenticateService)
         {
             this.departmentApplication = departmentApplication;
         }
@@ -27,11 +28,31 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAll")]
-        public List<Department> GetAll()
+        public ActionResult<List<Department>> GetAll()
         {
-            return departmentApplication.GetWithAllChildren();
+            //根据claims获取用户所在部门,再获取考核
+            User user = GetUserInfo();
+            if (user == null)
+            {
+                return StatusCode(401);
+            }
+            return departmentApplication.GetWithAllChildren(user);
         }
-
+        /// <summary>
+        /// 根据用户获取部门
+        /// 管理员看所有，非管理员看本级以及下级
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAllByUser")]
+        public ActionResult<List<Department>> GetAllByUser()
+        {
+            User user = GetUserInfo();
+            if (user == null)
+            {
+                return StatusCode(401);
+            }
+            return departmentApplication.GetWithAllChildrenByUser(user);
+        }
 
         /// <summary>
         /// 获取部门
@@ -41,7 +62,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpGet("Get")]
         public Department Get(string departmentId)
         {
-            return departmentApplication.GetWithAllChildren(departmentId);
+            return departmentApplication.GetWithSingleChildren(departmentId);
         }
         /// <summary>
         /// 创建部门
@@ -83,8 +104,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpGet("Delete")]
         public bool Delete(string departmentId)
         {
-            departmentApplication.Delete(departmentId);
-            return true;
+            return departmentApplication.DeleteDepartment(departmentId);
         }
 
     }

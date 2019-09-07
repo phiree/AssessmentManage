@@ -18,5 +18,5 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Service
         /// </summary>
         /// <param name="grades"></param>
         /// <returns></returns>
-         }
+    }
 }

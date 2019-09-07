@@ -18,19 +18,19 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         protected SubjectGrade() { }
         public SubjectGrade(string subjectId, double? grade)
         {
-            this.SubjectId=subjectId;
+            this.SubjectId = subjectId;
             this.Grade = grade;
         }
         public SubjectGrade(Subject subject, double? grade)
         {
             this.Subject = subject;
-            this.SubjectId=subject.Id;
+            this.SubjectId = subject.Id;
             this.Grade = grade;
         }
         public string SubjectId { get; protected set; }
         public Subject Subject { get; protected set; }
         public double? Grade { get; set; }
-        public double Score { get; set; }
+        public double Score { get; protected set; }
         public void SetScore(double score)
         {
             Score = score;

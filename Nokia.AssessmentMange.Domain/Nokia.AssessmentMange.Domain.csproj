@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Application\Dtos\PersonSearchVO.cs" />
+    <Compile Remove="Application\Dtos\UserSearchVO.cs" />
     <Compile Remove="DomainModels\Entity\Conversion\AgeConversion.cs" />
     <Compile Remove="DomainModels\Service\ScoreCompute.cs" />
   </ItemGroup>
@@ -24,15 +26,12 @@
   <ItemGroup>
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
-    <None Remove="appsettings.Production.Development.json" />
     <None Remove="appsettings.Production.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Migrations\20190903172906_InitialCreate.cs" />
-    <Compile Include="Migrations\20190903172906_InitialCreate.designer.cs" />
-    <Compile Include="Migrations\20190904012719_person_add_filed.cs" />
-    <Compile Include="Migrations\20190904012719_person_add_filed.Designer.cs" />
+    <Compile Include="Migrations\20190907082752_initCreate.cs" />
+    <Compile Include="Migrations\20190907082752_initCreate.Designer.cs" />
     <Compile Include="Migrations\AssessmentDbContextModelSnapshot.cs" />
   </ItemGroup>
 
@@ -41,9 +40,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="appsettings.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="appsettings.Production.Development.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="appsettings.Production.json">

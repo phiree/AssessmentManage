@@ -125,7 +125,6 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         public bool Update(IEnumerable<T> list)
         {
-
             Conn.UpdateRange(list);
             return true;
 

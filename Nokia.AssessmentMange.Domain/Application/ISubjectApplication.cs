@@ -26,5 +26,7 @@ namespace Nokia.AssessmentMange.Domain.Application
 
         ConversionTable RemoveScore(string subjectId, Sex sex, double score);
         ConversionTable RemoveAgeRange(string subjectId, Sex sex, AgeRange ageRange);
+
+        ConversionTable SetGrade(string subjectId, Sex sex, AgeRange ageRange, double score, double grade);
     }
 }

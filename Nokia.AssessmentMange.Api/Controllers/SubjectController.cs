@@ -40,7 +40,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
                 IList<ParamSubject> paramSubjects = new List<ParamSubject>();
                 foreach (var ps in model.ParamSubjects)
                 {
-                    paramSubjects.Add(new ParamSubject(ps.SortOrder, ps.SubjectId));
+                    paramSubjects.Add(new ParamSubject(ps.SortOrder, ps.SubjectId, ps.SubjectName));
                 }
                 return subjectApplication.CreateComputedSubject(model.Name, model.SubjectType, model.SexLimitation, model.IsQualifiedConversion, model.Unit, model.Formula, paramSubjects);
             }
@@ -106,7 +106,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
                 IList<ParamSubject> paramSubjects = new List<ParamSubject>();
                 foreach (var ps in model.ParamSubjects)
                 {
-                    paramSubjects.Add(new ParamSubject(ps.SortOrder, ps.SubjectId));
+                    paramSubjects.Add(new ParamSubject(ps.SortOrder, ps.SubjectId, ps.SubjectName));
                 }
 
                 ComputedSubject subject = (ComputedSubject)subjectApplication.Get(model.SubjectId);
@@ -228,12 +228,14 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// </summary>
         /// <param name="subjectId"></param>
         /// <param name="sex"></param>
-        /// <param name="ageRange"></param>
+        /// <param name="floorAge"></param>
+        /// <param name="cellingAge"></param>
         /// <param name="score"></param>
         /// <param name="grade"></param>
-        public void SetGrade(string subjectId, Sex sex, AgeRange ageRange, double score, double grade)
+        [HttpGet("SetGrade")]
+        public ConversionTable SetGrade(string subjectId, Sex sex, int floorAge, int cellingAge, double score, double grade)
         {
-
+            return subjectApplication.SetGrade(subjectId, sex, new AgeRange(floorAge, cellingAge), score, grade);
         }
     }
 }

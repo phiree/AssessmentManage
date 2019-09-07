@@ -17,6 +17,7 @@ namespace Nokia.AssessmentMange.Api.Controllers.Authentication
     public interface IAuthenticateService
     {
         bool IsAuthenticated(TokenRequest request, out string token);
+        User ParseToken(string token);
     }
     public class TokenAuthenticationService : IAuthenticateService
     {
@@ -28,12 +29,17 @@ namespace Nokia.AssessmentMange.Api.Controllers.Authentication
             _userManagementService = service;
             _tokenManagement = tokenManagement.Value;
         }
+        private const string Birthday = "Birthday";
         public bool IsAuthenticated(TokenRequest request, out string token)
         {
             token = string.Empty;
             User user = _userManagementService.IsValidUser(request.Username, request.Password);
             if (user == null) { return false; }
-            var claim = new[] { new Claim(ClaimTypes.Name, request.Username), new Claim(ClaimTypes.Role, user.IsAdmin ? "admin" : "user") };
+            var claim = new[] {
+                new Claim(ClaimTypes.Sid, user.Id),
+                new Claim(ClaimTypes.Name, request.Username),
+                new Claim(ClaimTypes.GivenName, (user.Person==null?"admin": user.Person.RealName)),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "admin" : "user") };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenManagement.Secret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var jwtToken = new JwtSecurityToken(_tokenManagement.Issuer, _tokenManagement.Audience,
@@ -55,9 +61,10 @@ namespace Nokia.AssessmentMange.Api.Controllers.Authentication
             {
                 var jwtToken = jwtHandler.ReadJwtToken(token);
                 IEnumerable<Claim> claims = jwtToken.Claims;
+                string id = claims.FirstOrDefault(item => item.Type == ClaimTypes.Sid).Value;
                 string loginName = claims.FirstOrDefault(item => item.Type == ClaimTypes.Name).Value;
                 bool isAdmin = claims.FirstOrDefault(item => item.Type == ClaimTypes.Role).Value == "admin";
-                return new User(loginName, isAdmin);
+                return new User(id, loginName, isAdmin);
             }
         }
     }

@@ -23,9 +23,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 var ageRanges = new List<AgeRange>();
                 foreach (var g in Grades)
                 {
-                    if (ageRanges.Where(x=>x.FloorAge==g.FloorAge).Count()==0)
+                    if (ageRanges.Where(x => x.FloorAge == g.FloorAge).Count() == 0)
                     {
-                       // ageRanges.Add(g.AgeRange);
+                        // ageRanges.Add(g.AgeRange);
                         ageRanges.Add(new AgeRange(g.FloorAge, g.CellingAge));
                     }
                 }
@@ -100,37 +100,40 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 Grades.Add(new ConversionCell(ageRange, score, Grade.NullGrade));
             }
         }
-        public void SetGrade(AgeRange ageRange, int score, double? grade)
+        public void SetGrade(AgeRange ageRange, double score, double? grade)
         {
             ConversionCell existed = null;
             try
             {
                 existed = Grades.First(x => x.AgeRange.Equals(ageRange) && x.Score == score);
-
             }
             catch (System.InvalidOperationException)
             {
                 throw new Exceptions.ConversionCellNotFound(ageRange, score);
             }
-            Grades.Remove(existed);
-            Grades.Add(new ConversionCell(ageRange, score, new Grade(grade)));
-
+            existed.Grade = new Grade(grade);
+            //Grades.Remove(existed);
+            //Grades.Add(new ConversionCell(ageRange, score, new Grade(grade)));
+            //Grades.First(x => x.AgeRange.Equals(ageRange) && x.Score == score).Grade = new Grade(grade);
         }
         public void RemoveAge(AgeRange ageRange)
         {
-            var existedGrades = Grades.Where(x => x.AgeRange == ageRange && Scores.Contains(x.Score));
-            foreach (var grade in existedGrades)
+            var existedGrades = Grades.Where(x => x.AgeRange.Equals(ageRange) && Scores.Contains(x.Score)).ToList();
+            int count = existedGrades.Count;
+            for (var i = 0; i < count; i++)
             {
-                Grades.Remove(grade);
+                Grades.Remove(existedGrades.ElementAt(i));
             }
         }
         public void RemoveScore(double score)
         {
-            var existedGrades = Grades.Where(x => x.Score == score && AgeRangeList2.Contains(x.AgeRange));
-            foreach (var grade in existedGrades.ToList())
+            var existedGrades = Grades.Where(x => x.Score == score).ToList();//&& AgeRangeList2.Contains(x.AgeRange)
+            int count = existedGrades.Count;
+            for (var i = 0; i < count; i++)
             {
-                Grades.Remove(grade);
+                Grades.Remove(existedGrades.ElementAt(i));
             }
+
         }
         /// <summary>
         /// 成绩换算
@@ -224,22 +227,35 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         protected ConversionCell() { }
         public ConversionCell(AgeRange ageRange, double score, Grade grade)
         {
-            this.AgeRange = ageRange;
+            this._ageRange = ageRange;
             this.Score = score;
             this.Grade = grade;
-             this.FloorAgeAsKey = ageRange.FloorAge;
-            this.CellingAge=ageRange.CellingAge;
-            this.FloorAge=ageRange.FloorAge;
+            this.FloorAgeAsKey = ageRange.FloorAge;
+            this.CellingAge = ageRange.CellingAge;
+            this.FloorAge = ageRange.FloorAge;
         }
-        int _floorAgeAsKey;
-        public int FloorAgeAsKey { get;set; }
+        //int _floorAgeAsKey;
+        public int FloorAgeAsKey { get; set; }
 
-        public int FloorAge { get;set;}
-        public int CellingAge { get;set;}
+        public int FloorAge { get; set; }
+        public int CellingAge { get; set; }
 
-        public AgeRange AgeRange { get; set; }//column
+        private AgeRange _ageRange = null;
+
+        public AgeRange AgeRange
+        {
+            get
+            {
+                if (_ageRange == null)
+                {
+                    _ageRange = new AgeRange(FloorAge, CellingAge);
+                }
+                return _ageRange;
+            }
+            set { _ageRange = value; }
+        }//column
         public double Score { get; set; }  //row
-        public Grade Grade { get;   set; }//cell
+        public Grade Grade { get; set; }//cell
     }
 
 

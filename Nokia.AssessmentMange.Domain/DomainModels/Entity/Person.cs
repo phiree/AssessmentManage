@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
@@ -8,14 +9,16 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     {
 
         public Person() { }
-        public Person(string realName, DateTime birthday, Sex sex, string departmentId)
+        public Person(string id, string realName, DateTime birthday, Sex sex)
         {
+            this.Id = id;
             this.RealName = realName;
             this.Birthday = birthday;
             this.Sex = sex;
-            this.DepartmentId = departmentId;
         }
 
+
+        [MaxLength(20)]
         public string RealName { get; set; }
         public DateTime Birthday { get; set; }
         public string DepartmentId { get; set; }
@@ -42,13 +45,21 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// <summary>
         /// 职务
         /// </summary>
+        [MaxLength(50)]
         public string Position { get; set; }
 
         public Sex Sex { get; set; }
         /// <summary>
         /// 证件号
         /// </summary>
+        [MaxLength(50)]
         public string IdNo { get; set; }
+        /// <summary>
+        /// 人员状态
+        /// 1 存在 2 删除
+        /// </summary>
+        
+        public int State { get; set; } = 1;
     }
     public enum Sex
     {

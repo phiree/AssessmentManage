@@ -7,16 +7,16 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
     /// most  from https://stackoverflow.com/a/5343033/714883
     /// <summary>The Range class.</summary>
     /// <typeparam name="T">Generic parameter.</typeparam>
-    public class Range<T>:IEquatable<Range<T>> where T : IComparable<T>,IEquatable<T>
+    public class Range<T> : IEquatable<Range<T>> where T : IComparable<T>, IEquatable<T>
     {
         public Range() { }
-        public Range(T min,T max)
-        { 
-            if(min.CompareTo(max)>0)
-            { 
+        public Range(T min, T max)
+        {
+            if (min.CompareTo(max) > 0)
+            {
                 throw new Exception();
-                }
             }
+        }
         /// <summary>Minimum value of the range.</summary>
         public T Minimum { get; set; }
 
@@ -67,13 +67,12 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// <returns></returns>
         public bool IsCoincide(Range<T> range)
         {
-            return !(range.Minimum.CompareTo(Maximum)>0|| range.Maximum.CompareTo(Minimum)<0);
-
+            return !(range.Minimum.CompareTo(Maximum) > 0 || range.Maximum.CompareTo(Minimum) < 0);
         }
 
         public bool Equals(Range<T> other)
         {
-            return other. Minimum.Equals( Minimum)&& other.Maximum .Equals(Maximum);
+            return other.Minimum.Equals(Minimum) && other.Maximum.Equals(Maximum);
         }
         public override int GetHashCode()
         {

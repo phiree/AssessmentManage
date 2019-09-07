@@ -8,6 +8,8 @@ using Nokia.AssessmentMange.Domain.Application.Dtos;
 using Nokia.AssessmentMange.Domain.Application;
 using Nokia.AssessmentMange.Domain.Application.Dtos;
 using Nokia.AssessmentMange.Domain.DomainModels;
+using Nokia.AssessmentMange.Api.Controllers.Authentication;
+
 namespace Nokia.AssessmentMange.Api.Controllers
 {
     /// <summary>
@@ -15,11 +17,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class AssessmentController : ControllerBase
+    public class AssessmentController : BaseController
     {
         IAssessmentApplication assessmentApplication;
-
-        public AssessmentController(IAssessmentApplication assessmentApplication)
+        public AssessmentController(IAssessmentApplication assessmentApplication, IAuthenticateService authenticateService) : base(authenticateService)
         {
             this.assessmentApplication = assessmentApplication;
 
@@ -32,7 +33,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpPost("create")]
         public Assessment Create(AssessmentCreateModel createModel)
         {
-
+            createModel.CreatedTime = DateTime.Now;
             var assessment = assessmentApplication.CreateAssessment(createModel);
             return assessment;
         }
@@ -42,7 +43,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="assessmentModel">考核模型,id不能为空</param>
         /// <returns></returns>
         [HttpPost("update")]
-        public Assessment UpdateSubjects(AssessmentModel assessmentModel)
+        public Assessment UpdateSubjects(AssessmentUpdateModel assessmentModel)
         {
             var assessment = assessmentApplication.UpdateSubjects(assessmentModel);
             return assessment;
@@ -52,12 +53,18 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getlist")]
-        public IEnumerable<Assessment> GetList()
+        public ActionResult<SearchPageVO<Assessment>> GetList(string departmentID = null, int pageSize = 15, int pageCurrent = 1)
         {
             //根据claims获取用户所在部门,再获取考核
-
-            throw new NotImplementedException();
+            User user = GetUserInfo();
+            if (user == null)
+            {
+                return StatusCode(401);
+            }
+            return assessmentApplication.GetList(departmentID, pageSize, pageCurrent);
         }
+
+
         /// <summary>
         /// 删除考核
         /// </summary>
@@ -66,8 +73,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         [HttpGet("delete")]
         public void Delete(string assessmentId)
         {
-            //根据claims获取用户所在部门,再获取考核
-            throw new NotImplementedException();
+            assessmentApplication.Delete(assessmentId);
         }
 
     }

@@ -70,6 +70,12 @@ namespace Nokia.AssessmentMange.Api.Models
         [JsonProperty("subjectId")]
         public string SubjectId { get; set; }
         /// <summary>
+        /// 科目名称
+        /// </summary>
+        [JsonProperty("subjectName")]
+        public string SubjectName { get; set; }
+
+        /// <summary>
         /// 排序
         /// </summary>
         [Required]

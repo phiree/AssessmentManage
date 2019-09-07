@@ -26,5 +26,10 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public string ParentId { get; set; }
         public Department Parent { get; protected set; }
         public IList<Department> Children { get; protected set; }
+        /// <summary>
+        /// 部门状态
+        /// 1 存在 2 删除
+        /// </summary>
+        public int State { get; set; } = 1;
     }
 }

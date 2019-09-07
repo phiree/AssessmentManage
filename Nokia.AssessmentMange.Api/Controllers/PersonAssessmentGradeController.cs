@@ -8,6 +8,8 @@ using Nokia.AssessmentMange.Domain.DomainModels;
 using Nokia.AssessmentMange.Domain.Application.Dtos;
 
 using Nokia.AssessmentMange.Domain.Application;
+using Nokia.AssessmentMange.Api.Models;
+using Nokia.AssessmentMange.Api.Controllers.Authentication;
 
 namespace Nokia.AssessmentMange.Api.Controllers
 {
@@ -16,10 +18,10 @@ namespace Nokia.AssessmentMange.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonAssessmentGradeController : ControllerBase
+    public class PersonAssessmentGradeController : BaseController
     {
         IPersonAssessmentGradeApplication personAssessmentGradeApplication;
-        public PersonAssessmentGradeController(IPersonAssessmentGradeApplication personAssessmentGradeApplication)
+        public PersonAssessmentGradeController(IPersonAssessmentGradeApplication personAssessmentGradeApplication, IAuthenticateService authenticateService) : base(authenticateService)
         {
             this.personAssessmentGradeApplication = personAssessmentGradeApplication;
 
@@ -44,11 +46,16 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="subjectGrades">各科目的成绩</param>
         /// <returns></returns>
         [HttpPost("CommitGrade")]
-        public PersonAssessmentGrade CommitGrade(string personAssessmentId, bool isAbsent, bool isMakeup, IList<SubjectGradeModel> subjectGrades)
+        public PersonAssessmentGrade CommitGrade([FromBody]PersonAssessmentGradeVO model)
         {
-            return personAssessmentGradeApplication.CommitGrades(personAssessmentId, isAbsent, isMakeup, subjectGrades);
-
+            return personAssessmentGradeApplication.CommitGrades(model.PersonAssessmentId, model.IsAbsent, model.IsMakeup, model.SubjectGrades);
         }
 
+        [HttpGet("GetAssessmentGrade")]
+        public IEnumerable<PersonAssessmentGrade> GetAssessmentGrade(string assessmentId)
+        {
+            var  result= personAssessmentGradeApplication.GetList(assessmentId).ToList();
+            return result;
+        }
     }
 }

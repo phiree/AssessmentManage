@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Nokia.AssessmentMange.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 {
@@ -14,6 +15,7 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         public User GetUserByPerson(string personID)
         {
+
             return Conn.Users.FirstOrDefault(item => item.PersonId == personID);
         }
 
@@ -47,6 +49,15 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
             rowCount = list.Count();
             return list.Skip((pageCurrent - 1) * pageSize).Take(pageSize).ToList();
 
+        }
+
+        public User GetUser(string id)
+        {
+            return Conn.Users.Include(c => c.Person).FirstOrDefault(item => item.Id == id);
+        }
+        public User GetUser(string loginName, string passWord)
+        {
+            return Conn.Users.FirstOrDefault(item => item.LoginName == loginName && item.Password == passWord);
         }
     }
 }

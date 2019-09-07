@@ -40,7 +40,6 @@ namespace Nokia.AssessmentMange.Domain.Application
             var ass = assemblyMapper.ToEntity(assessment);// new Assessment(assessment.DepartmentId,assessment.Name, assessment.Annual);
             assessmentRepository.Insert(ass);
             return ass;
-
         }
         public IEnumerable<Assessment> GetAllAssessment()
         {
@@ -66,9 +65,16 @@ namespace Nokia.AssessmentMange.Domain.Application
         public Assessment UpdateSubjects(AssessmentModel assessmentModel)
         {
             var ass = assemblyMapper.ToEntity(assessmentModel);// new Assessment(assessment.DepartmentId,assessment.Name, assessment.Annual);
+
             assessmentRepository.Update(ass);
             return ass;
-            throw new NotImplementedException();
         }
+
+
+        public SearchPageVO<Assessment> GetList(string departmentID, int pageSize, int pageCurrent)
+        {
+            return assessmentService.GetList(departmentID, pageSize, pageCurrent);
+        }
+
     }
 }

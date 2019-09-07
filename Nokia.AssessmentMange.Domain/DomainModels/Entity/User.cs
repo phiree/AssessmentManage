@@ -19,6 +19,13 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
 
         }
 
+        public User(string id, string loginName, bool isAdmin) : this(loginName, isAdmin)
+        {
+            this.Id = id;
+            this.LoginName = loginName;
+            this.IsAdmin = isAdmin;
+        }
+
         public string LoginName { get; set; }
         public string Password { get; set; }
         /// <summary>

@@ -101,5 +101,14 @@ namespace Nokia.AssessmentMange.Domain.Application
             subjectRepository.SaveChanges();
             return table;
         }
+
+        public ConversionTable SetGrade(string subjectId, Sex sex, AgeRange ageRange, double score, double grade)
+        {
+            Subject subject = subjectRepository.Get(subjectId);
+            var table = subject.GetSubjectConversion(sex).ConversionTable;
+            table.SetGrade(ageRange, score, grade);
+            subjectRepository.SaveChanges();
+            return table;
+        }
     }
 }

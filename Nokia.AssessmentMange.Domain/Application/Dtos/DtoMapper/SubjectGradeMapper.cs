@@ -26,27 +26,26 @@ namespace Nokia.AssessmentMange.Domain.Application.Dtos.DtoMapper
             this.personAssessmentGradeRepository = personAssessmentGradeRepository;
         }
 
-        public SubjectGrade ToEntity(SubjectGradeModel subjectGradeModel)
+        private SubjectGrade ToEntity(SubjectGradeModel subjectGradeModel, Person person)
         {
-
-
             var subject = subjectRepository.Get(subjectGradeModel.SubjectId);
+            var subjectConversion = subject.GetSubjectConversion(person.Sex);
+            double score = subjectConversion.ConversionTable.CalculateScore(subject.IsQualifiedConversion, person.Age, subjectGradeModel.Grade.Value);
             var grade = new SubjectGrade(subject, subjectGradeModel.Grade);
+            grade.SetScore((double)decimal.Round((decimal)score, 4));
             return grade;
 
         }
-        public IList<SubjectGrade> ToEntityList(IList<SubjectGradeModel> subjectGradeModels)
+        public IList<SubjectGrade> ToEntityList(IList<SubjectGradeModel> subjectGradeModels, Person person)
         {
             IList<SubjectGrade> subjectGrades = new List<SubjectGrade>();
 
             foreach (var model in subjectGradeModels)
             {
-                subjectGrades.Add(ToEntity(model));
+                subjectGrades.Add(ToEntity(model, person));
             }
             return subjectGrades;
 
         }
-
-
     }
 }

@@ -13,6 +13,6 @@ namespace Nokia.AssessmentMange.Domain.Application
 
         User GetUser(string loginName, string passWord);
         User GetUserByPersonID(string personID);
-        UserSearchVO GetUsers(string name, string loginName, int pageSize, int pageCurrent);
+        SearchPageVO<User> GetUsers(string name, string loginName, int pageSize, int pageCurrent);
     }
 }

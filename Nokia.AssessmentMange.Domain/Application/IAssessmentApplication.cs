@@ -4,7 +4,7 @@ using Nokia.AssessmentMange.Domain.DomainModels;
 
 namespace Nokia.AssessmentMange.Domain.Application
 {
-    public interface IAssessmentApplication:IApplicationBase<Assessment>
+    public interface IAssessmentApplication : IApplicationBase<Assessment>
     {
         Assessment CreateAssessment(AssessmentCreateModel assessment);
         IEnumerable<Assessment> GetAllAssessment();
@@ -12,5 +12,6 @@ namespace Nokia.AssessmentMange.Domain.Application
         PersonAssessmentGrade SavePersonGrade(string assessmentId, string personId, bool isMakeup, IDictionary<string, double> grades);
 
         Assessment UpdateSubjects(AssessmentModel assessmentModel);
+        SearchPageVO<Assessment> GetList(string departmentID, int pageSize, int pageCurrent);
     }
 }

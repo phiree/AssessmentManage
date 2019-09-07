@@ -30,7 +30,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.Property<string>("DepartmentId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -64,6 +65,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.Property<string>("ParentId");
 
+                    b.Property<int>("State");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
@@ -84,15 +87,20 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.Property<string>("DepartmentId");
 
-                    b.Property<string>("IdNo");
+                    b.Property<string>("IdNo")
+                        .HasMaxLength(50);
 
                     b.Property<int>("MilitaryRank");
 
-                    b.Property<string>("Position");
+                    b.Property<string>("Position")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("RealName");
+                    b.Property<string>("RealName")
+                        .HasMaxLength(20);
 
                     b.Property<int>("Sex");
+
+                    b.Property<int>("State");
 
                     b.HasKey("Id");
 
@@ -169,7 +177,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("PersonId")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -186,15 +195,9 @@ namespace Nokia.AssessmentMange.Domain.Migrations
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.AssessmentSubject", b =>
                 {
                     b.HasOne("Nokia.AssessmentMange.Domain.DomainModels.Assessment", "Assessment")
-                        .WithMany("Subjects")
+                        .WithMany("SubjectList")
                         .HasForeignKey("AssessmentId")
                         .HasConstraintName("AssessmentSubject_AssessmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Nokia.AssessmentMange.Domain.DomainModels.Subject", "Subject")
-                        .WithMany("Assessments")
-                        .HasForeignKey("SubjectId")
-                        .HasConstraintName("AssessmentSubject_SubjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -315,7 +318,11 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                                             b3.Property<int>("FloorAgeAsKey");
 
-                                            b3.Property<int>("Score");
+                                            b3.Property<double>("Score");
+
+                                            b3.Property<int>("CellingAge");
+
+                                            b3.Property<int>("FloorAge");
 
                                             b3.HasKey("SubjectId", "Sex", "FloorAgeAsKey", "Score")
                                                 .HasName("ConversionCellId");
@@ -327,34 +334,6 @@ namespace Nokia.AssessmentMange.Domain.Migrations
                                                 .HasForeignKey("SubjectId", "Sex")
                                                 .OnDelete(DeleteBehavior.Cascade);
 
-                                            b3.OwnsOne("Nokia.AssessmentMange.Domain.DomainModels.AgeRange", "AgeRange", b4 =>
-                                                {
-                                                    b4.Property<string>("ConversionCellSubjectId");
-
-                                                    b4.Property<int>("ConversionCellSex");
-
-                                                    b4.Property<int>("ConversionCellFloorAgeAsKey");
-
-                                                    b4.Property<int>("ConversionCellScore");
-
-                                                    b4.Property<int>("CellingAge");
-
-                                                    b4.Property<int>("FloorAge");
-
-                                                    b4.Property<int>("Maximum");
-
-                                                    b4.Property<int>("Minimum");
-
-                                                    b4.HasKey("ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAgeAsKey", "ConversionCellScore");
-
-                                                    b4.ToTable("ConversionCell");
-
-                                                    b4.HasOne("Nokia.AssessmentMange.Domain.DomainModels.ConversionCell")
-                                                        .WithOne("AgeRange")
-                                                        .HasForeignKey("Nokia.AssessmentMange.Domain.DomainModels.AgeRange", "ConversionCellSubjectId", "ConversionCellSex", "ConversionCellFloorAgeAsKey", "ConversionCellScore")
-                                                        .OnDelete(DeleteBehavior.Cascade);
-                                                });
-
                                             b3.OwnsOne("Nokia.AssessmentMange.Domain.DomainModels.Grade", "Grade", b4 =>
                                                 {
                                                     b4.Property<string>("ConversionCellSubjectId");
@@ -363,7 +342,7 @@ namespace Nokia.AssessmentMange.Domain.Migrations
 
                                                     b4.Property<int>("ConversionCellFloorAgeAsKey");
 
-                                                    b4.Property<int>("ConversionCellScore");
+                                                    b4.Property<double>("ConversionCellScore");
 
                                                     b4.Property<double>("GradeValue");
 
@@ -384,8 +363,8 @@ namespace Nokia.AssessmentMange.Domain.Migrations
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.User", b =>
                 {
                     b.HasOne("Nokia.AssessmentMange.Domain.DomainModels.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId");
+                        .WithOne("User")
+                        .HasForeignKey("Nokia.AssessmentMange.Domain.DomainModels.User", "PersonId");
                 });
 
             modelBuilder.Entity("Nokia.AssessmentMange.Domain.DomainModels.ComputedSubject", b =>

@@ -20,7 +20,7 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
 
         public User GetUser(string loginName, string passWord)
         {
-            User user = _userRepository.FindOne(item => item.LoginName == loginName && item.Password == passWord);
+            User user = _userRepository.GetUser(loginName, passWord);
             return user;
         }
 
@@ -30,9 +30,9 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
             return user;
         }
 
-        public UserSearchVO GetUsers(string name, string loginName, int pageSize, int pageCurrent)
+        public SearchPageVO<User> GetUsers(string name, string loginName, int pageSize, int pageCurrent)
         {
-            UserSearchVO result = new UserSearchVO();
+            SearchPageVO<User> result = new SearchPageVO<User>();
             int pageCount = 0;
             List<User> usersList = _userRepository.GetUsers(name, loginName, pageSize, pageCurrent, out pageCount);
             if (pageCount != 0)
@@ -46,7 +46,7 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
             }
             result.PageCurrent = pageCurrent;
             result.PageSize = pageSize;
-            result.UserList = usersList;
+            result.DataList = usersList;
             result.RowCount = pageCount;
             return result;
         }

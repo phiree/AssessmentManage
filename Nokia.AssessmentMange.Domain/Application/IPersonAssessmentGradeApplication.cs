@@ -8,5 +8,6 @@ namespace Nokia.AssessmentMange.Domain.Application
     {
         PersonAssessmentGrade CommitGrades(string personAssessmentGradeId, bool isAbsent, bool isMakeup, IList<SubjectGradeModel> subjectGradeModels);
         PersonAssessmentGrade Get(string assessmentId, string personId);
+        IEnumerable<PersonAssessmentGrade> GetList(string assessmentId);
     }
 }

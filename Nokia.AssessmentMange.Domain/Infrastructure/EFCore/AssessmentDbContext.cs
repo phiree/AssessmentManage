@@ -32,23 +32,28 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-            modelBuilder.Entity<Department>().HasIndex(p=>new { p.Name,p.ParentId}).IsUnique(true);
+
+            modelBuilder.Entity<Department>().HasIndex(p => new { p.Name, p.ParentId }).IsUnique(true);
+
+
             modelBuilder.Entity<PersonAssessmentGrade>()
-                .OwnsMany(x=>x.AssessmentGrades
-                ,m=>{ 
+                .OwnsMany(x => x.AssessmentGrades
+                , m =>
+                {
                     m.HasForeignKey("PersonAssessmentGradeId");
-                    m.Property(x=>x.IsMakeup).HasColumnType("TINYINT(1)");//.HasConversion(v =>v?1:0,  v =>v==0?false:true );
-                    m.Property(x=>x.IsAbsent).HasColumnType("TINYINT(1)");
-                ;//最多只有一次补考,可以作为联合组建
-                    m.HasKey("PersonAssessmentGradeId","IsMakeup").HasName("AssessmentGradeId");
-                    m.OwnsMany(x => x.SubjectGrades, n => { 
-                        n.HasForeignKey("PersonAssessmentGradeId","IsMakeup");
-                        n.Property(x=>x.SubjectId);
-                        n.HasKey("PersonAssessmentGradeId", "IsMakeup","SubjectId").HasName("PMS");
-                        });
+                    m.Property(x => x.IsMakeup).HasColumnType("TINYINT(1)");//.HasConversion(v =>v?1:0,  v =>v==0?false:true );
+                    m.Property(x => x.IsAbsent).HasColumnType("TINYINT(1)");
+
+                    ;//最多只有一次补考,可以作为联合组建
+                    m.HasKey("PersonAssessmentGradeId", "IsMakeup").HasName("AssessmentGradeId");
+                    m.OwnsMany(x => x.SubjectGrades, n =>
+                    {
+                        n.HasForeignKey("PersonAssessmentGradeId", "IsMakeup");
+                        n.Property(x => x.SubjectId);
+                        n.HasKey("PersonAssessmentGradeId", "IsMakeup", "SubjectId").HasName("PMS");
                     });
- 
+                });
+
             modelBuilder.Entity<AssessmentSubject>()
                 .Property(x => x.AssessmentId).HasMaxLength(100)
                 ;
@@ -58,42 +63,43 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
             modelBuilder.Entity<AssessmentSubject>()
                 .HasKey(k => new { k.SubjectId, k.AssessmentId })
                 .HasName("AssessmentSubjectId");
+
             modelBuilder.Entity<AssessmentSubject>()
                 .HasOne(a => a.Assessment)
-                .WithMany(a => a.Subjects)
+                .WithMany(a => a.SubjectList)
                 .HasForeignKey(a => a.AssessmentId).HasConstraintName("AssessmentSubject_AssessmentId");
-            modelBuilder.Entity<AssessmentSubject>()
-               .HasOne(a => a.Subject)
-               .WithMany(a => a.Assessments)
-               .HasForeignKey(a => a.SubjectId).HasConstraintName("AssessmentSubject_SubjectId");
+
+
+            //modelBuilder.Entity<AssessmentSubject>()
+            //   .HasOne(a => a.SubjectInfo)
+            //   .WithMany(a => a.Assessments)
+            //   .HasForeignKey(a => a.SubjectId).HasConstraintName("AssessmentSubject_SubjectId");
 
 
             modelBuilder.Entity<Person>().Ignore(x => x.Age);
             //科目-->成绩换算表
-         
-            modelBuilder.Entity<Subject>(). HasIndex(p=>new {p.Name }).IsUnique(true);
+
+            modelBuilder.Entity<Subject>().HasIndex(p => new { p.Name }).IsUnique(true);
+
             modelBuilder.Entity<Subject>()
 
                 .OwnsMany(x => x.SubjectConversions, a =>
                {
 
                    a.HasForeignKey("SubjectId");
-                  
-                //   a.Property<Sex>(x=>x.Sex).HasConversion(v => ((int)v).ToString(),
-                //v => (Sex)Enum.Parse(typeof(Sex), v))
-                //.IsUnicode(false);
-                   a.Property(x=>x.Sex);
+
+                   a.Property(x => x.Sex);
 
                    a.HasKey("SubjectId", "Sex").HasName("SubjectConversionId");
                    a.OwnsOne(x => x.ConversionTable, b =>
                    {
                        b.Ignore(x => x.Scores);
-                       b.Ignore(x=>x.AgeRangeList2);
+                       b.Ignore(x => x.AgeRangeList2);
                        b.OwnsMany(x => x.Grades, c =>
                        {
                            c.HasForeignKey("SubjectId", "Sex");
-                           c.Property(x=>x.Score);
-                          // HasConversion(x=>(int)x,x=>(int)x);
+                           c.Property(x => x.Score);
+                           // HasConversion(x=>(int)x,x=>(int)x);
 
                            c.Ignore(x => x.AgeRange);
                            //  c.Property<int>("FloorAge");//约定.会自动寻找子对象的同名属性?

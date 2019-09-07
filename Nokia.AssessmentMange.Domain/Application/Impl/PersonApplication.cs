@@ -26,30 +26,33 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
         public bool DeletePersons(string personId)
         {
             bool result = false;
-            using (var tran = _personRepository.BeginTransaction())
-            {
-                try
-                {
-                    _personRepository.Delete(_personRepository.Get(personId));
-                    _userRepository.Delete(_userRepository.GetUserByPerson(personId));
-                    tran.Commit();
-                    result = true;
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    result = false;
-                }
-            }
+            //using (var tran = _personRepository.BeginTransaction())
+            //{
+            //    try
+            //    {
+            //        _personRepository.Delete(_personRepository.Get(personId));
+            //        _userRepository.Delete(_userRepository.GetUserByPerson(personId));
+            //        tran.Commit();
+            //        result = true;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        tran.Rollback();
+            //        result = false;
+            //    }
+            //}
+            Person person = _personRepository.Get(personId);
+            person.State = 0;
+            _personRepository.Update(person);
             return result;
         }
 
-        public PersonSearchVO GetPersons(string name, string idNo, int pageSize, int pageCurrent)
+        public SearchPageVO<Person> GetPersons(string deptID, string name, string idNo, int pageSize, int pageCurrent)
         {
-
-            PersonSearchVO result = new PersonSearchVO();
+            SearchPageVO<Person> result = new SearchPageVO<Person>();
             int pageCount = 0;
             var where = PredicateBuilder.True<Person>();
+            where = where.And(p => p.State == 1 && p.DepartmentId == deptID);
             if (!string.IsNullOrEmpty(name))
             {
                 where = where.And(p => p.RealName.Contains(name));
@@ -80,7 +83,7 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
 
             result.PageCurrent = pageCurrent;
             result.PageSize = pageSize;
-            result.PersonList = list;
+            result.DataList = list;
             result.RowCount = pageCount;
 
             return result;

@@ -11,9 +11,10 @@ namespace Nokia.AssessmentMange.Domain.Application
     public class PersonAssessmentGradeApplication : IPersonAssessmentGradeApplication
     {
         ISubjectGradeMapper subjectGradeMapper;
-        IEFCRepository<PersonAssessmentGrade> personAssessementGradeRepository;
+        IPersonGradeRepository personAssessementGradeRepository;
+
         public PersonAssessmentGradeApplication(ISubjectGradeMapper subjectGradeMapper,
-             IEFCRepository<PersonAssessmentGrade> personAssessementGradeRepository)
+             IPersonGradeRepository personAssessementGradeRepository)
         {
             this.subjectGradeMapper = subjectGradeMapper;
             this.personAssessementGradeRepository = personAssessementGradeRepository;
@@ -26,12 +27,17 @@ namespace Nokia.AssessmentMange.Domain.Application
         /// <returns></returns>
         public PersonAssessmentGrade Get(string assessmentId, string personId)
         {
-            PersonAssessmentGrade personAssessmentGrade =null;//  new PersonAssessmentGrade(assessmentId, personId)
-            if (personAssessementGradeRepository.Find(x => x.AssessmentId == assessmentId && x.PersonId == personId).Count()==0)
+            PersonAssessmentGrade personAssessmentGrade = null;//  new PersonAssessmentGrade(assessmentId, personId)
+
+            if (personAssessementGradeRepository.Find(x => x.AssessmentId == assessmentId && x.PersonId == personId).Count() == 0)
             {
-                personAssessmentGrade= new PersonAssessmentGrade(assessmentId, personId);
+                personAssessmentGrade = new PersonAssessmentGrade(assessmentId, personId);
                 personAssessementGradeRepository.Insert(personAssessmentGrade);
-                }
+            }
+            else
+            {
+                personAssessmentGrade = personAssessementGradeRepository.GetByPersonAssessment(personId, assessmentId);
+            }
             return personAssessmentGrade;
         }
         /// <summary>
@@ -43,15 +49,21 @@ namespace Nokia.AssessmentMange.Domain.Application
         {
 
             var personAssessementGrade = personAssessementGradeRepository.GetEager(personAssessmentGradeId);
-
-            var subjectGrades = subjectGradeMapper.ToEntityList(subjectGradeModels);
-
+            var subjectGrades = subjectGradeMapper.ToEntityList(subjectGradeModels, personAssessementGrade.Person);
 
             personAssessementGrade.CommitGrade(new AssessmentGrade(isAbsent, isMakeup, subjectGrades));
-
+            personAssessementGradeRepository.SaveChanges();
             return personAssessementGrade;
 
         }
+
+        public IEnumerable<PersonAssessmentGrade> GetList(string assessmentId)
+        {
+            return personAssessementGradeRepository.GetByPersonAssessment(assessmentId);
+        }
+
+
+
 
     }
 }

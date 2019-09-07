@@ -41,9 +41,9 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="pageCurrent"></param>
         /// <returns></returns>
         [HttpGet("GetPersons")]
-        public PersonSearchVO GetPersons(string name, string idNo, int pageSize = 15, int pageCurrent = 1)
+        public SearchPageVO<Person> GetPersons(string deptID, string name, string idNo, int pageSize = 15, int pageCurrent = 1)
         {
-            return _personApplication.GetPersons(name, idNo, pageSize, pageCurrent);
+            return _personApplication.GetPersons(deptID, name, idNo, pageSize, pageCurrent);
         }
 
         /// <summary>
@@ -94,7 +94,6 @@ namespace Nokia.AssessmentMange.Api.Controllers
             person.Department = department;
             person.User = user;
             _personApplication.Update(person);
-
             return person;
         }
         /// <summary>
@@ -129,7 +128,6 @@ namespace Nokia.AssessmentMange.Api.Controllers
                 user.Password = CryptographyHelp.GetMD5(password);
                 user.PersonId = personId;
                 _userApplication.Create(user);
-
             }
             else
             {
@@ -175,7 +173,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="pageCurrent"></param>
         /// <returns></returns>
         [HttpGet("GetUsers")]
-        public UserSearchVO GetUsers(string name, string loginName, int pageSize = 15, int pageCurrent = 1)
+        public SearchPageVO<User> GetUsers(string name, string loginName, int pageSize = 15, int pageCurrent = 1)
         {
             return _userApplication.GetUsers(name, loginName, pageSize, pageCurrent);
         }

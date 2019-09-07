@@ -22,7 +22,7 @@ build_job:
 
   artifacts:
     paths:
-      - "%publishingProject%/bin/Debug/netcoreapp2.1/publish"      #--------------------编译结果文件夹--------------------------------
+      - "%publishingProject%/bin/Debug/netcoreapp2.2/publish"      #--------------------编译结果文件夹--------------------------------
     name: "%CI_PROJECT_NAME%_%CI_COMMIT_SHA%"
 deploy_test_server:
   stage: deploy_test
@@ -40,7 +40,7 @@ deploy_test_server:
     - echo > %PublishPath%%publishingProject%\app_offline.htm
     - echo %CI_COMMIT_SHA% > %PublishPath%%publishingProject%\version.txt
     #3 拷贝到发布目录
-    - echo d|xcopy /s /Y "%publishingProject%/bin/Debug/netcoreapp2.1/publish" %PublishPath%%publishingProject%  #--------------------编译结果文件夹--------------------------------
+    - echo d|xcopy /s /Y "%publishingProject%/bin/Debug/netcoreapp2.2/publish" %PublishPath%%publishingProject%  #--------------------编译结果文件夹--------------------------------
     #4 app上线. 方法:删除app_offline文件
     - del  %PublishPath%%publishingProject%\app_offline.htm
 

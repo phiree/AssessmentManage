@@ -1,21 +1,38 @@
+#"%publishingProject%/bin/Debug/netcoreapp2.1/publish" 
 variables:
-#--------------修改点 如果有submodule,请包含该代码
+  
   GIT_SUBMODULE_STRATEGY: normal
-#web服务器的发布文件夹名称
-#--------------------修改点1-------------------
-  publishingProject: "Nokia.AssessmentMange.Api"
+  publishingProject: "Nokia.AssessmentMange.Api"            #--------------------web服务器的发布文件夹名称-------------------
+before_script:
+  #设置控制台语言为中文,防止乱码
+  - chcp 65001
 stages:
-  - build
- 
+  - build 
+  #外网测试服务器
+  - deploy_test
+
 build_job:
   stage: build
   tags: 
     - nk
   script:
-    #设置控制台语言为中文,防止乱码
-    - chcp 65001
     # 编译
-    - dotnet publish
+    - dotnet publish               #--------------------编译命令-------------------------------
+
+
+  artifacts:
+    paths:
+      - "%publishingProject%/bin/Debug/netcoreapp2.1/publish"      #--------------------编译结果文件夹--------------------------------
+    name: "%CI_PROJECT_NAME%_%CI_COMMIT_SHA%"
+deploy_test_server:
+  stage: deploy_test
+  tags: 
+    - nk
+  variables:
+    GIT_STRATEGY: none
+  dependencies: []
+
+  script:
     # app下线,防止覆盖失败. 方法: 创建app_offline.htm文件
     - if exist %PublishPath%%publishingProject% (echo > %PublishPath%%publishingProject%\app_offline.htm)
     - if exist %PublishPath%%publishingProject% (rd /S /Q %PublishPath%%publishingProject%)
@@ -23,20 +40,8 @@ build_job:
     - echo > %PublishPath%%publishingProject%\app_offline.htm
     - echo %CI_COMMIT_SHA% > %PublishPath%%publishingProject%\version.txt
     #3 拷贝到发布目录
-    #--------------------修改点2 路径-------------------
-    - echo d|xcopy /s /Y %publishingProject%\bin\Debug\netcoreapp2.2\publish %PublishPath%%publishingProject%
+    - echo d|xcopy /s /Y "%publishingProject%/bin/Debug/netcoreapp2.1/publish" %PublishPath%%publishingProject%  #--------------------编译结果文件夹--------------------------------
     #4 app上线. 方法:删除app_offline文件
     - del  %PublishPath%%publishingProject%\app_offline.htm
-    #5 打包文件
-    - 7z a -tzip  %publishingProject%.zip  %PublishPath%%publishingProject%
-    #6 拷贝到自动发布目录
-    - if not exist  %AutoDeployPath% (mkdir %AutoDeployPath%)
-    - copy /Y  %publishingProject%.zip %AutoDeployPath%%publishingProject%.zip
-  artifacts:
-    paths:
-    #--------------------修改点3 路径-------------------
-      - "%CI_PROJECT_NAME%/bin/debug/netcoreapp2.2/publish"
-    name: "%CI_PROJECT_NAME%_%CI_COMMIT_SHA%"
- 
 
     

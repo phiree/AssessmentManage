@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nokia.AssessmentMange.Api",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nokia.AssessmentMange.Domain", "Nokia.AssessmentMange.Domain\Nokia.AssessmentMange.Domain.csproj", "{71CF00AF-5D34-450A-8C27-23F01C9CD9E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nokia.AssessmentManage.Domain.Tests", "Nokia.AssessmentManage.Domain.Tests\Nokia.AssessmentManage.Domain.Tests.csproj", "{C4A67E8C-9034-4C47-BEF7-5C70EF0DA6D3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{71CF00AF-5D34-450A-8C27-23F01C9CD9E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71CF00AF-5D34-450A-8C27-23F01C9CD9E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71CF00AF-5D34-450A-8C27-23F01C9CD9E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4A67E8C-9034-4C47-BEF7-5C70EF0DA6D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4A67E8C-9034-4C47-BEF7-5C70EF0DA6D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4A67E8C-9034-4C47-BEF7-5C70EF0DA6D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4A67E8C-9034-4C47-BEF7-5C70EF0DA6D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

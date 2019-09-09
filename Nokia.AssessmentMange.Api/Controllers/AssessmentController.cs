@@ -48,6 +48,13 @@ namespace Nokia.AssessmentMange.Api.Controllers
             var assessment = assessmentApplication.UpdateSubjects(assessmentModel);
             return assessment;
         }
+
+        [HttpGet("getSubjectList")]
+        public List<string> GetSubjectsByAssessment(string assessmentID)
+        {
+            return assessmentApplication.GetSubjectByAssessment(assessmentID);
+        }
+
         /// <summary>
         /// 获取当前用户的所有考核
         /// </summary>

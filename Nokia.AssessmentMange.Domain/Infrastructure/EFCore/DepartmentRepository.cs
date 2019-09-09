@@ -22,10 +22,10 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
         public List<Department> GetWithAllChildren(bool isAdmin)
         {
             var where = PredicateBuilder.True<Department>();
-            where.And(x => x.ParentId == null);
+            where= where.And(x => x.ParentId == null);
             if (!isAdmin)
             {
-                where.And(x => x.State == 1);
+                where= where.And(x => x.State == 1);
             }
             return Conn.Departments.Include(c => c.Children).Where(where).ToList();
         }

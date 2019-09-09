@@ -41,6 +41,11 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Service
             return result;
         }
 
+        public List<string> GetSubjectByAssessment(string assessmentID)
+        {
+            return _assessmentRepository.GetSubjectByAssessment(assessmentID);
+        }
+
         /// <summary>
         /// 保存用户得分.
         /// </summary>

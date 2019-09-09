@@ -25,5 +25,12 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
             rowCount = Conn.Assessments.Count(where);
             return Conn.Assessments.Where(where).Skip((pageCurrent - 1) * pageSize).Take(pageSize).ToList();
         }
+
+        public List<string> GetSubjectByAssessment(string assessmentID)
+        {
+            Assessment assessment = Conn.Assessments.FirstOrDefault(i => i.Id == assessmentID);
+            if (assessment == null || assessment.SubjectList == null) { return null; }
+            return assessment.SubjectList.Select(item => item.SubjectId).ToList();
+        }
     }
 }

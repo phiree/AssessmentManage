@@ -13,6 +13,6 @@ namespace Nokia.AssessmentMange.Domain.Application
 
         Assessment UpdateSubjects(AssessmentModel assessmentModel);
         SearchPageVO<Assessment> GetList(string departmentID, int pageSize, int pageCurrent);
-        List<string> GetSubjectByAssessment(string assessmentID);
+        Assessment GetAssessment(string assessmentID);
     }
 }

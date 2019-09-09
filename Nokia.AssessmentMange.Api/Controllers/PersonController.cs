@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Nokia.AssessmentMange.Api.Controllers.Authentication;
 using Nokia.AssessmentMange.Api.Models;
 using Nokia.AssessmentMange.Domain.Application;
 using Nokia.AssessmentMange.Domain.Application.Dtos;
@@ -17,14 +18,14 @@ namespace Nokia.AssessmentMange.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController : ControllerBase
+    public class PersonController : BaseController
     {
 
         IPersonApplication _personApplication;
         IDepartmentApplication _departmentApplication;
         IUserApplication _userApplication;
         IMapper _mapper;
-        public PersonController(IPersonApplication personApplication, IDepartmentApplication departmentApplication, IUserApplication userApplication, IMapper mapper)
+        public PersonController(IAuthenticateService authenticateService, IPersonApplication personApplication, IDepartmentApplication departmentApplication, IUserApplication userApplication, IMapper mapper) : base(authenticateService)
         {
             this._personApplication = personApplication;
             this._departmentApplication = departmentApplication;
@@ -41,19 +42,25 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="pageCurrent"></param>
         /// <returns></returns>
         [HttpGet("GetPersons")]
-        public SearchPageVO<Person> GetPersons(string deptID, string name, string idNo, int pageSize = 15, int pageCurrent = 1)
+        public ActionResult<SearchPageVO<Person>> GetPersons(string deptID, string search, int? hasUser = null, int pageSize = 15, int pageCurrent = 1)
         {
-            return _personApplication.GetPersons(deptID, name, idNo, pageSize, pageCurrent);
+            //根据claims获取用户所在部门,再获取考核
+            User user = GetUserInfo();
+            if (user == null)
+            {
+                return StatusCode(401);
+            }
+            return _personApplication.GetPersons(user, deptID, search, hasUser, pageSize, pageCurrent);
         }
 
         /// <summary>
         /// 创建人员
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="birthday"></param>
-        /// <param name="sex"></param>
+        /// <param name="name">名称</param>
+        /// <param name="birthday">生日</param>
+        /// <param name="sex"> 性别</param>
         /// <param name="position">职务</param>
-        /// <param name="departmentId"></param>
+        /// <param name="departmentId">部门</param>
         /// <param name="rank">军衔</param>
         /// <param name="idNo">证件号</param>
         [HttpPost("CreatePerson")]

@@ -62,7 +62,10 @@ namespace Nokia.AssessmentMange.Domain.Application
             return personAssessementGradeRepository.GetByPersonAssessment(assessmentId);
         }
 
-
+        public int GetCountByAssessment(string assessmentId)
+        {
+            return personAssessementGradeRepository.GetCountByAssessment(assessmentId);
+        }
 
 
     }

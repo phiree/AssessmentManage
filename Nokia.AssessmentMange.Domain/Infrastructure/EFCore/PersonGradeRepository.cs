@@ -43,5 +43,11 @@ namespace Nokia.AssessmentMange.Domain.Infrastructure.EFCore
                 .Where(item => item.AssessmentId == assessmentId);
         }
 
+
+        public int GetCountByAssessment(string assessmentId)
+        {
+            return Conn.PersonGrades.Count(item => item.AssessmentId == assessmentId);
+        }
+
     }
 }

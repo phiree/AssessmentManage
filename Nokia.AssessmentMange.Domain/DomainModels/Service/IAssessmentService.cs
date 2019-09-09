@@ -7,6 +7,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Service
     {
         void SavePersonGrade(Assessment assessment, Person person, bool isAbsent, bool isMakeup, IEnumerable<SubjectGrade> subjectGrades);
         SearchPageVO<Assessment> GetList(string departmentID, int pageSize, int pageCurrent);
-        List<string> GetSubjectByAssessment(string assessmentID);
+        Assessment GetAssessment(string assessmentID);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Nokia.AssessmentMange.Domain.DomainModels;
+﻿using Nokia.AssessmentMange.Domain.Common;
+using Nokia.AssessmentMange.Domain.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,8 +12,8 @@ namespace Nokia.AssessmentMange.Domain.Application
         List<Department> GetWithAllChildren(User user);
         List<Department> GetWithAllChildrenByUser(User user);
 
-        Department GetWithSingleChildren(string id);
+        Department GetWithSingleChildren(string id, User user);
 
-        bool DeleteDepartment(string id);
+        ResultModel<bool> DeleteDepartment(string id);
     }
 }

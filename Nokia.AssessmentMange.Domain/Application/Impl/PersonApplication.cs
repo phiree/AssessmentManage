@@ -12,15 +12,16 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
 {
     public class PersonApplication : ApplicationBase<Person>, IPersonApplication
     {
-        IRepository<Person> _personRepository;
         IRepository<Department> _departmentRepository;
         IUserRepository _userRepository;
-
-        public PersonApplication(IRepository<Person> personRepository, IRepository<Department> departmentRepository, IUserRepository userRepository) : base(personRepository)
+        IRepository<Person> _personRepository;
+        IPersonRepository _repository;
+        public PersonApplication(IPersonRepository repository, IRepository<Person> personRepository, IRepository<Department> departmentRepository, IUserRepository userRepository) : base(personRepository)
         {
             this._personRepository = personRepository;
             this._departmentRepository = departmentRepository;
             this._userRepository = userRepository;
+            this._repository = repository;
         }
 
         public bool DeletePersons(string personId)
@@ -47,12 +48,26 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
             return result;
         }
 
-        public SearchPageVO<Person> GetPersons(string deptID, string name, string idNo, int pageSize, int pageCurrent)
+        public SearchPageVO<Person> GetPersons(User user, string deptID, string name, string idNo, int pageSize, int pageCurrent)
         {
+            if (string.IsNullOrEmpty(deptID) && !user.IsAdmin)
+            {
+                //获取登录用户的部门
+                Person person = _repository.GetPersonByUser(user.Id);
+                if (person != null)
+                {
+                    deptID = person.DepartmentId;
+                }
+            }
+
             SearchPageVO<Person> result = new SearchPageVO<Person>();
             int pageCount = 0;
             var where = PredicateBuilder.True<Person>();
-            where = where.And(p => p.State == 1 && p.DepartmentId == deptID);
+            where = where.And(p => p.State == 1);
+            if (!string.IsNullOrEmpty(deptID))
+            {
+                where = where.And(p => p.DepartmentId == deptID);
+            }
             if (!string.IsNullOrEmpty(name))
             {
                 where = where.And(p => p.RealName.Contains(name));
@@ -88,5 +103,30 @@ namespace Nokia.AssessmentMange.Domain.Application.Impl
 
             return result;
         }
+
+        public SearchPageVO<Person> GetPersons(User user, string deptID, string search, int? hasUser, int pageSize, int pageCurrent)
+        {
+            if (string.IsNullOrEmpty(deptID) && !user.IsAdmin)
+            {
+                //获取登录用户的部门
+                Person person = _repository.GetPersonByUser(user.Id);
+                if (person != null)
+                {
+                    deptID = person.DepartmentId;
+                }
+            }
+            SearchPageVO<Person> result = new SearchPageVO<Person>();
+            int pageCount = 0;
+            var list = _repository.GetPersons(deptID, search, hasUser, pageSize, pageCurrent, out pageCount);
+            result.PageCurrent = pageCurrent;
+            result.PageSize = pageSize;
+            result.DataList = list;
+            result.RowCount = pageCount;
+
+            return result;
+        }
+
+
+
     }
 }

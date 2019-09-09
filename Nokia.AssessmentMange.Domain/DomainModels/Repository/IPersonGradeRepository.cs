@@ -17,5 +17,6 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Repository
         PersonAssessmentGrade GetByPersonAssessment(string personId, string assessmentId);
 
         IEnumerable<PersonAssessmentGrade> GetByPersonAssessment(string assessmentId);
+        int GetCountByAssessment(string assessmentId);
     }
 }

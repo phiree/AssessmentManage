@@ -41,9 +41,9 @@ namespace Nokia.AssessmentMange.Domain.DomainModels.Service
             return result;
         }
 
-        public List<string> GetSubjectByAssessment(string assessmentID)
+        public Assessment GetAssessment(string assessmentID)
         {
-            return _assessmentRepository.GetSubjectByAssessment(assessmentID);
+            return _assessmentRepository.GetAssessment(assessmentID);
         }
 
         /// <summary>

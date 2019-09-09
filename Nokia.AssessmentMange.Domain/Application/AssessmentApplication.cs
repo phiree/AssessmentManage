@@ -76,9 +76,9 @@ namespace Nokia.AssessmentMange.Domain.Application
             return assessmentService.GetList(departmentID, pageSize, pageCurrent);
         }
 
-        public List<string> GetSubjectByAssessment(string assessmentID)
+        public Assessment GetAssessment(string assessmentID)
         {
-            return assessmentService.GetSubjectByAssessment(assessmentID);
+            return assessmentService.GetAssessment(assessmentID);
         }
     }
 }

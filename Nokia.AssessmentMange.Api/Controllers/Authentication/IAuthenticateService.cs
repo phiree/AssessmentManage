@@ -63,7 +63,7 @@ namespace Nokia.AssessmentMange.Api.Controllers.Authentication
                 IEnumerable<Claim> claims = jwtToken.Claims;
                 string id = claims.FirstOrDefault(item => item.Type == "sid").Value;
                 string loginName = claims.FirstOrDefault(item => item.Type == "name").Value;
-                bool isAdmin = claims.FirstOrDefault(item => item.Type == "givename").Value == "admin";
+                bool isAdmin = claims.FirstOrDefault(item => item.Type == "role").Value == "admin";
                 return new User(id, loginName, isAdmin);
             }
         }

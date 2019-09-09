@@ -28,6 +28,8 @@ namespace Nokia.AssessmentMange.Api
              .ConfigureServices(services => services.AddAutofac())
 
             .UseStartup<Startup>()
+             .UseKestrel(o => o.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(20))
+            .UseUrls("http://192.168.43.29:40825")
             .UseNLog()
             ;
     }

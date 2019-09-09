@@ -20,9 +20,11 @@ namespace Nokia.AssessmentMange.Api.Controllers
     public class AssessmentController : BaseController
     {
         IAssessmentApplication assessmentApplication;
-        public AssessmentController(IAssessmentApplication assessmentApplication, IAuthenticateService authenticateService) : base(authenticateService)
+        IPersonAssessmentGradeApplication _personAssessmentGradeApplication;
+        public AssessmentController(IAssessmentApplication assessmentApplication, IAuthenticateService authenticateService, IPersonAssessmentGradeApplication personAssessmentGradeApplication) : base(authenticateService)
         {
             this.assessmentApplication = assessmentApplication;
+            this._personAssessmentGradeApplication = personAssessmentGradeApplication;
 
         }
         /// <summary>
@@ -48,11 +50,15 @@ namespace Nokia.AssessmentMange.Api.Controllers
             var assessment = assessmentApplication.UpdateSubjects(assessmentModel);
             return assessment;
         }
-
-        [HttpGet("getSubjectList")]
-        public List<string> GetSubjectsByAssessment(string assessmentID)
+        /// <summary>
+        /// 获取考核
+        /// </summary>
+        /// <param name="assessmentID"></param>
+        /// <returns></returns>
+        [HttpGet("get")]
+        public Assessment GetAssessment(string assessmentID)
         {
-            return assessmentApplication.GetSubjectByAssessment(assessmentID);
+            return assessmentApplication.GetAssessment(assessmentID);
         }
 
         /// <summary>
@@ -81,6 +87,19 @@ namespace Nokia.AssessmentMange.Api.Controllers
         public void Delete(string assessmentId)
         {
             assessmentApplication.Delete(assessmentId);
+        }
+
+        /// <summary>
+        /// 判断考核是否可以修改
+        /// 如果考核有被使用，则不许修改
+        /// </summary>
+        /// <param name="assessmentId"></param>
+        /// <returns></returns>
+        [HttpGet("IsChangeSubject")]
+        public bool IsChangeSubject(string assessmentId)
+        {
+            int count = _personAssessmentGradeApplication.GetCountByAssessment(assessmentId);
+            return count > 0;
         }
 
     }

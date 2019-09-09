@@ -7,6 +7,7 @@ using Nokia.AssessmentMange.Domain.DomainModels;
 using Nokia.AssessmentMange.Domain.Application;
 using Nokia.AssessmentMange.Api.Models;
 using Nokia.AssessmentMange.Api.Controllers.Authentication;
+using Nokia.AssessmentMange.Domain.Common;
 
 namespace Nokia.AssessmentMange.Api.Controllers
 {
@@ -60,9 +61,14 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// <param name="departmentId"></param>
         /// <returns></returns>
         [HttpGet("Get")]
-        public Department Get(string departmentId)
+        public ActionResult<Department> Get(string departmentId)
         {
-            return departmentApplication.GetWithSingleChildren(departmentId);
+            User user = GetUserInfo();
+            if (user == null)
+            {
+                return StatusCode(401);
+            }
+            return departmentApplication.GetWithSingleChildren(departmentId, user);
         }
         /// <summary>
         /// 创建部门
@@ -102,7 +108,7 @@ namespace Nokia.AssessmentMange.Api.Controllers
         /// </summary>
         /// <param name="departmentId"></param>
         [HttpGet("Delete")]
-        public bool Delete(string departmentId)
+        public ResultModel<bool> Delete(string departmentId)
         {
             return departmentApplication.DeleteDepartment(departmentId);
         }

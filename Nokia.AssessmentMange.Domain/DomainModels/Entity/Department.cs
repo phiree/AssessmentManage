@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
@@ -25,7 +26,8 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public string Name { get; protected set; }
         public string ParentId { get; set; }
         public Department Parent { get; protected set; }
-        public IList<Department> Children { get; protected set; }
+        [NotMapped]
+        public IList<Department> Children { get; set; }
         /// <summary>
         /// 部门状态
         /// 1 存在 2 删除

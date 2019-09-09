@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Nokia.AssessmentMange.Domain.DomainModels
@@ -58,7 +59,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         /// 人员状态
         /// 1 存在 2 删除
         /// </summary>
-        
+
         public int State { get; set; } = 1;
     }
     public enum Sex

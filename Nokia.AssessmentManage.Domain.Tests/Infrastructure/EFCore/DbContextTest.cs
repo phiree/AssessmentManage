@@ -138,7 +138,7 @@ Console.WriteLine(changed);
             //Assert.Equal(0,subject.SubjectConversions[0].ConversionTable.Grades[0].Grade.GradeValue);
             */
         }
-
+        IGradeCalculater gradeCalculater = new GradeCalculater(new CodeRunner());
         [Fact]
         public void 录入人员成绩()
         {
@@ -190,20 +190,25 @@ Console.WriteLine(changed);
             db.SaveChanges();
             //录入成绩
             personAssessmentGrade=db.PersonGrades.Find(personAssessmentGrade.Id);
-            personAssessmentGrade.CommitGrade(new AssessmentGrade(false,false,new List<SubjectGrade>{new SubjectGrade(subject.Id,13)}));
+            personAssessmentGrade.CommitGrade(new AssessmentGrade(false,false,new List<SubjectGrade>{new SubjectGrade(subject.Id,13)})
+                ,gradeCalculater);
             db.SaveChanges();
 
             personAssessmentGrade= db.PersonGrades.Find(personAssessmentGrade.Id);
 
             Assert.Equal(13,personAssessmentGrade.AssessmentGrades.First().SubjectGrades.First().Grade);
             //第二次录入_非补考
-            personAssessmentGrade.CommitGrade(new AssessmentGrade(false, false, new List<SubjectGrade> { new SubjectGrade(subject.Id, 14) }));
+            personAssessmentGrade.CommitGrade(new AssessmentGrade(false, false, new List<SubjectGrade>
+            { new SubjectGrade(subject.Id, 14) })
+                , gradeCalculater);
 
             personAssessmentGrade = db.PersonGrades.Find(personAssessmentGrade.Id);
             Assert.Equal(1, personAssessmentGrade.AssessmentGrades.Count);
             Assert.Equal(14, personAssessmentGrade.AssessmentGrades.First().SubjectGrades.First().Grade);
             //第二次录入_补考
-            personAssessmentGrade.CommitGrade(new AssessmentGrade(false, true, new List<SubjectGrade> { new SubjectGrade(subject.Id, 19) }));
+            personAssessmentGrade.CommitGrade(new AssessmentGrade(false, true, new List<SubjectGrade>
+            { new SubjectGrade(subject.Id, 19) })
+                , gradeCalculater);
 
             personAssessmentGrade = db.PersonGrades.Find(personAssessmentGrade.Id);
             Assert.Equal(2, personAssessmentGrade.AssessmentGrades.Count);

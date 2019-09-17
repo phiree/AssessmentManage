@@ -38,7 +38,7 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
         public IList<AssessmentGrade> AssessmentGrades { get; protected set; }
 
         //提交成绩
-        public void CommitGrade(AssessmentGrade assessmentGrade)
+        public void CommitGrade(AssessmentGrade assessmentGrade, IGradeCalculater gradeCalculater)
         {
             bool isNew = false;
 
@@ -99,11 +99,19 @@ namespace Nokia.AssessmentMange.Domain.DomainModels
                 }
 
             }
+
+            //计算成绩 
+            foreach (var subjectGrade in assessmentGrade.SubjectGrades)
+            {
+                gradeCalculater.CalculateGrade(subjectGrade,assessmentGrade.SubjectGrades);
+            }
+            
             if (isNew) { this.AssessmentGrades.Add(assessmentGrade); }
             else
             {
                 AssessmentGrades.First().Update(assessmentGrade.IsAbsent, assessmentGrade.IsMakeup, assessmentGrade.SubjectGrades);
             }
+            
 
 
 

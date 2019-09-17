@@ -12,12 +12,14 @@ namespace Nokia.AssessmentMange.Domain.Application
     {
         ISubjectGradeMapper subjectGradeMapper;
         IPersonGradeRepository personAssessementGradeRepository;
+        IGradeCalculater gradeCalculater;
 
         public PersonAssessmentGradeApplication(ISubjectGradeMapper subjectGradeMapper,
-             IPersonGradeRepository personAssessementGradeRepository)
+             IPersonGradeRepository personAssessementGradeRepository,IGradeCalculater gradeCalculater)
         {
             this.subjectGradeMapper = subjectGradeMapper;
             this.personAssessementGradeRepository = personAssessementGradeRepository;
+            this.gradeCalculater = gradeCalculater;
         }
         /// <summary>
         /// 人员考核成绩
@@ -51,7 +53,7 @@ namespace Nokia.AssessmentMange.Domain.Application
             var personAssessementGrade = personAssessementGradeRepository.GetEager(personAssessmentGradeId);
             var subjectGrades = subjectGradeMapper.ToEntityList(subjectGradeModels, personAssessementGrade.Person);
 
-            personAssessementGrade.CommitGrade(new AssessmentGrade(isAbsent, isMakeup, subjectGrades));
+            personAssessementGrade.CommitGrade(new AssessmentGrade(isAbsent, isMakeup, subjectGrades),gradeCalculater);
             personAssessementGradeRepository.SaveChanges();
             return personAssessementGrade;
 

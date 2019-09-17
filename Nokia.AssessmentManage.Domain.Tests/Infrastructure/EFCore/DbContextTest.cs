@@ -174,16 +174,16 @@ Console.WriteLine(changed);
             db.Add(department);
             db.SaveChanges();
             //增加一个人员
-            Person person=new Person("zhangsan", new DateTime(1991,10,10),Sex.Female,department.Id);
+            Person person=new Person(Guid.NewGuid().ToString(), "zhangsan", new DateTime(1991, 10, 10), Sex.Female) { DepartmentId=department.Id};
             db.Add(person);
             db.SaveChanges();
             //增加一个考核
-            Assessment assessment=new Assessment(department.Id,"9月考核",false);
+            Assessment assessment=new Assessment(department.Id,"9月考核",false,new List<Subject> { subject});
             db.Add(assessment);
             db.SaveChanges();
             //考核增加一个科目
-            assessment.Subjects=new List<AssessmentSubject> {new AssessmentSubject(assessment,subject) };
-            db.SaveChanges();
+            //assessment.Subjects=new List<AssessmentSubject> {new AssessmentSubject(assessment,subject) };
+            //db.SaveChanges();
             //添加人员考核.
             PersonAssessmentGrade personAssessmentGrade=new PersonAssessmentGrade(assessment,person);
             db.Add(personAssessmentGrade);
@@ -262,12 +262,12 @@ Console.WriteLine(changed);
                     .HasName("AssessmentSubjectId");
                 modelBuilder.Entity<AssessmentSubject>()
                     .HasOne(a => a.Assessment)
-                    .WithMany(a => a.Subjects)
+                    .WithMany(a => a.SubjectList)
                     .HasForeignKey(a => a.AssessmentId).HasConstraintName("AssessmentSubject_AssessmentId");
-                modelBuilder.Entity<AssessmentSubject>()
-                   .HasOne(a => a.Subject)
-                   .WithMany(a => a.Assessments)
-                   .HasForeignKey(a => a.SubjectId).HasConstraintName("AssessmentSubject_SubjectId");
+                //modelBuilder.Entity<AssessmentSubject>()
+                //   .HasOne(a => a.Subject)
+                //   .WithMany(a => a.Assessments)
+                //   .HasForeignKey(a => a.SubjectId).HasConstraintName("AssessmentSubject_SubjectId");
 
 
                 modelBuilder.Entity<Person>().Ignore(x => x.Age);

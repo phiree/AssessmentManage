@@ -17,7 +17,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Service
             Subject subject=new Subject("百米", SubjectType.PhysicalFitness, SexLimitation.BothButDiffirentConversion, false,"秒");
           var  personAssessmentGrade =new PersonAssessmentGrade(
                  new Assessment("dd","name",false,new List<Subject>{ subject}),
-                 new Person("realname",DateTime.Now,Sex.Female,"") 
+                 new Person(Guid.NewGuid().ToString(), "realname",DateTime.Now,Sex.Female) 
                  
                  );
             var firstCommit=new AssessmentGrade(true,true,new List<SubjectGrade>{ new SubjectGrade(subject,14) });
@@ -39,7 +39,7 @@ namespace Nokia.AssessmentManage.Domain.Tests.DomainModels.Service
             var firstCommit = new AssessmentGrade(true, false, new List<SubjectGrade> { new SubjectGrade(subject, 14) });
             var personAssessmentGrade = new PersonAssessmentGrade(
                    new Assessment("dd", "name", false, new List<Subject> { subject }),
-                   new Person("realname", DateTime.Now, Sex.Female, "") 
+                   new Person(Guid.NewGuid().ToString(), "realname", DateTime.Now, Sex.Female) 
                   
                    );
             //第二次提交的不是补考,直接修改
